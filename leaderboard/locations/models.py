@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 
+
 # Create your models here.
 class Country(models.Model):
     name = models.CharField(max_length=50)
@@ -13,12 +14,19 @@ class Country(models.Model):
     subregion = models.IntegerField('Sub-Region Code')
     lon = models.FloatField()
     lat = models.FloatField()
-
-    # GeoDjango-specific: a geometry field (MultiPolygonField), and
-    # overriding the default manager with a GeoManager instance.
     mpoly = models.MultiPolygonField()
 
     objects = models.GeoManager()
 
     def __unicode__(self):
         return self.name
+
+
+class Tile(models.Model):
+    country = models.ForeignKey(Country, related_name='tiles')
+    mpoly = models.MultiPolygonField()
+
+    objects = models.GeoManager()
+
+    def __unicode__(self):
+        return 'Tile'
