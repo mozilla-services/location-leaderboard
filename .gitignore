@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Django
+settings_local.py
