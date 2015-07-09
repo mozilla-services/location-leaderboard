@@ -5,18 +5,18 @@ from leaderboard.locations.models import Country
 
 
 field_mapping = {
-    'fips' : 'FIPS',
-    'iso2' : 'ISO2',
-    'iso3' : 'ISO3',
-    'un' : 'UN',
-    'name' : 'NAME',
-    'area' : 'AREA',
-    'pop2005' : 'POP2005',
-    'region' : 'REGION',
-    'subregion' : 'SUBREGION',
-    'lon' : 'LON',
-    'lat' : 'LAT',
-    'mpoly' : 'MULTIPOLYGON',
+    'fips': 'FIPS',
+    'iso2': 'ISO2',
+    'iso3': 'ISO3',
+    'un': 'UN',
+    'name': 'NAME',
+    'area': 'AREA',
+    'pop2005': 'POP2005',
+    'region': 'REGION',
+    'subregion': 'SUBREGION',
+    'lon': 'LON',
+    'lat': 'LAT',
+    'mpoly': 'MULTIPOLYGON',
 }
 
 
@@ -27,4 +27,10 @@ class Command(BaseCommand):
         parser.add_argument('file_path', type=str)
 
     def handle(self, *args, **options):
-        LayerMapping(Country, options['file_path'], field_mapping, transform=False, encoding='iso-8859-1').save(strict=True, verbose=True)
+        LayerMapping(
+            Country,
+            options['file_path'],
+            field_mapping,
+            transform=False,
+            encoding='iso-8859-1',
+        ).save(strict=True, verbose=True)
