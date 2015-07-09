@@ -94,6 +94,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# Geography Settings
+
+# This project uses the Web Mercator projection system for specifying spatial coordinates
+# http://spatialreference.org/ref/sr-org/7483/
+PROJECTION_SRID = 3857
+
+
 try:
     from settings_local import *
 except:
