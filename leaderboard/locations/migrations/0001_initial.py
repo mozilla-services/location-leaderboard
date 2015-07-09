@@ -26,14 +26,14 @@ class Migration(migrations.Migration):
                 ('subregion', models.IntegerField(verbose_name=b'Sub-Region Code')),
                 ('lon', models.FloatField()),
                 ('lat', models.FloatField()),
-                ('mpoly', django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326)),
+                ('mpoly', django.contrib.gis.db.models.fields.MultiPolygonField(srid=3857)),
             ],
         ),
         migrations.CreateModel(
             name='Tile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('mpoly', django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326)),
+                ('mpoly', django.contrib.gis.db.models.fields.MultiPolygonField(srid=3857)),
                 ('country', models.ForeignKey(related_name='tiles', to='locations.Country')),
                 ('east', models.IntegerField()),
                 ('north', models.IntegerField()),
