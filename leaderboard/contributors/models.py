@@ -2,6 +2,10 @@ from django.db import models
 
 
 class Contributor(models.Model):
+    """
+    A contributor to the leaderboard.
+    Synchronizes with Firefox Accounts.
+    """
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
 
@@ -10,6 +14,9 @@ class Contributor(models.Model):
 
 
 class Contribution(models.Model):
+    """
+    A contribution made by a contributor to the leaderboard.
+    """
     created = models.DateTimeField(auto_now_add=True)
     contributor = models.ForeignKey(Contributor)
     tile = models.ForeignKey('locations.Tile')

@@ -3,6 +3,10 @@ from django.contrib.gis.geos import MultiPolygon, Polygon, Point
 
 
 class ProjectedMixin(object):
+    """
+    A mixin which sets the SRID on a Geometry object to the
+    SRID specified in the project settings.
+    """
 
     def __init__(self, *args, **kwargs):
         return super(ProjectedMixin, self).__init__(

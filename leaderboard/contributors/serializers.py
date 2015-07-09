@@ -5,6 +5,11 @@ from leaderboard.locations.models import Tile
 
 
 class ContributionSerializer(serializers.Serializer):
+    """
+    A contribution submission from a contributor.  A contribution
+    contains information about a tile and the number of observations
+    made within taht tile.
+    """
     tile_north = serializers.IntegerField()
     tile_east = serializers.IntegerField()
     observations = serializers.IntegerField()
