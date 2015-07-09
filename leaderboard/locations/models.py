@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.gis.db import models
 
 from leaderboard.locations.projected_geos import (
@@ -39,7 +40,7 @@ class Country(models.Model):
     subregion = models.IntegerField('Sub-Region Code')
     lon = models.FloatField()
     lat = models.FloatField()
-    mpoly = models.MultiPolygonField()
+    mpoly = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
 
     objects = CountryManager()
 
@@ -77,7 +78,7 @@ class Tile(models.Model):
     north = models.IntegerField()
 
     country = models.ForeignKey(Country, related_name='tiles')
-    mpoly = models.MultiPolygonField()
+    mpoly = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
 
     objects = TileManager()
 
