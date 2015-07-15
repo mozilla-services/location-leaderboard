@@ -71,26 +71,26 @@ class TestCountryManager(TestCase):
 class TestTileManager(CountryTestMixin, TestCase):
 
     def test_get_or_create_nearest_tile_rounds_coords(self):
-        east = 12345
-        north = 67890
+        easting = 12345
+        northing = 67890
 
         tile, created = Tile.objects.get_or_create_nearest_tile(
-            east=east, north=north)
+            easting=easting, northing=northing)
         self.assertTrue(created)
-        self.assertEqual(tile.east, 12000)
-        self.assertEqual(tile.north, 67000)
+        self.assertEqual(tile.easting, 12000)
+        self.assertEqual(tile.northing, 67000)
 
         tile, created = Tile.objects.get_or_create_nearest_tile(
-            east=east+1, north=north+1)
+            easting=easting+1, northing=northing+1)
         self.assertFalse(created)
-        self.assertEqual(tile.east, 12000)
-        self.assertEqual(tile.north, 67000)
+        self.assertEqual(tile.easting, 12000)
+        self.assertEqual(tile.northing, 67000)
 
 
 class TestTile(CountryTestMixin, TestCase):
 
     def test_save_sets_polygon_and_country(self):
-        tile = Tile(east=0, north=0)
+        tile = Tile(easting=0, northing=0)
         tile.save()
 
         mpoly = ProjectedMultiPolygon([
@@ -103,7 +103,7 @@ class TestTile(CountryTestMixin, TestCase):
             ]),
         ])
 
-        self.assertEqual(tile.east, 0)
-        self.assertEqual(tile.north, 0)
+        self.assertEqual(tile.easting, 0)
+        self.assertEqual(tile.northing, 0)
         self.assertEqual(tile.mpoly, mpoly)
         self.assertEqual(tile.country, self.country)

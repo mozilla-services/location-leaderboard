@@ -55,13 +55,14 @@ class TileManager(models.GeoManager):
     projected coordinates.
     """
 
-    def get_or_create_nearest_tile(self, east=None, north=None,
+    def get_or_create_nearest_tile(self, easting=None, northing=None,
                                    *args, **kwargs):
         # Round to the nearest tile size
-        east = east - (east % self.model.TILE_SIZE)
-        north = north - (north % self.model.TILE_SIZE)
+        easting = easting - (easting % self.model.TILE_SIZE)
+        northing = northing - (northing % self.model.TILE_SIZE)
 
-        return self.get_or_create(*args, east=east, north=north, **kwargs)
+        return self.get_or_create(
+            *args, easting=easting, northing=northing, **kwargs)
 
 
 class Tile(models.Model):
@@ -74,8 +75,8 @@ class Tile(models.Model):
     TILE_SIZE = 1000
 
     # The bottom left coordinates
-    east = models.IntegerField()
-    north = models.IntegerField()
+    easting = models.IntegerField()
+    northing = models.IntegerField()
 
     country = models.ForeignKey(Country, related_name='tiles')
     mpoly = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
@@ -83,7 +84,8 @@ class Tile(models.Model):
     objects = TileManager()
 
     def __unicode__(self):
-        return '{east},{north}'.format(north=self.north, east=self.east)
+        return '{easting},{northing}'.format(
+            northing=self.northing, east=self.east)
 
     def save(self, *args, **kwargs):
         # If we are saving a new tile, we want to automatically
@@ -92,14 +94,14 @@ class Tile(models.Model):
             # Create a box starting with the coordinates provided
             # at the bottom left
             points = [
-                ProjectedPoint(self.east, self.north),
-                ProjectedPoint(self.east + self.TILE_SIZE, self.north),
+                ProjectedPoint(self.easting, self.northing),
+                ProjectedPoint(self.easting + self.TILE_SIZE, self.northing),
                 ProjectedPoint(
-                    self.east + self.TILE_SIZE,
-                    self.north + self.TILE_SIZE,
+                    self.easting + self.TILE_SIZE,
+                    self.northing + self.TILE_SIZE,
                 ),
-                ProjectedPoint(self.east, self.north + self.TILE_SIZE),
-                ProjectedPoint(self.east, self.north),
+                ProjectedPoint(self.easting, self.northing + self.TILE_SIZE),
+                ProjectedPoint(self.easting, self.northing),
             ]
 
             self.mpoly = ProjectedMultiPolygon([ProjectedPolygon(points)])

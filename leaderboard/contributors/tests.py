@@ -25,18 +25,18 @@ class ContributionTests(CountryTestMixin, TestCase):
         observation_data = {
             'items': [
                 {
-                    'tile_east': -8872100,
-                    'tile_north': 5435700,
+                    'tile_easting_m': -8872100,
+                    'tile_northing_m': 5435700,
                     'observations': 100,
                 },
                 {
-                    'tile_east': -8872100,
-                    'tile_north': 5435700,
+                    'tile_easting_m': -8872100,
+                    'tile_northing_m': 5435700,
                     'observations': 100,
                 },
                 {
-                    'tile_east': -8892100,
-                    'tile_north': 5435700,
+                    'tile_easting_m': -8892100,
+                    'tile_northing_m': 5435700,
                     'observations': 100,
                 },
             ],
@@ -52,8 +52,8 @@ class ContributionTests(CountryTestMixin, TestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(Tile.objects.all().count(), 2)
-        tile1 = Tile.objects.get(east=-8873000, north=5435000)
-        tile2 = Tile.objects.get(east=-8893000, north=5435000)
+        tile1 = Tile.objects.get(easting=-8873000, northing=5435000)
+        tile2 = Tile.objects.get(easting=-8893000, northing=5435000)
         self.assertEqual(tile1.country, self.country)
         self.assertEqual(tile2.country, self.country)
 
