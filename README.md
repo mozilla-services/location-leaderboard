@@ -38,15 +38,15 @@ Add Stumbles
 
   * **POST body (JSON encoded)**
 
-        {
-          items: [
-            {
-              tile_easting_m: <int>,
-              tile_northing_m: <int>,
-              observations: <int>
-            }
-          ]
-        }
+          {
+            items: [
+              {
+                tile_easting_m: <int>,
+                tile_northing_m: <int>,
+                observations: <int>
+              }
+            ]
+          }
 
   * **tile_easting_m**
 
