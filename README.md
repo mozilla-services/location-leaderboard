@@ -15,7 +15,7 @@ Add Stumbles
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/backend/add_stumbles
+  https://leaderboard.services.mozilla.com/api/v1/add_stumbles/
 
 * **Method:**
 
@@ -93,7 +93,7 @@ Add Stumbles
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/backend/add_stumbles",
+          url: "https://leaderboard.services.mozilla.com/api/v1/add_stumbles/",
           dataType: "json",
           beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer fksdf90sek4jk50');
@@ -129,7 +129,7 @@ Get Leaders
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/backend/leaders/country/
+  https://leaderboard.services.mozilla.com/api/v1/leaders/country/
 
 * **Method:**
 
@@ -139,7 +139,7 @@ Get Leaders
 
   * country_id : `int`
 
-  A country_id is an id which can be found by calling the /backend/countries/ API endpoint.
+  A country_id is an id which can be found by calling the /api/v1/countries/ API endpoint.
 
 * **Data Params**
 
@@ -172,7 +172,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/backend/leaders",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/",
           dataType: "json",
           data: {
             country_id: 1,
