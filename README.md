@@ -11,7 +11,7 @@ the top contributors.
 
 Add Stumbles
 ----
- Submit the number of networks detected within a series of tiles.
+ Submit the number of networks detected within a series of tiles for a given contributor.
 
 * **URL**
 
@@ -27,17 +27,39 @@ Add Stumbles
 
 * **Data Params**
 
-  POST body (JSON encoded)
+  The data submitted in a single POST request describes how many observations 
+  were made by a contributor.  Each observation is made at a given time and place,
+  however to reduce the size of the data sent, the observations are grouped into 'tiles'.
+  The tile size is requested from the server, and is measured in meters.  Observations are
+  then grouped into tiles of that size and summed.  Each data point sent 
+  describes the coordinates of a point within that tile (the server will round the coordinates
+  provided to the nearest containing tile), and the number of observations made within that
+  tile.
+
+  * **POST body (JSON encoded)**
 
         {
           items: [
             {
-              tile_east: <int>,
-              tile_north: <int>,
+              tile_easting_m: <int>,
+              tile_northing_m: <int>,
               observations: <int>
             }
           ]
         }
+
+  * **tile_easting_m**
+
+  The number of meters east from 0,0 in the [EPSG 3857 coordinate system](http://spatialreference.org/ref/sr-org/7483/)
+
+  * **tile_northing_m**
+
+  The number of meters north from 0,0 in the [EPSG 3857 coordinate system](http://spatialreference.org/ref/sr-org/7483/)
+
+  * **observations**
+
+  The number of observations made by the contributor since the last time they submitted
+  to the leaderboard within the specified 1km x 1km tile.
 
 * **Request Headers**
 
@@ -79,18 +101,18 @@ Add Stumbles
           data : {
             items: [
               {
-                tile_east: -8872100,
-                tile_north: 5435700,
+                tile_easting_m: -8872100,
+                tile_northing_m: 5435700,
                 observations: 100
               },
               {
-                tile_east: -8872100,
-                tile_north: 5435700,
+                tile_easting_m: -8872100,
+                tile_northing_m: 5435700,
                 observations: 100
               },
               {
-                tile_east: -8892100,
-                tile_north: 5435700,
+                tile_easting_m: -8892100,
+                tile_northing_m: 5435700,
                 observations: 100
               }
             ]

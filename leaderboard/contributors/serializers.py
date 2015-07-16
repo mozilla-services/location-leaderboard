@@ -10,13 +10,13 @@ class ContributionSerializer(serializers.Serializer):
     contains information about a tile and the number of observations
     made within taht tile.
     """
-    tile_north = serializers.IntegerField()
-    tile_east = serializers.IntegerField()
+    tile_northing_m = serializers.IntegerField()
+    tile_easting_m = serializers.IntegerField()
     observations = serializers.IntegerField()
 
     def create(self, data):
         tile, created = Tile.objects.get_or_create_nearest_tile(
-            east=data['tile_east'], north=data['tile_north'])
+            easting=data['tile_easting_m'], northing=data['tile_northing_m'])
 
         # TODO: Actually pass the user in through fxa
         contributor, created = Contributor.objects.get_or_create(

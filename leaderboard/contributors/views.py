@@ -11,8 +11,8 @@ class CreateContributionsView(CreateAPIView):
     {
         'items': [
             {
-                'tile_east': <int>,
-                'tile_north': <int>,
+                'tile_easting_m': <int>,
+                'tile_northing_m': <int>,
                 'observations': <int>,
             },
         ]
