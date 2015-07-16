@@ -97,6 +97,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Django Rest Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': (
+        'leaderboard.parsers.GzipJSONParser',
+    )
+}
+
 # Geography Settings
 
 # This project uses the Web Mercator projection system for specifying spatial coordinates

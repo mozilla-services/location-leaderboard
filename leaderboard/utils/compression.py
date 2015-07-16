@@ -1,6 +1,6 @@
+import StringIO
 import gzip
 import io
-import StringIO
 
 
 def gzip_compress(content):
@@ -12,9 +12,6 @@ def gzip_compress(content):
 
 
 def gzip_decompress(content):
-    try:
-        binary_content = io.BytesIO(content)
-        gzip_file = gzip.GzipFile(fileobj=binary_content, mode="rb")
-        return gzip_file.read()
-    except IOError:
-        return None
+    binary_content = io.BytesIO(content)
+    gzip_file = gzip.GzipFile(fileobj=binary_content, mode='rb')
+    return gzip_file.read()
