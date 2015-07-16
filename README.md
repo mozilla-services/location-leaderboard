@@ -1,5 +1,10 @@
 # leaderboard-server
 
+[![Build Status](https://api.travis-ci.org/JaredKerim-Mozilla/leaderboard-server.svg)](https://travis-ci.org/JaredKerim-Mozilla/leaderboard-server)
+
+Overview
+---
+
 The leaderboard-server is a RESTful service which implements an API
 for submitting data which describes the geolocation stumbling efforts
 of contributors to the Mozilla Location Service project.  Mozilla Stumbler
