@@ -97,6 +97,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Database configuration for travis tests
+# Shoudl be overridden by a local settings file for actual deployments
+
+if 'TRAVIS' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'leaderboard_test',
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
 # Django Rest Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (

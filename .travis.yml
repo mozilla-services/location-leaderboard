@@ -1,9 +1,18 @@
 language: python
+
 python:
-    - 2.7
+  - 2.7
+
+addons:
+  postgresql: "9.3"
 
 install:
-    - pip install -r requirements.txt
+  - pip install -r requirements.txt
+
+before_script:
+  - psql -U postgres -c 'CREATE DATABASE leaderboard_test;'
+  - psql -U postgres -c "CREATE EXTENSION postgis" -d leaderboard_test
+  - psql -U postgres -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
 
 script: 
-    - python manage.py test 
+  - python manage.py test 
