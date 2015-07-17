@@ -15,9 +15,9 @@ before_script:
   - psql -U postgres -c "CREATE EXTENSION postgis" -d leaderboard_test
   - psql -U postgres -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
 
-script: 
-  - python manage.py test
-  - coverage run --source=home manage.py test 
+script:
+  - python manage.py test leaderboard
+  - coverage run --source=leaderboard manage.py test leaderboard
 
-after_success: 
+after_success:
   - coveralls
