@@ -8,6 +8,7 @@ addons:
 
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
 
 before_script:
   - psql -U postgres -c 'CREATE DATABASE leaderboard_test;'
@@ -15,4 +16,8 @@ before_script:
   - psql -U postgres -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
 
 script: 
-  - python manage.py test 
+  - python manage.py test
+  - coverage run --source=home manage.py test 
+
+after_success: 
+  - coveralls
