@@ -17,10 +17,13 @@ class Contribution(models.Model):
     """
     A contribution made by a contributor to the leaderboard.
     """
-    created = models.DateTimeField(auto_now_add=True)
-    contributor = models.ForeignKey(Contributor)
+    date = models.DateField()
     tile = models.ForeignKey('locations.Tile')
-    observations = models.PositiveIntegerField()
+    contributor = models.ForeignKey(Contributor)
+    observations = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('date', 'tile', 'contributor')
 
     def __unicode__(self):
         return '{user}-{date}-{tile}: {observations}'.format(

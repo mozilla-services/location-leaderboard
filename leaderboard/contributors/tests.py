@@ -1,3 +1,4 @@
+import time
 import json
 
 import factory
@@ -23,19 +24,35 @@ class ContributorFactory(factory.DjangoModelFactory):
 class ContributionTests(CountryTestMixin, TestCase):
 
     def test_submit_multiple_observations(self):
+        now = time.time()
+        one_day = 24 * 60 * 60
+
         observation_data = {
             'items': [
+                # A contribution for tile1 at time1
                 {
+                    'time': now,
                     'tile_easting_m': -8872100,
                     'tile_northing_m': 5435700,
                     'observations': 100,
                 },
+                # A contribution for tile1 at time 1
                 {
+                    'time': now,
                     'tile_easting_m': -8872100,
                     'tile_northing_m': 5435700,
                     'observations': 100,
                 },
+                # A contribution for tile2 at time1
                 {
+                    'time': now,
+                    'tile_easting_m': -8892100,
+                    'tile_northing_m': 5435700,
+                    'observations': 100,
+                },
+                # A contribution for tile2 at time2
+                {
+                    'time': now + one_day,
                     'tile_easting_m': -8892100,
                     'tile_northing_m': 5435700,
                     'observations': 100,
@@ -52,20 +69,26 @@ class ContributionTests(CountryTestMixin, TestCase):
         )
 
         self.assertEqual(response.status_code, 201)
+
         self.assertEqual(Tile.objects.all().count(), 2)
         tile1 = Tile.objects.get(easting=-8873000, northing=5435000)
-        tile2 = Tile.objects.get(easting=-8893000, northing=5435000)
         self.assertEqual(tile1.country, self.country)
+        tile2 = Tile.objects.get(easting=-8893000, northing=5435000)
         self.assertEqual(tile2.country, self.country)
 
         self.assertEqual(Contribution.objects.all().count(), 3)
-        self.assertEqual(Contribution.objects.filter(tile=tile1).count(), 2)
-        self.assertEqual(Contribution.objects.filter(tile=tile2).count(), 1)
+        contribution1 = Contribution.objects.filter(tile=tile1).get()
+        self.assertEqual(contribution1.observations, 200)
+
+        self.assertEqual(Contribution.objects.filter(tile=tile2).count(), 2)
+        for contribution in Contribution.objects.filter(tile=tile2):
+            self.assertEqual(contribution.observations, 100)
 
     def test_invalid_data_returns_400(self):
         observation_data = {
             'items': [
                 {
+                    'time': 'asdf',
                     'tile_easting_m': 'asdf',
                     'tile_northing_m': 'asdf',
                     'observations': 'asdf',
@@ -85,6 +108,7 @@ class ContributionTests(CountryTestMixin, TestCase):
         self.assertEqual(Tile.objects.all().count(), 0)
         self.assertEqual(Contribution.objects.all().count(), 0)
         errors = response.data[0]
+        self.assertIn('time', errors)
         self.assertIn('tile_easting_m', errors)
         self.assertIn('tile_northing_m', errors)
         self.assertIn('observations', errors)
@@ -93,6 +117,7 @@ class ContributionTests(CountryTestMixin, TestCase):
         observation_data = {
             'items': [
                 {
+                    'time': time.time(),
                     'tile_easting_m': -8872100,
                     'tile_northing_m': 5435700,
                     'observations': 100,

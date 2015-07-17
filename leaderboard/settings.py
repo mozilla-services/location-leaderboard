@@ -98,7 +98,7 @@ STATIC_URL = '/static/'
 
 
 # Database configuration for travis tests
-# Shoudl be overridden by a local settings file for actual deployments
+# Should be overridden by a local settings file for actual deployments
 
 if 'TRAVIS' in os.environ:
     DATABASES = {
