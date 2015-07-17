@@ -48,12 +48,18 @@ Add Stumbles
           {
             items: [
               {
+                time: <float>,
                 tile_easting_m: <int>,
                 tile_northing_m: <int>,
                 observations: <int>
               }
             ]
           }
+
+  * **time**
+
+  A UNIX time stamp in seconds that represents the time when the observations for the given tile
+  were made.
 
   * **tile_easting_m**
 
@@ -108,16 +114,19 @@ Add Stumbles
           data : {
             items: [
               {
+                time: 1234567890,
                 tile_easting_m: -8872100,
                 tile_northing_m: 5435700,
                 observations: 100
               },
               {
+                time: 1234567890,
                 tile_easting_m: -8872100,
                 tile_northing_m: 5435700,
                 observations: 100
               },
               {
+                time: 1234567890,
                 tile_easting_m: -8892100,
                 tile_northing_m: 5435700,
                 observations: 100
