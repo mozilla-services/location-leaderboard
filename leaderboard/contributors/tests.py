@@ -22,7 +22,7 @@ class ContributorFactory(factory.DjangoModelFactory):
 # Create your tests here.
 class ContributionTests(CountryTestMixin, TestCase):
 
-    def test_submit_observations(self):
+    def test_submit_multiple_observations(self):
         observation_data = {
             'items': [
                 {
@@ -61,6 +61,33 @@ class ContributionTests(CountryTestMixin, TestCase):
         self.assertEqual(Contribution.objects.all().count(), 3)
         self.assertEqual(Contribution.objects.filter(tile=tile1).count(), 2)
         self.assertEqual(Contribution.objects.filter(tile=tile2).count(), 1)
+
+    def test_invalid_data_returns_400(self):
+        observation_data = {
+            'items': [
+                {
+                    'tile_easting_m': 'asdf',
+                    'tile_northing_m': 'asdf',
+                    'observations': 'asdf',
+                },
+            ],
+        }
+
+        payload = json.dumps(observation_data)
+
+        response = self.client.post(
+            reverse('contributions-create'),
+            payload,
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Tile.objects.all().count(), 0)
+        self.assertEqual(Contribution.objects.all().count(), 0)
+        errors = response.data[0]
+        self.assertIn('tile_easting_m', errors)
+        self.assertIn('tile_northing_m', errors)
+        self.assertIn('observations', errors)
 
     def test_submit_observations_with_gzipped_data(self):
         observation_data = {
