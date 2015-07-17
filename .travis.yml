@@ -9,11 +9,13 @@ addons:
 install:
   - pip install -r requirements.txt
   - pip install coveralls
+  - pip install flake8
 
 before_script:
   - psql -U postgres -c 'CREATE DATABASE leaderboard_test;'
   - psql -U postgres -c "CREATE EXTENSION postgis" -d leaderboard_test
   - psql -U postgres -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
+  - flake8 leaderboard
 
 script:
   - python manage.py test leaderboard
