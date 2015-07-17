@@ -58,7 +58,7 @@ class TileManager(models.GeoManager):
     def get_or_create_nearest_tile(self, easting=None, northing=None,
                                    *args, **kwargs):
         # Round to the nearest tile size
-        easting = easting - (easting % self.model.TILE_SIZE)#derp
+        easting = easting - (easting % self.model.TILE_SIZE)
         northing = northing - (northing % self.model.TILE_SIZE)
 
         return self.get_or_create(
