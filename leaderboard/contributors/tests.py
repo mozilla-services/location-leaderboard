@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 
 from leaderboard.utils.compression import gzip_compress
 from leaderboard.locations.models import Tile
-from leaderboard.locations.tests import CountryTestMixin
+from leaderboard.locations.tests.test_models import CountryTestMixin
 from leaderboard.contributors.models import Contributor, Contribution
 
 

@@ -22,7 +22,7 @@ Add Stumbles
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/add_stumbles/
+  https://leaderboard.services.mozilla.com/api/v1/contributors/add_stumbles/
 
 * **Method:**
 
@@ -139,6 +139,66 @@ Add Stumbles
           }
         });
 
+Get Countries
+----
+  Get the list of all countries and their shapes.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/api/v1/locations/countries/
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      {
+        id: <int>,
+        name: <str>,
+        mpoly: {
+          type: "MultiPolygon",
+          coordinates: [
+            [
+              [
+                [<float>, <float>],
+              ]
+            ]
+          ]
+        }
+      }
+
+* **Error Responses:**
+
+  None
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/locations/countries/",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
 Get Leaders
 ----
   Get the leaders for a given Country.
@@ -155,7 +215,7 @@ Get Leaders
 
   * country_id : `int`
 
-  A country_id is an id which can be found by calling the /api/v1/countries/ API endpoint.
+  A country_id is an id which can be found by calling the [Get Countries](#get-countries) API endpoint.
 
 * **Data Params**
 

@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/v1/', include('leaderboard.contributors.urls')),
+    url(r'^api/v1/locations/', include('leaderboard.locations.urls')),
+    url(r'^api/v1/contributors/', include('leaderboard.contributors.urls')),
 ]
