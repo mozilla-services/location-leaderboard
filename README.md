@@ -172,7 +172,7 @@ Get Countries
       {
         id: <int>,
         name: <str>,
-        mpoly: {
+        geometry: {
           type: "MultiPolygon",
           coordinates: [
             [

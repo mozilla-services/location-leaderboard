@@ -5,8 +5,8 @@ from leaderboard.locations.models import Country
 
 
 class CountrySerializer(serializers.ModelSerializer):
-    mpoly = GeometryField()
+    geometry = GeometryField()
 
     class Meta:
         model = Country
-        fields = ('id', 'name', 'mpoly')
+        fields = ('id', 'name', 'geometry')
