@@ -21,7 +21,6 @@ class CountryManager(models.GeoManager):
             return country.get()
 
 
-# Create your models here.
 class Country(models.Model):
     """
     A country as defined by:

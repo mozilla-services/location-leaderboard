@@ -41,6 +41,8 @@ class CountryFactory(factory.DjangoModelFactory):
 class CountryTestMixin(object):
 
     def setUp(self):
+        super(CountryTestMixin, self).setUp()
+
         self.country = CountryFactory.build()
         self.country.save()
 
