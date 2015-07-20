@@ -18,8 +18,7 @@ before_script:
   - flake8 leaderboard
 
 script:
-  - python manage.py test leaderboard
-  - coverage run --source=leaderboard manage.py test leaderboard
+  - coverage run manage.py test leaderboard
 
 after_success:
   - coveralls
