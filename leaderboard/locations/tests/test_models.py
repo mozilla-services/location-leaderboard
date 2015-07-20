@@ -24,7 +24,7 @@ class CountryFactory(factory.DjangoModelFactory):
     subregion = factory.Sequence(lambda n: n)
     lon = factory.Sequence(lambda n: n)
     lat = factory.Sequence(lambda n: n)
-    mpoly = ProjectedMultiPolygon([
+    geometry = ProjectedMultiPolygon([
         ProjectedPolygon([
             ProjectedPoint(0, 0),
             ProjectedPoint(0, 1),
@@ -54,7 +54,7 @@ class TestCountryManager(TestCase):
         country1.save()
 
         country2 = CountryFactory.build()
-        country2.mpoly = ProjectedMultiPolygon([
+        country2.geometry = ProjectedMultiPolygon([
             ProjectedPolygon([
                 ProjectedPoint(1000, 1000),
                 ProjectedPoint(1000, 1001),
@@ -95,7 +95,7 @@ class TestTile(CountryTestMixin, TestCase):
         tile = Tile(easting=0, northing=0)
         tile.save()
 
-        mpoly = ProjectedMultiPolygon([
+        geometry = ProjectedMultiPolygon([
             ProjectedPolygon([
                 ProjectedPoint(0, 0),
                 ProjectedPoint(1000, 0),
@@ -107,5 +107,5 @@ class TestTile(CountryTestMixin, TestCase):
 
         self.assertEqual(tile.easting, 0)
         self.assertEqual(tile.northing, 0)
-        self.assertEqual(tile.mpoly, mpoly)
+        self.assertEqual(tile.geometry, geometry)
         self.assertEqual(tile.country, self.country)

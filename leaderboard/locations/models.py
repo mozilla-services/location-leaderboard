@@ -39,7 +39,7 @@ class Country(models.Model):
     subregion = models.IntegerField('Sub-Region Code')
     lon = models.FloatField()
     lat = models.FloatField()
-    mpoly = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
+    geometry = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
 
     objects = CountryManager()
 
@@ -78,7 +78,7 @@ class Tile(models.Model):
     northing = models.IntegerField()
 
     country = models.ForeignKey(Country, related_name='tiles')
-    mpoly = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
+    geometry = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
 
     objects = TileManager()
 
@@ -103,8 +103,8 @@ class Tile(models.Model):
                 ProjectedPoint(self.easting, self.northing),
             ]
 
-            self.mpoly = ProjectedMultiPolygon([ProjectedPolygon(points)])
+            self.geometry = ProjectedMultiPolygon([ProjectedPolygon(points)])
             self.country = Country.objects.nearest_to_point(
-                self.mpoly.centroid)
+                self.geometry.centroid)
 
         return super(Tile, self).save(*args, **kwargs)

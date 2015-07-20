@@ -16,7 +16,7 @@ field_mapping = {
     'subregion': 'SUBREGION',
     'lon': 'LON',
     'lat': 'LAT',
-    'mpoly': 'MULTIPOLYGON',
+    'geometry': 'MULTIPOLYGON',
 }
 
 
