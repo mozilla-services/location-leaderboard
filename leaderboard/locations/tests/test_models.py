@@ -1,4 +1,3 @@
-import uuid
 import random
 
 import factory
@@ -16,9 +15,9 @@ class CountryFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Country {}'.format(n))
     area = factory.LazyAttribute(lambda o: random.randint(1000, 9999999))
     pop2005 = factory.LazyAttribute(lambda o: random.randint(1000, 999999))
-    fips = factory.LazyAttribute(lambda o: uuid.uuid4().hex[:2])
-    iso2 = factory.LazyAttribute(lambda o: uuid.uuid4().hex[:2])
-    iso3 = factory.LazyAttribute(lambda o: uuid.uuid4().hex[:3])
+    fips = factory.Sequence(lambda n: str(n))
+    iso2 = factory.Sequence(lambda n: str(n))
+    iso3 = factory.Sequence(lambda n: str(n))
     un = factory.Sequence(lambda n: n)
     region = factory.Sequence(lambda n: n)
     subregion = factory.Sequence(lambda n: n)
