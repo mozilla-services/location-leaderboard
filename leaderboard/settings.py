@@ -126,6 +126,15 @@ REST_FRAMEWORK = {
 # http://spatialreference.org/ref/sr-org/7483/
 PROJECTION_SRID = 3857
 
+# Contribution Settings
+
+# Each contribution should be broken into tiles of 1km x 1km
+CONTRIBUTION_TILE_SIZE = 1000
+
+# Each contribution record for a tile should sum the
+# observations within that tile for a 24 hour period
+CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
+
 
 try:
     from settings_local import *
