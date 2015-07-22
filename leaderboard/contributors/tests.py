@@ -2,13 +2,14 @@ import time
 import json
 
 import factory
-from django.test import TestCase
+from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.test import TestCase
 
-from leaderboard.utils.compression import gzip_compress
+from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.locations.models import Tile
 from leaderboard.locations.tests.test_models import CountryTestMixin
-from leaderboard.contributors.models import Contributor, Contribution
+from leaderboard.utils.compression import gzip_compress
 
 
 class ContributorFactory(factory.DjangoModelFactory):
@@ -20,7 +21,21 @@ class ContributorFactory(factory.DjangoModelFactory):
         model = Contributor
 
 
-# Create your tests here.
+class ContributionConfigTests(TestCase):
+
+    def test_get_contribution_config(self):
+        response = self.client.get(reverse('contributions-config'))
+
+        self.assertEqual(response.status_code, 200)
+
+        config_data = json.loads(response.content)
+
+        self.assertEqual(config_data, {
+            'tile_size': settings.CONTRIBUTION_TILE_SIZE,
+            'record_duration': settings.CONTRIBUTION_RECORD_DURATION,
+        })
+
+
 class ContributionTests(CountryTestMixin, TestCase):
 
     def test_submit_multiple_observations(self):
