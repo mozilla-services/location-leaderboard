@@ -3,6 +3,7 @@ from django.conf.urls import url
 from leaderboard.contributors.views import (
     ContributionsConfigView,
     CreateContributionsView,
+    LeadersCountryView,
 )
 
 urlpatterns = [
@@ -10,4 +11,6 @@ urlpatterns = [
         name='contributions-config'),
     url('^add_stumbles/', CreateContributionsView.as_view(),
         name='contributions-create'),
+    url('^leaders/country/(?P<country_id>\d+)/', LeadersCountryView.as_view(),
+        name='leaders-country-list'),
 ]

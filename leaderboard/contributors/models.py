@@ -28,7 +28,7 @@ class Contribution(models.Model):
     def __unicode__(self):
         return '{user}-{date}-{tile}: {observations}'.format(
             user=self.contributor,
-            date=self.created,
+            date=self.date,
             tile=self.tile,
             observations=self.observations,
         )

@@ -1,5 +1,6 @@
-import time
+import datetime
 import json
+import time
 
 import factory
 from django.conf import settings
@@ -8,7 +9,11 @@ from django.test import TestCase
 
 from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.locations.models import Tile
-from leaderboard.locations.tests.test_models import CountryTestMixin
+from leaderboard.locations.tests.test_models import (
+    CountryFactory,
+    CountryTestMixin,
+    TileFactory,
+)
 from leaderboard.utils.compression import gzip_compress
 
 
@@ -19,6 +24,16 @@ class ContributorFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = Contributor
+
+
+class ContributionFactory(factory.DjangoModelFactory):
+    date = factory.LazyAttribute(lambda o: datetime.date.today())
+    contributor = factory.SubFactory(ContributorFactory)
+    tile = factory.SubFactory(TileFactory)
+    observations = 1
+
+    class Meta:
+        model = Contribution
 
 
 class ContributionConfigTests(TestCase):
@@ -36,7 +51,7 @@ class ContributionConfigTests(TestCase):
         })
 
 
-class ContributionTests(CountryTestMixin, TestCase):
+class SubmitContributionTests(CountryTestMixin, TestCase):
 
     def test_submit_multiple_observations(self):
         now = time.time()
@@ -162,3 +177,95 @@ class ContributionTests(CountryTestMixin, TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+
+class GetCountryLeadersTests(CountryTestMixin, TestCase):
+
+    def test_sums_for_each_contributor_and_orders_by_observations(self):
+        today = datetime.date.today()
+
+        contributor1 = ContributorFactory()
+
+        for i in range(3):
+            Contribution(
+                contributor=contributor1,
+                date=today,
+                observations=1,
+                tile=TileFactory(country=self.country),
+            ).save()
+
+        contributor2 = ContributorFactory()
+
+        for i in range(4):
+            Contribution(
+                contributor=contributor2,
+                date=today,
+                observations=1,
+                tile=TileFactory(country=self.country),
+            ).save()
+
+        response = self.client.get(
+            reverse(
+                'leaders-country-list',
+                kwargs={'country_id': self.country.id}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        leaders_data = json.loads(response.content)
+        self.assertEqual(leaders_data, [
+            {
+                'name': contributor2.name,
+                'observations': 4,
+            },
+            {
+                'name': contributor1.name,
+                'observations': 3,
+            },
+        ])
+
+    def test_filters_by_country(self):
+        today = datetime.date.today()
+
+        contributor = ContributorFactory()
+
+        country1 = CountryFactory()
+        country2 = CountryFactory()
+
+        contribution1 = Contribution(
+            contributor=contributor,
+            date=today,
+            observations=1,
+            tile=TileFactory(country=country1),
+        )
+        contribution1.save()
+
+        contribution2 = Contribution(
+            contributor=contributor,
+            date=today,
+            observations=1,
+            tile=TileFactory(country=country1),
+        )
+        contribution2.save()
+
+        contribution3 = Contribution(
+            contributor=contributor,
+            date=today,
+            observations=1,
+            tile=TileFactory(country=country2),
+        )
+        contribution3.save()
+
+        response = self.client.get(
+            reverse(
+                'leaders-country-list',
+                kwargs={'country_id': country1.id}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        leaders_data = json.loads(response.content)
+        self.assertEqual(leaders_data, [{
+            'name': contributor.name,
+            'observations': 2,
+        }])

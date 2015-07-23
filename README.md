@@ -265,7 +265,7 @@ Get Leaders
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/leaders/country/
+  https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: int>/
 
 * **Method:**
 
@@ -308,7 +308,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/1/",
           dataType: "json",
           data: {
             country_id: 1,

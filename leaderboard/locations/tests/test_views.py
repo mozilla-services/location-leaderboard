@@ -17,18 +17,5 @@ class TestCountryListVIew(CountryTestMixin, TestCase):
         self.assertEqual(countries_data, [{
             'id': self.country.id,
             'name': self.country.name,
-            'geometry': {
-                'type': 'MultiPolygon',
-                'coordinates': [
-                    [
-                        [
-                            [0.0, 0.0],
-                            [0.0, 1.0],
-                            [1.0, 0.0],
-                            [1.0, 1.0],
-                            [0.0, 0.0],
-                        ],
-                    ],
-                ],
-            },
+            'geometry': json.loads(self.country.geometry.geojson),
         }])
