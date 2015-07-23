@@ -6,6 +6,14 @@ from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.locations.models import Tile
 
 
+class LeaderSerializer(serializers.ModelSerializer):
+    observations = serializers.IntegerField()
+
+    class Meta:
+        model = Contributor
+        fields = ('name', 'observations')
+
+
 class ContributionSerializer(serializers.Serializer):
     """
     A contribution submission from a contributor.  A contribution

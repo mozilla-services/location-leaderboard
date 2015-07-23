@@ -23,27 +23,36 @@ class CountryFactory(factory.DjangoModelFactory):
     subregion = factory.Sequence(lambda n: n)
     lon = factory.Sequence(lambda n: n)
     lat = factory.Sequence(lambda n: n)
-    geometry = ProjectedMultiPolygon([
+    geometry = factory.Sequence(lambda n: ProjectedMultiPolygon([
         ProjectedPolygon([
-            ProjectedPoint(0, 0),
-            ProjectedPoint(0, 1),
-            ProjectedPoint(1, 0),
-            ProjectedPoint(1, 1),
-            ProjectedPoint(0, 0),
+            ProjectedPoint(n, n),
+            ProjectedPoint(n, n+1),
+            ProjectedPoint(n+1, n),
+            ProjectedPoint(n+1, n+1),
+            ProjectedPoint(n, n),
         ]),
-    ])
+    ]))
 
     class Meta:
         model = Country
 
 
-class CountryTestMixin(object):
+class TileFactory(factory.DjangoModelFactory):
+    easting = factory.Sequence(lambda n: n)
+    northing = factory.Sequence(lambda n: n)
+    country = factory.SubFactory(CountryFactory)
+    geometry = factory.Sequence(lambda n: ProjectedMultiPolygon([
+        ProjectedPolygon([
+            ProjectedPoint(n, n),
+            ProjectedPoint(n, n+1),
+            ProjectedPoint(n+1, n),
+            ProjectedPoint(n+1, n+1),
+            ProjectedPoint(n, n),
+        ]),
+    ]))
 
-    def setUp(self):
-        super(CountryTestMixin, self).setUp()
-
-        self.country = CountryFactory.build()
-        self.country.save()
+    class Meta:
+        model = Tile
 
 
 class TestCountryManager(TestCase):
@@ -67,6 +76,15 @@ class TestCountryManager(TestCase):
         point = ProjectedPoint(0, 0)
         nearest_country = Country.objects.nearest_to_point(point)
         self.assertEqual(nearest_country, country1)
+
+
+class CountryTestMixin(object):
+
+    def setUp(self):
+        super(CountryTestMixin, self).setUp()
+
+        self.country = CountryFactory.build()
+        self.country.save()
 
 
 class TestTileManager(CountryTestMixin, TestCase):

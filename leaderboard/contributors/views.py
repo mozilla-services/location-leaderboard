@@ -1,9 +1,14 @@
+from django.db.models import Sum
 from django.conf import settings
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from leaderboard.contributors.serializers import ContributionSerializer
+from leaderboard.contributors.models import Contributor
+from leaderboard.contributors.serializers import (
+    LeaderSerializer,
+    ContributionSerializer,
+)
 
 
 class ContributionsConfigView(APIView):
@@ -27,3 +32,18 @@ class CreateContributionsView(CreateAPIView):
             data = data.get('items', [])
         return super(CreateContributionsView, self).get_serializer(
             data=data, many=True, *args, **kwargs)
+
+
+class LeadersCountryView(ListAPIView):
+    queryset = Contributor.objects.all()
+    serializer_class = LeaderSerializer
+
+    def get_queryset(self):
+        return super(
+            LeadersCountryView,
+            self,
+        ).get_queryset().filter(
+            contribution__tile__country_id=self.kwargs['country_id']
+        ).annotate(
+            observations=Sum('contribution__observations')
+        ).order_by('-observations')
