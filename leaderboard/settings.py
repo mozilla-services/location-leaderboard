@@ -135,6 +135,11 @@ CONTRIBUTION_TILE_SIZE = 1000
 # observations within that tile for a 24 hour period
 CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
 
+# Firefox Accounts
+FXA_CLIENT_ID = 'TODO'
+FXA_SECRET = 'TODO'
+FXA_OAUTH_URI = 'TODO'
+FXA_PROFILE_URI = 'TODO'
 
 try:
     from settings_local import *
