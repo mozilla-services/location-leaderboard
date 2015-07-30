@@ -201,6 +201,62 @@ Add Stumbles
 
 Get Leaders
 ----
+  Get all leaders that have contributed, sorted by the highest contributions. 
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/api/v1/leaders/all/
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      [
+        {
+          name: <str>,
+          observations: <int>
+        }
+      ]
+
+* **Error Responses:**
+
+  None
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/",
+          dataType: "json",
+          data: {
+            country_id: 1,
+          }
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
+
+Get Country Leaders
+----
   Get the leaders for a given Country.
 
 * **URL**
@@ -231,15 +287,12 @@ Get Leaders
 
   JSON encoding
 
-        {
-          country_name: <str>,
-          leaders: [
-            {
-              name: <str>,
-              observations: <int>
-            }
-          ]
-        }
+        [
+          {
+            name: <str>,
+            observations: <int>
+          }
+        ]
 
 * **Error Responses:**
 
