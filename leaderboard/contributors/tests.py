@@ -207,24 +207,51 @@ class GetLeadersTests(TestCase):
                 tile=TileFactory(country=country2),
             ).save()
 
-        response = self.client.get(
-            reverse(
-                'leaders-list',
-            )
-        )
+        response = self.client.get(reverse('leaders-list'))
         self.assertEqual(response.status_code, 200)
 
         leaders_data = json.loads(response.content)
-        self.assertEqual(leaders_data, [
-            {
-                'name': contributor2.name,
-                'observations': 4,
-            },
-            {
-                'name': contributor1.name,
-                'observations': 3,
-            },
-        ])
+        self.assertEqual(leaders_data, {
+            'count': 2,
+            'previous': None,
+            'results': [
+                {
+                    'name': contributor2.name,
+                    'observations': 4,
+                }, {
+                    'name': contributor1.name,
+                    'observations': 3,
+                }
+            ],
+            'next': None,
+        })
+
+    def test_leaderboard_is_paginated(self):
+        today = datetime.date.today()
+        country = CountryFactory()
+        page_size = settings.REST_FRAMEWORK['PAGE_SIZE']
+
+        for i in range(page_size + 1):
+            contributor = ContributorFactory()
+            Contribution(
+                contributor=contributor,
+                date=today,
+                observations=1,
+                tile=TileFactory(country=country),
+            ).save()
+
+        response = self.client.get(reverse('leaders-list'))
+        self.assertEqual(response.status_code, 200)
+
+        leaders_data = json.loads(response.content)
+        self.assertEqual(len(leaders_data['results']), page_size)
+        print response.content
+
+        response = self.client.get(reverse('leaders-list'), {'page': 2})
+        self.assertEqual(response.status_code, 200)
+
+        leaders_data = json.loads(response.content)
+        self.assertEqual(len(leaders_data['results']), 1)
 
 
 class GetCountryLeadersTests(TestCase):
@@ -270,7 +297,12 @@ class GetCountryLeadersTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         leaders_data = json.loads(response.content)
-        self.assertEqual(leaders_data, [{
-            'name': contributor.name,
-            'observations': 2,
-        }])
+        self.assertEqual(leaders_data, {
+            'count': 1,
+            'previous': None,
+            'results': [{
+                'name': contributor.name,
+                'observations': 2,
+            }],
+            'next': None,
+        })

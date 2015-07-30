@@ -116,7 +116,8 @@ if 'TRAVIS' in os.environ:
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'leaderboard.parsers.GzipJSONParser',
-    )
+    ),
+    'PAGE_SIZE': 20,
 }
 
 # Geography Settings
