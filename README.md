@@ -205,7 +205,7 @@ Get Leaders
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: int>/
+  https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/
 
 * **Method:**
 
@@ -213,9 +213,9 @@ Get Leaders
 
 *  **URL Params**
 
-  * country_id : `int`
+  * country_id : `str`
 
-  A country_id is an id which can be found by calling the [Get Countries](#get-countries) API endpoint.
+  A country_id is a 2 letter ISO country code which can be found [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). 
 
 * **Data Params**
 
@@ -248,7 +248,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/1/",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/",
           dataType: "json",
           data: {
             country_id: 1,

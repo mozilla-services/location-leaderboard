@@ -43,7 +43,7 @@ class LeadersCountryView(ListAPIView):
             LeadersCountryView,
             self,
         ).get_queryset().filter(
-            contribution__tile__country_id=self.kwargs['country_id']
+            contribution__tile__country__iso2=self.kwargs['country_id']
         ).annotate(
             observations=Sum('contribution__observations')
         ).order_by('-observations')

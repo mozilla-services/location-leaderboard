@@ -207,7 +207,7 @@ class GetCountryLeadersTests(CountryTestMixin, TestCase):
         response = self.client.get(
             reverse(
                 'leaders-country-list',
-                kwargs={'country_id': self.country.id}
+                kwargs={'country_id': self.country.iso2}
             )
         )
         self.assertEqual(response.status_code, 200)
@@ -259,7 +259,7 @@ class GetCountryLeadersTests(CountryTestMixin, TestCase):
         response = self.client.get(
             reverse(
                 'leaders-country-list',
-                kwargs={'country_id': country1.id}
+                kwargs={'country_id': country1.iso2}
             )
         )
         self.assertEqual(response.status_code, 200)
