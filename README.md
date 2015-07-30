@@ -24,23 +24,11 @@ Get Contribution Config
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/contributions/config/
+  `https://leaderboard.services.mozilla.com/api/v1/contributions/config/`
 
 * **Method:**
 
   `GET`
-
-*  **URL Params**
-
-  None
-
-* **Data Params**
-
-  None
-
-* **Request Headers**
-
-  None
 
 * **Success Response:**
 
@@ -82,15 +70,11 @@ Add Stumbles
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/contributions/add_stumbles/
+  `https://leaderboard.services.mozilla.com/api/v1/contributions/add_stumbles/`
 
 * **Method:**
 
   `POST`
-
-*  **URL Params**
-
-  None
 
 * **Data Params**
 
@@ -205,23 +189,17 @@ Get Leaders
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/leaders/all/
+  `https://leaderboard.services.mozilla.com/api/v1/leaders/all/`
 
 * **Method:**
 
   `GET`
 
-*  **URL Params**
+* **GET Params**
 
-  None
+  * page: `int`
 
-* **Data Params**
-
-  None
-
-* **Request Headers**
-
-  None
+  Each page contains 20 leaders.
 
 * **Success Response:**
 
@@ -229,21 +207,22 @@ Get Leaders
 
   JSON encoding
 
-      [
-        {
-          name: <str>,
-          observations: <int>
-        }
-      ]
-
-* **Error Responses:**
-
-  None
+      {
+        count: <int>,
+        previous: <str>,
+        next: <str>,
+        results: [
+          {
+            name: <str>,
+            observations: <int>
+          }
+        ]
+      }
 
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/all/?page=1",
           dataType: "json",
           data: {
             country_id: 1,
@@ -261,7 +240,7 @@ Get Country Leaders
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/
+  `https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/`
 
 * **Method:**
 
@@ -273,13 +252,11 @@ Get Country Leaders
 
   A country_id is a 2 letter ISO country code which can be found [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). 
 
-* **Data Params**
+* **GET Params**
 
-  None
+  * page: `int`
 
-* **Request Headers**
-
-  None
+  Each page contains 20 leaders.
 
 * **Success Response:**
 
@@ -301,7 +278,7 @@ Get Country Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/?page=1",
           dataType: "json",
           data: {
             country_id: 1,
