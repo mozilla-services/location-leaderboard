@@ -11,6 +11,6 @@ urlpatterns = [
         name='contributions-config'),
     url('^add_stumbles/', CreateContributionsView.as_view(),
         name='contributions-create'),
-    url('^leaders/country/(?P<country_id>\d+)/', LeadersCountryView.as_view(),
+    url('^leaders/country/(?P<country_id>\w+)/', LeadersCountryView.as_view(),
         name='leaders-country-list'),
 ]
