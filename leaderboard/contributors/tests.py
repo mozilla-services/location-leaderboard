@@ -179,10 +179,13 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
         self.assertEqual(response.status_code, 400)
 
 
-class GetCountryLeadersTests(CountryTestMixin, TestCase):
+class GetLeadersTests(TestCase):
 
     def test_sums_for_each_contributor_and_orders_by_observations(self):
         today = datetime.date.today()
+
+        country1 = CountryFactory()
+        country2 = CountryFactory()
 
         contributor1 = ContributorFactory()
 
@@ -191,7 +194,7 @@ class GetCountryLeadersTests(CountryTestMixin, TestCase):
                 contributor=contributor1,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=self.country),
+                tile=TileFactory(country=country1),
             ).save()
 
         contributor2 = ContributorFactory()
@@ -201,13 +204,12 @@ class GetCountryLeadersTests(CountryTestMixin, TestCase):
                 contributor=contributor2,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=self.country),
+                tile=TileFactory(country=country2),
             ).save()
 
         response = self.client.get(
             reverse(
-                'leaders-country-list',
-                kwargs={'country_id': self.country.iso2}
+                'leaders-list',
             )
         )
         self.assertEqual(response.status_code, 200)
@@ -223,6 +225,9 @@ class GetCountryLeadersTests(CountryTestMixin, TestCase):
                 'observations': 3,
             },
         ])
+
+
+class GetCountryLeadersTests(TestCase):
 
     def test_filters_by_country(self):
         today = datetime.date.today()

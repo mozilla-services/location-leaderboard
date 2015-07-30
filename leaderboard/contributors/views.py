@@ -34,16 +34,24 @@ class CreateContributionsView(CreateAPIView):
             data=data, many=True, *args, **kwargs)
 
 
-class LeadersCountryView(ListAPIView):
+class LeadersView(ListAPIView):
     queryset = Contributor.objects.all()
     serializer_class = LeaderSerializer
 
+    def filtered_queryset(self):
+        return super(LeadersView, self).get_queryset()
+
     def get_queryset(self):
+        return self.filtered_queryset().annotate(
+            observations=Sum('contribution__observations')
+        ).order_by('-observations')
+
+
+class LeadersCountryView(LeadersView):
+
+    def filtered_queryset(self):
         return super(
             LeadersCountryView,
             self,
-        ).get_queryset().filter(
-            contribution__tile__country__iso2=self.kwargs['country_id']
-        ).annotate(
-            observations=Sum('contribution__observations')
-        ).order_by('-observations')
+        ).filtered_queryset().filter(
+            contribution__tile__country__iso2=self.kwargs['country_id'])
