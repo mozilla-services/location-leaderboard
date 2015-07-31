@@ -58,3 +58,6 @@ target/
 
 # Django
 settings_local.py
+
+# Node
+node_modules
