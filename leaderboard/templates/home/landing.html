@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hgroup id="main-feature" class="center">
+    <h1>Mozilla Location Service Leaderboard</h1>
+    <h3>Contributing to mapping the world!</h3>
+</hgroup>
+
+<article>
+    <section>
+        <h2>Overview</h2>
+        <p>
+            The Mozilla Location Service Leaderboard tracks the contributions made to the 
+            <a href="https://location.services.mozilla.com/">Mozilla Location Service</a>.
+            This leaderboard shows the contributions of individual community members, who 
+            are using one of the client applications and contribute back data to us - we 
+            call this activity stumbling. Joining this competition is optional and you 
+            can contribute data anonymously. You only show up on the leaderboard if you 
+            have collected at least ten reports.
+        </p>
+    </section>
+    <section>
+        <h2>How do I contribute?</h2>
+
+        <p>
+            <a href="https://play.google.com/store/apps/details?id=org.mozilla.mozstumbler">
+                <img title="Get Mozilla Stumbler on Google Play" src="/static/imgs/google_play.png"></a>
+
+            <a href="https://f-droid.org/repository/browse/?fdid=org.mozilla.mozstumbler">
+                <img title="Mozilla Stumbler available on F-Droid" src="/static/imgs/f-droid.png"></a>
+        </p>
+
+        <p>
+            Mozilla Stumbler is an open-source wireless network scanner
+            which collects GPS, cellular and wireless network metadata
+            for our crowd-sourced location database.
+        </p>
+
+        <p>
+            You can find <a href="https://github.com/mozilla/MozStumbler">
+                Mozilla Stumbler on Github</a>
+            to contribute to its development.
+        </p>
+    </section>
+</article>
+{% endblock %}

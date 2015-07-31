@@ -1,0 +1,1292 @@
+/****************************************************************************/
+/****************************************************************************/
+.button-flat,
+.button-flat:link,
+.button-flat:visited {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 6px;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  text-align: center;
+  padding: 12px 40px;
+  margin-bottom: 20px;
+  background: #00a0dc;
+  color: #fff !important;
+  font-size: 14px;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+}
+.button-flat:hover,
+.button-flat:link:hover,
+.button-flat:visited:hover,
+.button-flat:focus,
+.button-flat:link:focus,
+.button-flat:visited:focus {
+  text-decoration: none;
+  background: #00abeb;
+  color: #fff;
+}
+.button-flat-dark {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 6px;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  text-align: center;
+  padding: 12px 40px;
+  margin-bottom: 20px;
+  background: #00a0dc;
+  color: #fff !important;
+  font-size: 14px;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  background: #005189;
+}
+.button-flat-dark:hover,
+.button-flat-dark:focus {
+  text-decoration: none;
+  background: #00abeb;
+  color: #fff;
+}
+.button-flat-dark:hover,
+.button-flat-dark:focus {
+  background: #005a98;
+}
+.button-flat-green {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 6px;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  text-align: center;
+  padding: 12px 40px;
+  margin-bottom: 20px;
+  background: #00a0dc;
+  color: #fff !important;
+  font-size: 14px;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  background: #6fbe4a;
+}
+.button-flat-green:hover,
+.button-flat-green:focus {
+  text-decoration: none;
+  background: #00abeb;
+  color: #fff;
+}
+.button-flat-green:hover,
+.button-flat-green:focus {
+  background: #78c255;
+}
+.button-flat-inverted {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 6px;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  text-align: center;
+  padding: 12px 40px;
+  margin-bottom: 20px;
+  background: #00a0dc;
+  color: #fff !important;
+  font-size: 14px;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.4);
+  color: #00a0dc;
+  border: 2px solid #00a0dc;
+}
+.button-flat-inverted:hover,
+.button-flat-inverted:focus {
+  text-decoration: none;
+  background: #00abeb;
+  color: #fff;
+}
+.button-flat-inverted:hover,
+.button-flat-inverted:focus {
+  background: #ffffff;
+}
+html[lang^='en'] .button-flat,
+html[lang^='en'] .button-flat-dark,
+html[lang^='en'] .button-flat-green,
+html[lang^='en'] .button-flat-inverted {
+  text-transform: uppercase;
+}
+.button,
+.button:link,
+.button:visited {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 0.25em;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  background-color: #43a6e2;
+  background-color: #277ac1;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #43a6e2, #277ac1);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a6e2', endColorstr='#277ac1', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #43a6e2, #277ac1);
+  /* the standard */
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  line-height: 1.1;
+  text-decoration: none;
+  min-width: 80px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button:hover,
+.button:link:hover,
+.button:visited:hover,
+.button.hover,
+.button:link.hover,
+.button:visited.hover,
+.button:focus,
+.button:link:focus,
+.button:visited:focus,
+.button.focus,
+.button:link.focus,
+.button:visited.focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed;
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button:focus,
+.button:link:focus,
+.button:visited:focus,
+.button.focus,
+.button:link.focus,
+.button:visited.focus {
+  outline-color: #484848;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed, 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+.button:active,
+.button:link:active,
+.button:visited:active,
+.button.active,
+.button:link.active,
+.button:visited.active {
+  box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button.insensitive,
+.button:link.insensitive,
+.button:visited.insensitive,
+.button.insensitive:hover,
+.button:link.insensitive:hover,
+.button:visited.insensitive:hover,
+.button.insensitive:focus,
+.button:link.insensitive:focus,
+.button:visited.insensitive:focus {
+  background-color: #9ca3aa;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #bfc7cd, #9ca3aa);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfc7cd', endColorstr='#9ca3aa', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #bfc7cd, #9ca3aa);
+  /* the standard */
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+.button-green,
+.button-green:link,
+.button-green:visited {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 0.25em;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  background-color: #43a6e2;
+  background-color: #277ac1;
+  background-image: -webkit-linear-gradient(top, #43a6e2, #277ac1);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a6e2', endColorstr='#277ac1', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #43a6e2, #277ac1);
+  /* the standard */
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  line-height: 1.1;
+  text-decoration: none;
+  min-width: 80px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  cursor: pointer;
+  background-color: #81bc2e;
+  background-color: #659324;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #81bc2e, #659324);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#81bc2e', endColorstr='#659324', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #81bc2e, #659324);
+  /* the standard */
+}
+.button-green:hover,
+.button-green:link:hover,
+.button-green:visited:hover,
+.button-green.hover,
+.button-green:link.hover,
+.button-green:visited.hover,
+.button-green:focus,
+.button-green:link:focus,
+.button-green:visited:focus,
+.button-green.focus,
+.button-green:link.focus,
+.button-green:visited.focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed;
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-green:focus,
+.button-green:link:focus,
+.button-green:visited:focus,
+.button-green.focus,
+.button-green:link.focus,
+.button-green:visited.focus {
+  outline-color: #484848;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed, 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+.button-green:active,
+.button-green:link:active,
+.button-green:visited:active,
+.button-green.active,
+.button-green:link.active,
+.button-green:visited.active {
+  box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-green.insensitive,
+.button-green:link.insensitive,
+.button-green:visited.insensitive,
+.button-green.insensitive:hover,
+.button-green:link.insensitive:hover,
+.button-green:visited.insensitive:hover,
+.button-green.insensitive:focus,
+.button-green:link.insensitive:focus,
+.button-green:visited.insensitive:focus {
+  background-color: #9ca3aa;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #bfc7cd, #9ca3aa);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfc7cd', endColorstr='#9ca3aa', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #bfc7cd, #9ca3aa);
+  /* the standard */
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+.button-green small,
+.button-green:link small,
+.button-green:visited small {
+  display: block;
+}
+.button-green:hover,
+.button-green:link:hover,
+.button-green:visited:hover {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #83c822;
+}
+.button-green:focus,
+.button-green:link:focus,
+.button-green:visited:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(129, 188, 46, 0.4);
+}
+.button-negative,
+.button-negative:link,
+.button-negative:visited {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 0.25em;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  background-color: #43a6e2;
+  background-color: #277ac1;
+  background-image: -webkit-linear-gradient(top, #43a6e2, #277ac1);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a6e2', endColorstr='#277ac1', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #43a6e2, #277ac1);
+  /* the standard */
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  line-height: 1.1;
+  text-decoration: none;
+  min-width: 80px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  cursor: pointer;
+  background-color: #a91300;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #da5132, #a91300);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#da5132', endColorstr='#a91300', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #da5132, #a91300);
+  /* the standard */
+}
+.button-negative:hover,
+.button-negative:link:hover,
+.button-negative:visited:hover,
+.button-negative.hover,
+.button-negative:link.hover,
+.button-negative:visited.hover,
+.button-negative:focus,
+.button-negative:link:focus,
+.button-negative:visited:focus,
+.button-negative.focus,
+.button-negative:link.focus,
+.button-negative:visited.focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed;
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-negative:focus,
+.button-negative:link:focus,
+.button-negative:visited:focus,
+.button-negative.focus,
+.button-negative:link.focus,
+.button-negative:visited.focus {
+  outline-color: #484848;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed, 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+.button-negative:active,
+.button-negative:link:active,
+.button-negative:visited:active,
+.button-negative.active,
+.button-negative:link.active,
+.button-negative:visited.active {
+  box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-negative.insensitive,
+.button-negative:link.insensitive,
+.button-negative:visited.insensitive,
+.button-negative.insensitive:hover,
+.button-negative:link.insensitive:hover,
+.button-negative:visited.insensitive:hover,
+.button-negative.insensitive:focus,
+.button-negative:link.insensitive:focus,
+.button-negative:visited.insensitive:focus {
+  background-color: #9ca3aa;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #bfc7cd, #9ca3aa);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfc7cd', endColorstr='#9ca3aa', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #bfc7cd, #9ca3aa);
+  /* the standard */
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+.button-negative small,
+.button-negative:link small,
+.button-negative:visited small {
+  display: block;
+}
+.button-negative:hover,
+.button-negative:link:hover,
+.button-negative:visited:hover {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #e64926;
+}
+.button-negative:focus,
+.button-negative:link:focus,
+.button-negative:visited:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(218, 81, 50, 0.4);
+}
+.button-white,
+.button-white:link,
+.button-white:visited {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 0.25em;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  background-color: #43a6e2;
+  background-color: #277ac1;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #43a6e2, #277ac1);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a6e2', endColorstr='#277ac1', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #43a6e2, #277ac1);
+  /* the standard */
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  line-height: 1.1;
+  text-decoration: none;
+  min-width: 80px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  cursor: pointer;
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  padding: 4px 10.5px;
+  color: #484848;
+  font-size: 10.5px;
+  font-size: 0.65625rem;
+  font-weight: normal;
+  text-shadow: none;
+  box-shadow: 0 0 12px rgba(230, 230, 230, 0.2) inset, 0 -2px #e8e8e8 inset;
+  border-radius: 6px;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+.button-white:hover,
+.button-white:link:hover,
+.button-white:visited:hover,
+.button-white.hover,
+.button-white:link.hover,
+.button-white:visited.hover,
+.button-white:focus,
+.button-white:link:focus,
+.button-white:visited:focus,
+.button-white.focus,
+.button-white:link.focus,
+.button-white:visited.focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed;
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-white:focus,
+.button-white:link:focus,
+.button-white:visited:focus,
+.button-white.focus,
+.button-white:link.focus,
+.button-white:visited.focus {
+  outline-color: #484848;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed, 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+.button-white:active,
+.button-white:link:active,
+.button-white:visited:active,
+.button-white.active,
+.button-white:link.active,
+.button-white:visited.active {
+  box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-white.insensitive,
+.button-white:link.insensitive,
+.button-white:visited.insensitive,
+.button-white.insensitive:hover,
+.button-white:link.insensitive:hover,
+.button-white:visited.insensitive:hover,
+.button-white.insensitive:focus,
+.button-white:link.insensitive:focus,
+.button-white:visited.insensitive:focus {
+  background-color: #9ca3aa;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #bfc7cd, #9ca3aa);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfc7cd', endColorstr='#9ca3aa', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #bfc7cd, #9ca3aa);
+  /* the standard */
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+.button-white small,
+.button-white:link small,
+.button-white:visited small {
+  display: block;
+}
+.button-white:hover,
+.button-white:link:hover,
+.button-white:visited:hover,
+.button-white:focus,
+.button-white:link:focus,
+.button-white:visited:focus {
+  color: #484848;
+  box-shadow: 0 0 12px rgba(230, 230, 230, 0.2) inset, 0 -2px #e8e8e8 inset;
+}
+.button-white.selected {
+  background: #d7d5d5;
+  border-color: #bcb9b9;
+  text-shadow: 0 1px #fff;
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.75), 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+}
+.button,
+.button-white {
+  cursor: pointer;
+}
+.button small,
+.button-white small {
+  display: block;
+}
+.button.arrow span,
+.button-blue.arrow span,
+.button-white.arrow span {
+  display: block;
+  margin-right: -12px;
+  padding: 0 30px 0 0;
+  background: url(/static/sandstone/img/sandstone/buttons/arrow-go-r.png) right center no-repeat;
+}
+.button-sand,
+.button-sand:link,
+.button-sand:visited {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 0.25em;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  background-color: #43a6e2;
+  background-color: #277ac1;
+  background-image: -webkit-linear-gradient(top, #43a6e2, #277ac1);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a6e2', endColorstr='#277ac1', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #43a6e2, #277ac1);
+  /* the standard */
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  line-height: 1.1;
+  text-decoration: none;
+  min-width: 80px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.1);
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba(255, 255, 255, 0.1)', endColorstr='rgba(0, 0, 0, 0.1)', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+  /* the standard */
+  background-color: transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, 1px 0 0 0 rgba(255, 255, 255, 0.5) inset, -1px 0 0 0 rgba(255, 255, 255, 0.5) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.1) inset;
+  color: #0096dd;
+  text-shadow: none;
+}
+.button-sand:hover,
+.button-sand:link:hover,
+.button-sand:visited:hover,
+.button-sand.hover,
+.button-sand:link.hover,
+.button-sand:visited.hover,
+.button-sand:focus,
+.button-sand:link:focus,
+.button-sand:visited:focus,
+.button-sand.focus,
+.button-sand:link.focus,
+.button-sand:visited.focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed;
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-sand:focus,
+.button-sand:link:focus,
+.button-sand:visited:focus,
+.button-sand.focus,
+.button-sand:link.focus,
+.button-sand:visited.focus {
+  outline-color: #484848;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed, 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+.button-sand:active,
+.button-sand:link:active,
+.button-sand:visited:active,
+.button-sand.active,
+.button-sand:link.active,
+.button-sand:visited.active {
+  box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.button-sand.insensitive,
+.button-sand:link.insensitive,
+.button-sand:visited.insensitive,
+.button-sand.insensitive:hover,
+.button-sand:link.insensitive:hover,
+.button-sand:visited.insensitive:hover,
+.button-sand.insensitive:focus,
+.button-sand:link.insensitive:focus,
+.button-sand:visited.insensitive:focus {
+  background-color: #9ca3aa;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #bfc7cd, #9ca3aa);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfc7cd', endColorstr='#9ca3aa', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #bfc7cd, #9ca3aa);
+  /* the standard */
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+.button-sand small,
+.button-sand:link small,
+.button-sand:visited small {
+  display: block;
+}
+.button-sand:hover,
+.button-sand:link:hover,
+.button-sand:visited:hover,
+.button-sand:focus,
+.button-sand:link:focus,
+.button-sand:visited:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #ffffff;
+  color: #00539f;
+}
+.button-list {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  font-size: 0;
+}
+.button-list li {
+  font-size: 14px;
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0;
+  list-style-style: none;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+.button-list li .button-sand {
+  border-radius: 0;
+  border-left-width: 0;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, -1px 0 0 0 rgba(255, 255, 255, 0.5) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.1) inset;
+  min-width: 0;
+}
+.button-list li:first-child .button-sand {
+  border-top-left-radius: 0.25em;
+  border-bottom-left-radius: 0.25em;
+  border-left-width: 1px;
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.5) inset, 1px 0 0 0 rgba(255, 255, 255, 0.5) inset, -1px 0 0 0 rgba(255, 255, 255, 0.5) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.1) inset;
+}
+.button-list li:first-child .button-sand:hover,
+.button-list li:first-child .button-sand:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #ffffff;
+}
+.button-list li:last-child .button-sand {
+  border-top-right-radius: 0.25em;
+  border-bottom-right-radius: 0.25em;
+}
+.dark .button-sand,
+.dark .button-sand:link,
+.dark .button-sand:visited {
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.2) inset, 1px 0 0 0 rgba(255, 255, 255, 0.2) inset, -1px 0 0 0 rgba(255, 255, 255, 0.2) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.1) inset;
+}
+.dark .button-sand:hover,
+.dark .button-sand:link:hover,
+.dark .button-sand:visited:hover,
+.dark .button-sand:focus,
+.dark .button-sand:link:focus,
+.dark .button-sand:visited:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px rgba(255, 255, 255, 0.2);
+  color: #0096dd;
+}
+.dark .button-list li .button-sand {
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.2) inset, -1px 0 0 0 rgba(255, 255, 255, 0.2) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.1) inset;
+}
+.dark .button-list li:first-child .button-sand {
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.2) inset, 1px 0 0 0 rgba(255, 255, 255, 0.2) inset, -1px 0 0 0 rgba(255, 255, 255, 0.2) inset, 0 -2px 0 0 rgba(0, 0, 0, 0.1) inset;
+}
+.dark .button-list li:first-child .button-sand:hover,
+.dark .button-list li:first-child .button-sand:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px rgba(255, 255, 255, 0.2);
+  color: #0096dd;
+}
+.download-button .ios-download,
+.download-button .linux-arm-download,
+.download-button .unrecognized-download,
+.download-button .unsupported-download {
+  display: none;
+}
+.download-button {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  vertical-align: top;
+}
+.download-button ul {
+  margin: 0;
+}
+.download-button ul li {
+  list-style-type: none;
+  margin: 0;
+}
+.download-button .download-link {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  border-radius: 0.25em;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  background-color: #43a6e2;
+  background-color: #277ac1;
+  background-image: -webkit-linear-gradient(top, #43a6e2, #277ac1);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#43a6e2', endColorstr='#277ac1', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #43a6e2, #277ac1);
+  /* the standard */
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  line-height: 1.1;
+  text-decoration: none;
+  min-width: 80px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  background-color: #81bc2e;
+  background-color: #659324;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #81bc2e, #659324);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#81bc2e', endColorstr='#659324', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #81bc2e, #659324);
+  /* the standard */
+  cursor: pointer;
+  padding: 0;
+  margin-left: 54px;
+  width: 220px;
+  /* for IE6 */
+  _margin-left: 0;
+  _width: 294px;
+  text-align: left;
+  font-weight: normal;
+  line-height: 20px;
+  font-size: 16px;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+.download-button .download-link:hover,
+.download-button .download-link.hover,
+.download-button .download-link:focus,
+.download-button .download-link.focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed;
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.download-button .download-link:focus,
+.download-button .download-link.focus {
+  outline-color: #484848;
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #38a9ed, 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+.download-button .download-link:active,
+.download-button .download-link.active {
+  box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-decoration: none;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+.download-button .download-link.insensitive,
+.download-button .download-link.insensitive:hover,
+.download-button .download-link.insensitive:focus {
+  background-color: #9ca3aa;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, #bfc7cd, #9ca3aa);
+  /* Safari 5.1+, Chrome 10+ */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfc7cd', endColorstr='#9ca3aa', GradientType=0)";
+  /* IE8+ */
+  background-image: linear-gradient(to bottom, #bfc7cd, #9ca3aa);
+  /* the standard */
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+.download-button .download-link small {
+  display: block;
+}
+.download-button .download-link:hover {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), inset 0px 12px 24px 2px #83c822;
+}
+.download-button .download-link:focus {
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(129, 188, 46, 0.4);
+}
+.download-button .download-link .download-content {
+  display: block;
+  position: relative;
+  color: #b8e779;
+  margin-left: -54px;
+  _margin-left: 0;
+  background: url(/static/sandstone/img/sandstone/buttons/firefox-large.png) 0 0 no-repeat;
+  _background-color: #659324;
+  min-height: 82px;
+  margin-bottom: -12px;
+  _margin-bottom: 0;
+  padding: 10px 12px 16px 119px;
+}
+.download-button .download-link .download-title,
+.download-button .download-link .download-title span {
+  display: block;
+  color: #fff;
+  font-size: 30px;
+  font-size: 1.875rem;
+  font-weight: normal;
+  letter-spacing: -0.02em;
+  padding-top: 8px;
+  margin-bottom: 10px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.download-button .download-link .download-title span {
+  padding-top: 0;
+  margin-bottom: 5px;
+}
+.download-button .download-link .download-subtitle {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.download-button .download-link .download-lang {
+  display: block;
+  color: #346012;
+  padding-top: 2px;
+  font-size: 11px;
+  font-size: 0.6875rem;
+  line-height: 100%;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.2);
+}
+.download-button .download-link .download-platform {
+  display: none;
+}
+.download-button-small .download-link {
+  margin-left: 44px;
+  width: 230px;
+  /* for IE6 */
+  _margin-left: 0;
+  _width: 274px;
+}
+.download-button-small .download-link .download-content {
+  margin-left: -34px;
+  _margin-left: 0;
+  margin-top: -2px;
+  margin-bottom: -7px;
+  background-image: url(/static/sandstone/img/sandstone/buttons/firefox-small.png);
+  min-height: 45px;
+  padding: 10px 20px 10px 73px;
+  overflow: visible;
+  font-size: 12px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
+.download-button-small .download-link .download-title {
+  font-size: 22px;
+  font-size: 1.375rem;
+  padding-top: 0;
+  margin-bottom: 0;
+}
+.download-button-small .download-link .download-lang {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  text-align: right;
+  width: 100px;
+}
+.download-button-beta.download-button-small .download-link .download-lang,
+.download-button-alpha.download-button-small .download-link .download-lang {
+  top: 33px;
+}
+.download-button-beta .download-link .download-title,
+.download-button-alpha .download-link .download-title,
+.download-button-beta .download-link .download-title span,
+.download-button-alpha .download-link .download-title span {
+  font-size: 24px;
+  font-size: 1.5rem;
+}
+.download-button-beta.download-button-small .download-link .download-title,
+.download-button-alpha.download-button-small .download-link .download-title,
+.download-button-beta.download-button-small .download-link .download-title span,
+.download-button-alpha.download-button-small .download-link .download-title span {
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+.download-button-alpha.download-button-small .download-link .download-title {
+  font-size: 13px;
+  font-size: 0.8125rem;
+  font-style: italic;
+}
+.download-button-alpha.download-button-small .download-link .download-title span {
+  font-size: 18px;
+  font-size: 1.125rem;
+  font-style: normal;
+  margin-bottom: 0;
+  letter-spacing: normal;
+}
+.download-button-alpha.download-button-small .download-link .download-subtitle {
+  display: none;
+}
+.download-button-alpha.download-button-small .download-link .download-lang {
+  top: 50%;
+  margin-top: -1em;
+}
+.download-button-alpha.download-button-simple .download-link .download-subtitle {
+  display: block;
+}
+.download-button.download-button-beta.download-button-small .download-list .os_android .download-link .download-title span,
+.download-button.download-button-alpha.download-button-small .download-list .os_android .download-link .download-title span,
+.download-button.download-button-android.download-button-alpha.download-button-small .download-link .download-title span,
+.download-button.download-button-android.download-button-beta.download-button-small .download-link .download-title span {
+  font-size: 18px;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+.download-button-large.beta .download-link .download-content {
+  background-image: url(/static/sandstone/img/sandstone/buttons/beta-large.png);
+}
+.download-button-small.beta .download-link .download-content {
+  background-image: url(/static/sandstone/img/sandstone/buttons/beta-small.png);
+}
+.download-button-large.alpha .download-link .download-content {
+  background-image: url(/static/sandstone/img/sandstone/buttons/aurora-large.png);
+}
+.download-button-small.alpha .download-link .download-content {
+  background-image: url(/static/sandstone/img/sandstone/buttons/aurora-small.png);
+}
+.download-button.download-button-noicon .download-link {
+  width: 250px;
+  margin-left: auto;
+}
+.download-button.download-button-noicon .download-link .download-content {
+  margin-left: auto;
+  padding-left: 55px;
+  background-image: url(/static/sandstone/img/sandstone/buttons/download-arrow.png);
+  background-position: 15px 30px;
+}
+.download-button.download-button-noicon .download-link .download-subtitle {
+  margin-right: auto;
+}
+.download-button-noicon .download-list .os_android .download-link .download-title span,
+.download-button-android.download-button-noicon .download-link .download-title span {
+  padding-top: 7px;
+}
+.download-button-small.download-button-noicon .download-link .download-content {
+  background-image: url(/static/sandstone/img/sandstone/buttons/download-arrow-small.png);
+  background-position: 15px 18px;
+}
+.download-button-small.download-button-noicon .download-list .os_android .download-link .download-title span,
+.download-button-small.download-button-android.download-button-noicon .download-link .download-title span {
+  padding-top: 0;
+}
+.download-button.download-button-simple .download-link {
+  margin-left: 0;
+  width: 240px;
+}
+.download-button.download-button-simple .download-link .download-content {
+  background-image: none;
+  padding: 20px 40px;
+  margin-left: 0;
+  margin-bottom: 0;
+  min-height: 0;
+  color: #fff;
+  text-align: center;
+}
+.download-button.download-button-simple .download-link .download-title,
+.download-button.download-button-simple .download-link .download-lang {
+  display: none;
+}
+.download-button.download-button-simple .download-link .download-subtitle {
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+.download-button.download-button-simple small.download-other {
+  display: none !important;
+}
+.download-button.download-button-simple.download-button-small .download-link {
+  width: 210px;
+}
+.download-button.download-button-simple.download-button-small .download-link .download-content {
+  padding: 10px 20px;
+}
+.download-button.download-button-simple.download-button-small .download-link .download-subtitle {
+  font-size: 16px;
+  font-size: 1rem;
+}
+.download-button.download-button-check-old-fx .download-link .download-content {
+  padding: 20px;
+}
+.download-button .os_win64,
+.download-button .os_linux,
+.download-button .os_linux64,
+.android .download-button-desktop,
+.windows.arm .download-button .os_win,
+.linux.arm .download-button .os_linux,
+.linux.x86.x64 .download-list .os_linux,
+.download-button .os_win,
+.download-button .os_osx,
+.download-button .os_android,
+.no-js .download-list,
+.other .download-list {
+  display: none !important;
+}
+.ios .download-button .ios-download,
+.linux .download-button .os_linux,
+.linux.x86.x64 .download-button .os_linux64,
+.windows .download-button .os_win,
+.osx .download-button .os_osx,
+.android .download-button .os_android,
+.download-button-android .os_android,
+.android .download-button-desktop .download-list,
+.android .download-button-desktop small.os_win,
+.no-js .download-button-android .download-list,
+.other .download-button-android .download-list,
+.other .download-button small.os_win {
+  display: block !important;
+}
+.windows.arm .download-button .unsupported-download,
+.linux.arm .download-button .linux-arm-download,
+.oldwin .download-button .unsupported-download,
+.oldmac .download-button .unsupported-download {
+  display: block;
+  max-width: 250px;
+}
+.download-button small.download-other,
+.other .download-button-android small.download-other,
+.android .download-button-desktop small.download-other {
+  font-family: 'Open Sans', X-LocaleSpecific, sans-serif;
+  display: block;
+  font-size: 11px;
+  font-size: 0.6875rem;
+  text-align: center;
+  margin-top: 6px;
+  color: #bbbbbb;
+}
+.download-button small.download-other a:link,
+.other .download-button-android small.download-other a:link,
+.android .download-button-desktop small.download-other a:link,
+.download-button small.download-other a:visited,
+.other .download-button-android small.download-other a:visited,
+.android .download-button-desktop small.download-other a:visited {
+  color: #999;
+}
+.no-js .download-button small.download-other,
+.other .download-button small.download-other,
+.android .download-button-desktop small.download-other {
+  text-align: left;
+}
+.other .download-button .unrecognized-download,
+.android .download-button-desktop .unrecognized-download {
+  display: block;
+}
+.download-button .download-dumb {
+  text-align: left;
+}
+.download-button .download-dumb h4 {
+  text-shadow: none;
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  font-size: 1.125rem;
+}
+.download-button .download-dumb ul li {
+  display: inline;
+}
+.download-button .download-dumb small {
+  font-size: 11px;
+  font-size: 0.6875rem;
+  letter-spacing: normal;
+}
+.download-button .download-dumb .button-green {
+  padding-left: 6px;
+  padding-right: 6px;
+  margin-left: 3px;
+  margin-bottom: 3px;
+}
+.ios-download a:before {
+  content: '\A';
+  white-space: pre;
+}
+.download-button .download-list .os_android .download-link .download-title,
+.download-button-android .download-link .download-title {
+  padding-top: 0;
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-size: 1rem;
+  color: #346012;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.2);
+}
+.download-button .download-list .os_android .download-link .download-subtitle,
+.download-button-android .download-link .download-subtitle {
+  display: block;
+  position: static;
+  text-align: left;
+  margin-right: 40px;
+  color: #fff;
+  font-size: 11px;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.download-button.download-button-small .download-list .os_android .download-link .download-title,
+.download-button.download-button-small.download-button-android .download-link .download-title {
+  padding-top: 0;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-size: 0.8125rem;
+  color: #346012;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.2);
+  letter-spacing: normal;
+}
+.download-button.download-button-small .download-list .os_android .download-link .download-title span,
+.download-button.download-button-small.download-button-android .download-link .download-title span {
+  font-size: 22px;
+  font-size: 1.375rem;
+  margin-bottom: 0;
+}
+.download-button.download-button-small .download-list .os_android .download-link .download-subtitle,
+.download-button.download-button-small.download-button-android .download-link .download-subtitle {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  text-align: right;
+  width: 85px;
+  margin-right: 0;
+}
+.download-button .download-list .os_android.api-9,
+.download-button .download-list .os_android.x86,
+.download-button .download-other.os_android .api-11,
+.android.gingerbread .download-button .download-list .os_android.api-11,
+.android.gingerbread .download-button .download-other.os_android .api-9,
+.android.x86 .download-button .download-list .os_android.armv7,
+.android.x86 .download-button .download-other.os_android .x86 {
+  display: none !important;
+}
+.android.gingerbread .download-button .download-list .os_android.api-9,
+.android.x86 .download-button .download-list .os_android.x86 {
+  display: block !important;
+}
+.android.gingerbread .download-button .download-other.os_android .api-11,
+.android.x86 .download-button .download-other.os_android .armv7 {
+  display: inline !important;
+}
+/* {{{ l10n tweaks */
+html[lang="es-AR"] .download-button-alpha.download-button-small .download-link .download-lang,
+html[lang="es-CL"] .download-button-alpha.download-button-small .download-link .download-lang,
+html[lang="es-ES"] .download-button-alpha.download-button-small .download-link .download-lang,
+html[lang="es-MX"] .download-button-alpha.download-button-small .download-link .download-lang,
+html[lang="pt-BR"] .download-button-alpha.download-button-small .download-link .download-lang,
+html[lang="pt-PT"] .download-button-alpha.download-button-small .download-link .download-lang,
+html[lang="es-AR"] .download-button-beta.download-button-small .download-link .download-lang,
+html[lang="es-CL"] .download-button-beta.download-button-small .download-link .download-lang,
+html[lang="es-ES"] .download-button-beta.download-button-small .download-link .download-lang,
+html[lang="es-MX"] .download-button-beta.download-button-small .download-link .download-lang,
+html[lang="pt-BR"] .download-button-beta.download-button-small .download-link .download-lang,
+html[lang="pt-PT"] .download-button-beta.download-button-small .download-link .download-lang {
+  top: 30px;
+}
+html[lang="gd"] .download-button-alpha.download-button-small .download-link .download-subtitle,
+html[lang="mk"] .download-button-alpha.download-button-small .download-link .download-subtitle,
+html[lang="gd"] .download-button-beta.download-button-small .download-link .download-subtitle,
+html[lang="mk"] .download-button-beta.download-button-small .download-link .download-subtitle {
+  padding-right: 50px;
+}
+html[lang="gd"] .download-button.download-button-small .download-list .os_android .download-subtitle,
+html[lang="mk"] .download-button.download-button-small .download-list .os_android .download-subtitle,
+html[lang="gd"] .download-button.download-button-small.download-button-android .download-subtitle,
+html[lang="mk"] .download-button.download-button-small.download-button-android .download-subtitle {
+  padding-right: 0;
+}
+html[lang="ml"] .download-button .download-link .download-title,
+html[lang="ml"] .download-button .download-link .download-title span {
+  font-size: 26px;
+  font-size: 1.625rem;
+  line-height: 1.2em;
+}
+html[lang="my"] .download-button .download-link .download-title,
+html[lang="te"] .download-button .download-link .download-title,
+html[lang="my"] .download-button .download-link .download-title span,
+html[lang="te"] .download-button .download-link .download-title span {
+  line-height: 1.4em;
+}
+html[lang="as"] .download-button.download-button-beta.download-button-android.download-button-small .download-subtitle,
+html[lang="ml"] .download-button.download-button-beta.download-button-android.download-button-small .download-subtitle,
+html[lang="ms"] .download-button.download-button-beta.download-button-android.download-button-small .download-subtitle,
+html[lang="ta"] .download-button.download-button-beta.download-button-android.download-button-small .download-subtitle,
+html[lang="te"] .download-button.download-button-beta.download-button-android.download-button-small .download-subtitle,
+html[lang="as"] .download-button.download-button-small .download-list .os_android .download-subtitle,
+html[lang="ml"] .download-button.download-button-small .download-list .os_android .download-subtitle,
+html[lang="ms"] .download-button.download-button-small .download-list .os_android .download-subtitle,
+html[lang="ta"] .download-button.download-button-small .download-list .os_android .download-subtitle,
+html[lang="te"] .download-button.download-button-small .download-list .os_android .download-subtitle {
+  width: auto;
+  position: relative;
+  top: 0;
+  left: 0;
+  text-align: left;
+}
+/* }}} */
