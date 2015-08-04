@@ -2,7 +2,9 @@ from django.conf import settings
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.exceptions import NotFound
 
+from leaderboard.locations.models import Country
 from leaderboard.contributors.models import Contributor
 from leaderboard.contributors.serializers import (
     LeaderSerializer,
@@ -45,6 +47,12 @@ class LeadersView(ListAPIView):
 
 
 class LeadersCountryView(LeadersView):
+
+    def get(self, *args, **kwargs):
+        if not Country.objects.filter(iso2=self.kwargs['country_id']).exists():
+            raise NotFound('Unknown country code.')
+
+        return super(LeadersCountryView, self).get(*args, **kwargs)
 
     def filtered_queryset(self):
         return super(
