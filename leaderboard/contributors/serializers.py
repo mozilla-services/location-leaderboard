@@ -7,6 +7,10 @@ from leaderboard.locations.models import Tile
 
 
 class LeaderSerializer(serializers.ModelSerializer):
+    """
+    Serialize a contributor with their name and the
+    number of observations they've made.
+    """
     observations = serializers.IntegerField()
 
     class Meta:

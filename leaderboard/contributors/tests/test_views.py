@@ -2,12 +2,12 @@ import datetime
 import json
 import time
 
-import factory
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from leaderboard.contributors.models import Contributor, Contribution
+from leaderboard.contributors.models import Contribution
+from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.models import Tile
 from leaderboard.locations.tests.test_models import (
     CountryFactory,
@@ -15,25 +15,6 @@ from leaderboard.locations.tests.test_models import (
     TileFactory,
 )
 from leaderboard.utils.compression import gzip_compress
-
-
-class ContributorFactory(factory.DjangoModelFactory):
-    name = factory.Sequence(lambda n: 'Contributor {}'.format(n))
-    email = factory.Sequence(
-        lambda n: 'contributor{}@contribute.org'.format(n))
-
-    class Meta:
-        model = Contributor
-
-
-class ContributionFactory(factory.DjangoModelFactory):
-    date = factory.LazyAttribute(lambda o: datetime.date.today())
-    contributor = factory.SubFactory(ContributorFactory)
-    tile = factory.SubFactory(TileFactory)
-    observations = 1
-
-    class Meta:
-        model = Contribution
 
 
 class ContributionConfigTests(TestCase):
@@ -245,7 +226,6 @@ class GetLeadersTests(TestCase):
 
         leaders_data = json.loads(response.content)
         self.assertEqual(len(leaders_data['results']), page_size)
-        print response.content
 
         response = self.client.get(reverse('leaders-list'), {'page': 2})
         self.assertEqual(response.status_code, 200)

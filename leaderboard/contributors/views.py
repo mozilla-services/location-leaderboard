@@ -1,4 +1,3 @@
-from django.db.models import Sum
 from django.conf import settings
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
@@ -42,9 +41,7 @@ class LeadersView(ListAPIView):
         return super(LeadersView, self).get_queryset()
 
     def get_queryset(self):
-        return self.filtered_queryset().annotate(
-            observations=Sum('contribution__observations')
-        ).order_by('-observations')
+        return self.filtered_queryset().annotate_observations()
 
 
 class LeadersCountryView(LeadersView):
@@ -53,5 +50,4 @@ class LeadersCountryView(LeadersView):
         return super(
             LeadersCountryView,
             self,
-        ).filtered_queryset().filter(
-            contribution__tile__country__iso2=self.kwargs['country_id'])
+        ).filtered_queryset().filter_country(self.kwargs['country_id'])
