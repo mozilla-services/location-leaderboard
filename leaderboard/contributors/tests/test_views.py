@@ -286,3 +286,12 @@ class GetCountryLeadersTests(TestCase):
             }],
             'next': None,
         })
+
+    def test_invalid_country_code_raises_404(self):
+        response = self.client.get(
+            reverse(
+                'leaders-country-list',
+                kwargs={'country_id': 'asdf'}
+            )
+        )
+        self.assertEqual(response.status_code, 404)
