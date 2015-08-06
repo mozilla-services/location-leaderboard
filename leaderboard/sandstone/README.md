@@ -54,6 +54,36 @@ as any .css files will not be included in source control.
 
 Feel free to add any additional exclusions you require.
 
+
+## For sites based on Django ##
+
+Inside your project's top level directory (the directory where your project apps are located)
+add the sandstone app:
+
+    /myproject/
+        -> sandstone/
+
+Inside your settings.py add 'sandstone' to your `INSTALLED_APPS`:
+
+    INSTALLED_APPS = (
+        ...
+
+        'myproject.sandstone',
+
+        ...
+    )
+
+Extend your templates from the base.html provided by sandstone:
+
+    {% extend 'base.html' %}
+
+    {% block main_content %}
+    <p>Hello world!</p>
+    {% endblock %}
+
+That's it!
+
+
 ## For sites based on Playdoh ##
 
 If you have not already, create your project using the following documentation:

@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
 
     'rest_framework',
+    'leaderboard.sandstone',
 
     'leaderboard.contributors',
     'leaderboard.locations',

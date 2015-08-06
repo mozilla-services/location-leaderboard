@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+
+{% block page_title_prefix %}Mozilla Location Leaderboard - {% endblock %}
+{% block page_title_suffix %}{% endblock %}
+
+{% block site_css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/leaderboard.css" %}" media="screen" />
+{% endblock %}
+
+{% block site_header_logo %}
+<div class="header-logo">
+    <a href="/" title="Mozilla Location Service">
+        <img src="/static/imgs/mls-logo.png" title="Mozilla Location Service">
+    </a>
+
+    <h2>
+        <a href="/">Mozilla<br>Location Service</a>
+    </h2>
+</div>
+{% endblock %}
