@@ -61,3 +61,6 @@ settings_local.py
 
 # Node
 node_modules
+
+# Static Files
+leaderboard/served/
