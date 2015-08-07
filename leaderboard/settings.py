@@ -125,6 +125,9 @@ if 'TRAVIS' in os.environ:
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
     'DEFAULT_PARSER_CLASSES': (
         'leaderboard.parsers.GzipJSONParser',
     ),
