@@ -11,6 +11,8 @@ from leaderboard.locations.tests.test_models import (
 
 
 class ContributorFactory(factory.DjangoModelFactory):
+    access_token = factory.Sequence(lambda n: str(n))
+    uid = factory.Sequence(lambda n: str(n))
     name = factory.Sequence(lambda n: 'Contributor {}'.format(n))
     email = factory.Sequence(
         lambda n: 'contributor{}@contribute.org'.format(n))
