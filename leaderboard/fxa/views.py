@@ -2,6 +2,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from leaderboard.contributors.models import Contributor
 from leaderboard.fxa.client import FXAClientMixin, FXAException
 
 
@@ -23,6 +24,9 @@ class FXARedirectView(FXAClientMixin, APIView):
 
         if not access_token:
             raise ValidationError('Unable to retrieve access token.')
+
+        contributor, created = Contributor.objects.get_or_create(
+            access_token=access_token)
 
         return Response(
             {'access_token': access_token},

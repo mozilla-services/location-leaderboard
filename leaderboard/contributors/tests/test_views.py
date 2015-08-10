@@ -34,6 +34,11 @@ class ContributionConfigTests(TestCase):
 
 class SubmitContributionTests(CountryTestMixin, TestCase):
 
+    def setUp(self):
+        super(SubmitContributionTests, self).setUp()
+        self.access_token = 'abcdef'
+        self.contributor = ContributorFactory(access_token=self.access_token)
+
     def test_submit_multiple_observations(self):
         now = time.time()
         one_day = 24 * 60 * 60
@@ -77,6 +82,7 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
         )
 
         self.assertEqual(response.status_code, 201)
@@ -87,12 +93,15 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
         tile2 = Tile.objects.get(easting=-8893000, northing=5435000)
         self.assertEqual(tile2.country, self.country)
 
-        self.assertEqual(Contribution.objects.all().count(), 3)
-        contribution1 = Contribution.objects.filter(tile=tile1).get()
+        contributor_contributions = Contribution.objects.filter(
+            contributor=self.contributor)
+        self.assertEqual(contributor_contributions.count(), 3)
+        contribution1 = contributor_contributions.filter(tile=tile1).get()
         self.assertEqual(contribution1.observations, 200)
 
-        self.assertEqual(Contribution.objects.filter(tile=tile2).count(), 2)
-        for contribution in Contribution.objects.filter(tile=tile2):
+        self.assertEqual(
+            contributor_contributions.filter(tile=tile2).count(), 2)
+        for contribution in contributor_contributions.filter(tile=tile2):
             self.assertEqual(contribution.observations, 100)
 
     def test_invalid_data_returns_400(self):
@@ -113,6 +122,7 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -143,6 +153,7 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             payload,
             content_type='application/json',
             headers={'Content-Encoding': 'gzip'},
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
         )
 
         self.assertEqual(response.status_code, 201)

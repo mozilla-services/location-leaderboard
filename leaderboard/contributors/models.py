@@ -33,8 +33,10 @@ class Contributor(models.Model):
     A contributor to the leaderboard.
     Synchronizes with Firefox Accounts.
     """
-    name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    access_token = models.CharField(max_length=255, unique=True)
+    uid = models.CharField(max_length=255, default='')
+    name = models.CharField(max_length=255, default='')
+    email = models.EmailField(unique=True, default='')
 
     objects = ContributorQuerySet.as_manager()
 
