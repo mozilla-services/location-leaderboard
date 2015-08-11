@@ -1,14 +1,8 @@
 import json
-import re
 import urlparse
 
 import requests
 from django.conf import settings
-
-
-# A regex which matches against a Bearer token
-# http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html#authz-header
-FXA_ACCESS_TOKEN_RE = re.compile('Bearer\s+(?P<token>[a-zA-Z0-9._~+\/\-=]+)')
 
 
 class FXAException(Exception):

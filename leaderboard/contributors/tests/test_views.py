@@ -104,6 +104,15 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
         for contribution in contributor_contributions.filter(tile=tile2):
             self.assertEqual(contribution.observations, 100)
 
+    def test_missing_authentication_token_returns_401(self):
+        response = self.client.post(
+            reverse('contributions-create'),
+            '',
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 401)
+
     def test_invalid_data_returns_400(self):
         observation_data = {
             'items': [
@@ -165,6 +174,7 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             'asdf',
             content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
             headers={'Content-Encoding': 'gzip'},
         )
 

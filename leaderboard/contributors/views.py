@@ -1,9 +1,10 @@
 from django.conf import settings
+from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import NotFound
 
+from leaderboard.fxa.authenticator import OAuthTokenAuthentication
 from leaderboard.locations.models import Country
 from leaderboard.contributors.models import Contributor
 from leaderboard.contributors.serializers import (
@@ -26,6 +27,7 @@ class CreateContributionsView(CreateAPIView):
     """
     Create a contribution from user submitted data.
     """
+    authentication_classes = (OAuthTokenAuthentication,)
     serializer_class = ContributionSerializer
 
     def get_serializer(self, data=None, *args, **kwargs):

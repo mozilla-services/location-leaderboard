@@ -2,7 +2,6 @@ import datetime
 
 from rest_framework import serializers
 
-from leaderboard.fxa.client import FXA_ACCESS_TOKEN_RE
 from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.locations.models import Tile
 
@@ -36,17 +35,10 @@ class ContributionSerializer(serializers.Serializer):
         tile, created = Tile.objects.get_or_create_nearest_tile(
             easting=data['tile_easting_m'], northing=data['tile_northing_m'])
 
-        auth_header = self.context['request'].META['HTTP_AUTHORIZATION']
-        access_token = (FXA_ACCESS_TOKEN_RE.match(auth_header)
-                                           .groupdict()
-                                           .get('token', None))
-
-        contributor = Contributor.objects.get(access_token=access_token)
-
         contribution, created = Contribution.objects.get_or_create(
             date=date,
             tile=tile,
-            contributor=contributor,
+            contributor=self.context['request'].user,
         )
 
         contribution.observations += data['observations']
