@@ -161,8 +161,8 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            headers={'Content-Encoding': 'gzip'},
             HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
+            HTTP_CONTENT_ENCODING='gzip',
         )
 
         self.assertEqual(response.status_code, 201)
@@ -175,10 +175,11 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             'asdf',
             content_type='application/json',
             HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
-            headers={'Content-Encoding': 'gzip'},
+            HTTP_CONTENT_ENCODING='gzip',
         )
 
         self.assertEqual(response.status_code, 400)
+        self.assertIn('gzip error', response.content)
 
 
 class GetLeadersTests(TestCase):
