@@ -17,8 +17,10 @@ class GzipJSONParser(JSONParser):
         """
         Simply return a string representing the body of the request.
         """
-        headers = parser_context['request'].META.get('headers', {})
-        if headers.get('Content-Encoding', '') == 'gzip':
+        encoding = parser_context['request'].META.get(
+            'HTTP_CONTENT_ENCODING', '')
+
+        if encoding == 'gzip':
             raw_content = stream.read()
 
             try:
