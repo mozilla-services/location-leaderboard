@@ -5,6 +5,7 @@ from leaderboard.contributors.views import (
     CreateContributionsView,
     LeadersView,
     LeadersCountryView,
+    UpdateContributorView,
 )
 
 urlpatterns = [
@@ -12,6 +13,8 @@ urlpatterns = [
         name='contributions-config'),
     url('^add_stumbles/', CreateContributionsView.as_view(),
         name='contributions-create'),
+    url('^contributor/update/', UpdateContributorView.as_view(),
+        name='contributor-update'),
     url('^leaders/all/', LeadersView.as_view(),
         name='leaders-list'),
     url('^leaders/country/(?P<country_id>\w+)/', LeadersCountryView.as_view(),

@@ -64,6 +64,70 @@ Get Contribution Config
           }
         });
 
+Update Contributor Name
+----
+  Update the public facing display name for a contributor that will appear on the leaderboard.
+
+* **URL**
+
+  `https://leaderboard.services.mozilla.com/api/v1/contributors/update/`
+
+* **Method:**
+
+  `PATCH`
+
+* **Data Params**
+
+  * ** PATCH body (JSON encoded)**
+
+          {
+            name: <str>,
+          }
+
+  * **name**
+
+    A UTF8 encoded string that the user wants to display.  Names are unique
+    and so if the requested name is taken, the request will fail.  Max length is 255
+    characters.
+
+* **Request Headers**
+
+  * Authorization
+
+  A successful submission must include a valid Firefox Accounts authorization
+  bearer token
+
+  Example: `Authorization: Bearer kf94k5jsgsl3kj`
+
+* **Success Response:**
+
+  * **Code:** 200
+
+* **Error Responses:**
+
+  * **Code:** 400 INVALID  <br />
+    **Content:** `{"detail":"JSON parse error - Expecting object: line 1 column 1 (char 0)"}`
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{"detail":"Unable to determine a valid Firefox Accounts authorization token"}`
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/update/",
+          dataType: "json",
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer fksdf90sek4jk50');
+          },
+          data : {
+              name: "Epic Stumbler!"
+          },
+          type : "POST",
+          success : function(req) {
+            console.log(req);
+          }
+        });
+
 Add Stumbles
 ----
  Submit the number of networks detected within a series of tiles for a given contributor.

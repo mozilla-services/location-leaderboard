@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from leaderboard.contributors.models import Contribution
+from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.models import Tile
 from leaderboard.locations.tests.test_models import (
@@ -32,12 +32,15 @@ class ContributionConfigTests(TestCase):
         })
 
 
-class SubmitContributionTests(CountryTestMixin, TestCase):
+class ContributorTestMixin(object):
 
     def setUp(self):
-        super(SubmitContributionTests, self).setUp()
-        self.access_token = 'abcdef'
-        self.contributor = ContributorFactory(access_token=self.access_token)
+        super(ContributorTestMixin, self).setUp()
+        self.contributor = ContributorFactory()
+
+
+class SubmitContributionTests(CountryTestMixin, ContributorTestMixin,
+                              TestCase):
 
     def test_submit_multiple_observations(self):
         now = time.time()
@@ -82,7 +85,8 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
         )
 
         self.assertEqual(response.status_code, 201)
@@ -131,7 +135,8 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -161,7 +166,8 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
             HTTP_CONTENT_ENCODING='gzip',
         )
 
@@ -174,12 +180,65 @@ class SubmitContributionTests(CountryTestMixin, TestCase):
             reverse('contributions-create'),
             'asdf',
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(self.access_token),
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
             HTTP_CONTENT_ENCODING='gzip',
         )
 
         self.assertEqual(response.status_code, 400)
         self.assertIn('gzip error', response.content)
+
+
+class UpdateContributorTests(ContributorTestMixin, TestCase):
+
+    def test_update_contributor_saves_to_db(self):
+        new_name = 'new name'
+
+        response = self.client.patch(
+            reverse('contributor-update'),
+            json.dumps({'name': new_name}),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
+        )
+
+        self.assertEquals(response.status_code, 200)
+
+        response_data = json.loads(response.content)
+        self.assertEqual(response_data, {u'name': unicode(new_name)})
+
+        contributor = Contributor.objects.get(id=self.contributor.id)
+        self.assertEqual(contributor.name, new_name)
+
+    def test_update_contributor_doesnt_update_disallowed_field(self):
+        old_access_token = self.contributor.access_token
+
+        response = self.client.patch(
+            reverse('contributor-update'),
+            json.dumps({'access_token': 'asdf'}),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        contributor = Contributor.objects.get(id=self.contributor.id)
+        self.assertEqual(contributor.access_token, old_access_token)
+
+    def test_name_must_be_unique(self):
+        new_name = 'new name'
+        ContributorFactory(name=new_name)
+
+        response = self.client.patch(
+            reverse('contributor-update'),
+            json.dumps({'name': new_name}),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
+        )
+
+        self.assertEquals(response.status_code, 400)
 
 
 class GetLeadersTests(TestCase):
