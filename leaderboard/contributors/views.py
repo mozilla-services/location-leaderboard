@@ -1,6 +1,6 @@
 from django.conf import settings
 from rest_framework.exceptions import NotFound
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,8 +8,9 @@ from leaderboard.fxa.authenticator import OAuthTokenAuthentication
 from leaderboard.locations.models import Country
 from leaderboard.contributors.models import Contributor
 from leaderboard.contributors.serializers import (
-    LeaderSerializer,
     ContributionSerializer,
+    ContributorSerializer,
+    LeaderSerializer,
 )
 
 
@@ -21,6 +22,14 @@ class ContributionsConfigView(APIView):
             'record_duration': settings.CONTRIBUTION_RECORD_DURATION,
         }
         return Response(config_data, content_type='application/json')
+
+
+class UpdateContributorView(UpdateAPIView):
+    authentication_classes = (OAuthTokenAuthentication,)
+    serializer_class = ContributorSerializer
+
+    def get_object(self):
+        return self.request.user
 
 
 class CreateContributionsView(CreateAPIView):

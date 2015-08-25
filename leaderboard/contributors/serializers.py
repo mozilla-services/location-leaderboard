@@ -6,6 +6,17 @@ from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.locations.models import Tile
 
 
+class ContributorSerializer(serializers.ModelSerializer):
+    """
+    An interface to update a Contributor object's public
+    facing name.
+    """
+
+    class Meta:
+        model = Contributor
+        fields = ('name',)
+
+
 class LeaderSerializer(serializers.ModelSerializer):
     """
     Serialize a contributor with their name and the
