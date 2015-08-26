@@ -10,7 +10,7 @@ from leaderboard.contributors.models import Contributor
 from leaderboard.contributors.serializers import (
     ContributionSerializer,
     ContributorSerializer,
-    LeaderSerializer,
+    ContributorUpdateSerializer,
 )
 
 
@@ -26,7 +26,7 @@ class ContributionsConfigView(APIView):
 
 class UpdateContributorView(UpdateAPIView):
     authentication_classes = (OAuthTokenAuthentication,)
-    serializer_class = ContributorSerializer
+    serializer_class = ContributorUpdateSerializer
 
     def get_object(self):
         return self.request.user
@@ -47,27 +47,27 @@ class CreateContributionsView(CreateAPIView):
             data=data, many=True, *args, **kwargs)
 
 
-class LeadersView(ListAPIView):
+class ContributorsView(ListAPIView):
     queryset = Contributor.objects.all()
-    serializer_class = LeaderSerializer
+    serializer_class = ContributorSerializer
 
     def filtered_queryset(self):
-        return super(LeadersView, self).get_queryset()
+        return super(ContributorsView, self).get_queryset()
 
     def get_queryset(self):
         return self.filtered_queryset().annotate_observations()
 
 
-class LeadersCountryView(LeadersView):
+class ContributorsCountryView(ContributorsView):
 
     def get(self, *args, **kwargs):
         if not Country.objects.filter(iso2=self.kwargs['country_id']).exists():
             raise NotFound('Unknown country code.')
 
-        return super(LeadersCountryView, self).get(*args, **kwargs)
+        return super(ContributorsCountryView, self).get(*args, **kwargs)
 
     def filtered_queryset(self):
         return super(
-            LeadersCountryView,
+            ContributorsCountryView,
             self,
         ).filtered_queryset().filter_country(self.kwargs['country_id'])

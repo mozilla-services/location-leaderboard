@@ -253,7 +253,7 @@ Get Leaders
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/leaders/all/`
+  `https://leaderboard.services.mozilla.com/api/v1/contributors/all/`
 
 * **Method:**
 
@@ -286,7 +286,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/all/?page=1",
+          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/all/?page=1",
           dataType: "json",
           data: {
             country_id: 1,
@@ -304,7 +304,7 @@ Get Country Leaders
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/`
+  `https://leaderboard.services.mozilla.com/api/v1/contributors/country/<country_id: str>/`
 
 * **Method:**
 
@@ -342,7 +342,7 @@ Get Country Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/?page=1",
+          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/country/ca/?page=1",
           dataType: "json",
           data: {
             country_id: 1,
