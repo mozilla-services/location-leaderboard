@@ -3,8 +3,8 @@ from django.conf.urls import url
 from leaderboard.contributors.views import (
     ContributionsConfigView,
     CreateContributionsView,
-    LeadersView,
-    LeadersCountryView,
+    ContributorsView,
+    ContributorsCountryView,
     UpdateContributorView,
 )
 
@@ -15,8 +15,9 @@ urlpatterns = [
         name='contributions-create'),
     url('^contributor/update/', UpdateContributorView.as_view(),
         name='contributor-update'),
-    url('^leaders/all/', LeadersView.as_view(),
-        name='leaders-list'),
-    url('^leaders/country/(?P<country_id>\w+)/', LeadersCountryView.as_view(),
-        name='leaders-country-list'),
+    url('^contributors/all/', ContributorsView.as_view(),
+        name='contributors-list'),
+    url('^contributors/country/(?P<country_id>\w+)/',
+        ContributorsCountryView.as_view(),
+        name='contributors-country-list'),
 ]

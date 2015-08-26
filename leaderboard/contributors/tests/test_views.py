@@ -241,7 +241,7 @@ class UpdateContributorTests(ContributorTestMixin, TestCase):
         self.assertEquals(response.status_code, 400)
 
 
-class GetLeadersTests(TestCase):
+class GetContributorsTests(TestCase):
 
     def test_sums_for_each_contributor_and_orders_by_observations(self):
         today = datetime.date.today()
@@ -269,11 +269,11 @@ class GetLeadersTests(TestCase):
                 tile=TileFactory(country=country2),
             ).save()
 
-        response = self.client.get(reverse('leaders-list'))
+        response = self.client.get(reverse('contributors-list'))
         self.assertEqual(response.status_code, 200)
 
-        leaders_data = json.loads(response.content)
-        self.assertEqual(leaders_data, {
+        contributors_data = json.loads(response.content)
+        self.assertEqual(contributors_data, {
             'count': 2,
             'previous': None,
             'results': [
@@ -302,20 +302,20 @@ class GetLeadersTests(TestCase):
                 tile=TileFactory(country=country),
             ).save()
 
-        response = self.client.get(reverse('leaders-list'))
+        response = self.client.get(reverse('contributors-list'))
         self.assertEqual(response.status_code, 200)
 
-        leaders_data = json.loads(response.content)
-        self.assertEqual(len(leaders_data['results']), page_size)
+        contributors_data = json.loads(response.content)
+        self.assertEqual(len(contributors_data['results']), page_size)
 
-        response = self.client.get(reverse('leaders-list'), {'page': 2})
+        response = self.client.get(reverse('contributors-list'), {'page': 2})
         self.assertEqual(response.status_code, 200)
 
-        leaders_data = json.loads(response.content)
-        self.assertEqual(len(leaders_data['results']), 1)
+        contributors_data = json.loads(response.content)
+        self.assertEqual(len(contributors_data['results']), 1)
 
 
-class GetCountryLeadersTests(TestCase):
+class GetCountryContributorsTests(TestCase):
 
     def test_filters_by_country(self):
         today = datetime.date.today()
@@ -351,14 +351,14 @@ class GetCountryLeadersTests(TestCase):
 
         response = self.client.get(
             reverse(
-                'leaders-country-list',
+                'contributors-country-list',
                 kwargs={'country_id': country1.iso2}
             )
         )
         self.assertEqual(response.status_code, 200)
 
-        leaders_data = json.loads(response.content)
-        self.assertEqual(leaders_data, {
+        contributors_data = json.loads(response.content)
+        self.assertEqual(contributors_data, {
             'count': 1,
             'previous': None,
             'results': [{
@@ -371,7 +371,7 @@ class GetCountryLeadersTests(TestCase):
     def test_invalid_country_code_raises_404(self):
         response = self.client.get(
             reverse(
-                'leaders-country-list',
+                'contributors-country-list',
                 kwargs={'country_id': 'asdf'}
             )
         )
