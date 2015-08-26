@@ -195,7 +195,9 @@ class UpdateContributorTests(ContributorTestMixin, TestCase):
         new_name = 'new name'
 
         response = self.client.patch(
-            reverse('contributor-update'),
+            reverse('contributors-detail', kwargs={
+                'uid': self.contributor.uid,
+            }),
             json.dumps({'name': new_name}),
             content_type='application/json',
             HTTP_AUTHORIZATION='Bearer {}'.format(
@@ -210,11 +212,27 @@ class UpdateContributorTests(ContributorTestMixin, TestCase):
         contributor = Contributor.objects.get(id=self.contributor.id)
         self.assertEqual(contributor.name, new_name)
 
+    def test_update_contributor_cant_edit_another_contributor(self):
+        contributor2 = ContributorFactory()
+        new_name = 'new name'
+
+        response = self.client.patch(
+            reverse('contributors-detail', kwargs={'uid': contributor2.uid}),
+            json.dumps({'name': new_name}),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(
+                self.contributor.access_token),
+        )
+
+        self.assertEquals(response.status_code, 403)
+
     def test_update_contributor_doesnt_update_disallowed_field(self):
         old_access_token = self.contributor.access_token
 
         response = self.client.patch(
-            reverse('contributor-update'),
+            reverse('contributors-detail', kwargs={
+                'uid': self.contributor.uid,
+            }),
             json.dumps({'access_token': 'asdf'}),
             content_type='application/json',
             HTTP_AUTHORIZATION='Bearer {}'.format(
@@ -231,7 +249,9 @@ class UpdateContributorTests(ContributorTestMixin, TestCase):
         ContributorFactory(name=new_name)
 
         response = self.client.patch(
-            reverse('contributor-update'),
+            reverse('contributors-detail', kwargs={
+                'uid': self.contributor.uid,
+            }),
             json.dumps({'name': new_name}),
             content_type='application/json',
             HTTP_AUTHORIZATION='Bearer {}'.format(
