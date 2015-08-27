@@ -4,6 +4,10 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/fxa/', include('leaderboard.fxa.urls')),
-    url(r'^api/v1/contributions/', include('leaderboard.contributors.urls')),
+    url(r'^api/v1/contributions/',
+        include('leaderboard.contributors.contribution_urls')),
+    url(r'^api/v1/contributors/',
+        include('leaderboard.contributors.contributor_urls')),
+    url(r'^api/v1/leaders/', include('leaderboard.leaders.urls')),
     url(r'^', include('leaderboard.home.urls')),
 ]
