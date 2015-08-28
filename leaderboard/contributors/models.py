@@ -25,7 +25,7 @@ class ContributorQuerySet(models.QuerySet):
         """
         return self.annotate(
             observations=models.Sum('contribution__observations')
-        ).order_by('-observations')
+        ).filter(observations__gt=0).order_by('-observations')
 
 
 class Contributor(models.Model):

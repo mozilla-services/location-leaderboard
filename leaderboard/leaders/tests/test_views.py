@@ -41,6 +41,10 @@ class LeadersGlobalListTests(TestCase):
                 tile=TileFactory(country=country2),
             ).save()
 
+        # Create a contributor with no contributions
+        # who should not appearin the leaderboard
+        ContributorFactory()
+
         response = self.client.get(reverse('leaders-global-list'))
         self.assertEqual(response.status_code, 200)
 
