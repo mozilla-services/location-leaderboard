@@ -277,8 +277,9 @@ Get Leaders
         next: <str>,
         results: [
           {
-            name: <str>,
-            observations: <int>
+            contributor: <str>,
+            observations: <int>,
+            rank: <int>
           }
         ]
       }
@@ -330,8 +331,9 @@ Get Country Leaders
 
         [
           {
-            name: <str>,
-            observations: <int>
+            contributor: <str>,
+            observations: <int>,
+            rank: <int>
           }
         ]
 

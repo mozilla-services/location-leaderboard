@@ -5,7 +5,10 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from leaderboard.contributors.models import Contribution
+from leaderboard.contributors.models import (
+    Contribution,
+    ContributorCountryRank,
+)
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.tests.test_models import (
     CountryFactory,
@@ -45,6 +48,9 @@ class LeadersGlobalListTests(TestCase):
         # who should not appearin the leaderboard
         ContributorFactory()
 
+        # Create the contributor ranks
+        ContributorCountryRank.compute_ranks()
+
         response = self.client.get(reverse('leaders-global-list'))
         self.assertEqual(response.status_code, 200)
 
@@ -54,11 +60,13 @@ class LeadersGlobalListTests(TestCase):
             'previous': None,
             'results': [
                 {
-                    'name': contributor2.name,
+                    'contributor': contributor2.name,
                     'observations': 4,
+                    'rank': 1,
                 }, {
-                    'name': contributor1.name,
+                    'contributor': contributor1.name,
                     'observations': 3,
+                    'rank': 2,
                 }
             ],
             'next': None,
@@ -77,6 +85,9 @@ class LeadersGlobalListTests(TestCase):
                 observations=1,
                 tile=TileFactory(country=country),
             ).save()
+
+        # Create the contributor ranks
+        ContributorCountryRank.compute_ranks()
 
         response = self.client.get(reverse('leaders-global-list'))
         self.assertEqual(response.status_code, 200)
@@ -125,6 +136,9 @@ class LeaderCountryListViewTests(TestCase):
         )
         contribution3.save()
 
+        # Create the contributor ranks
+        ContributorCountryRank.compute_ranks()
+
         response = self.client.get(
             reverse(
                 'leaders-country-list',
@@ -138,8 +152,9 @@ class LeaderCountryListViewTests(TestCase):
             'count': 1,
             'previous': None,
             'results': [{
-                'name': contributor.name,
+                'contributor': contributor.name,
                 'observations': 2,
+                'rank': 1,
             }],
             'next': None,
         })
