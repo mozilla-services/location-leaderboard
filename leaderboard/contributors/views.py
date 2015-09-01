@@ -10,7 +10,7 @@ from leaderboard.contributors.permissions import (
 )
 from leaderboard.contributors.serializers import (
     ContributionSerializer,
-    ContributorUpdateSerializer,
+    ContributorNameSerializer,
 )
 
 
@@ -28,7 +28,7 @@ class UpdateContributorView(UpdateAPIView):
     queryset = Contributor.objects.all()
     authentication_classes = (OAuthTokenAuthentication,)
     permission_classes = (AccessTokenContributorPermission,)
-    serializer_class = ContributorUpdateSerializer
+    serializer_class = ContributorNameSerializer
     lookup_field = 'uid'
 
 
