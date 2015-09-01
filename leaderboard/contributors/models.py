@@ -1,5 +1,7 @@
 from django.db import models
 
+from leaderboard.locations.models import Country
+
 
 class ContributorQuerySet(models.QuerySet):
     """
@@ -42,6 +44,72 @@ class Contributor(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class ContributorCountryRankQuerySet(models.QuerySet):
+    """
+    A queryset for ContributorCountryRank objects which knows that
+    when country is set to None it refers to a global rank.
+    """
+
+    def all_global(self):
+        """
+        Return all global ranks.
+        """
+        return self.filter(country=None)
+
+
+class ContributorCountryRank(models.Model):
+    """
+    The rank and number of observations for a contributor
+    for each country they've contributed to, and globally where
+    country is set to None.
+    """
+    # When country is None, store the global rank and observations
+    country = models.ForeignKey('locations.Country', blank=True, null=True)
+    contributor = models.ForeignKey(Contributor)
+    observations = models.IntegerField(blank=True, null=True)
+    rank = models.IntegerField(blank=True, null=True)
+
+    objects = ContributorCountryRankQuerySet.as_manager()
+
+    class Meta:
+        unique_together = ('contributor', 'country')
+        ordering = ('-observations',)
+
+    def __unicode__(self):
+        return '{rank}: {contributor} for {country}'.format(
+            rank=self.rank,
+            contributor=self.contributor,
+            country=self.country,
+        )
+
+    @staticmethod
+    def compute_ranks():
+        """
+        Compute the number of observations and ranks for
+        each contributor for each country and globally.
+        """
+        # When country is None, compute the global ranks
+        countries = [None] + list(Country.objects.all())
+
+        for country in countries:
+            contributors = Contributor.objects.all()
+
+            if country:
+                contributors = contributors.filter_country(country.iso2)
+
+            for rank, contributor in enumerate(
+                    contributors.annotate_observations(), start=1):
+
+                contributor_rank, created = (
+                    ContributorCountryRank.objects.get_or_create(
+                        contributor=contributor, country=country)
+                )
+
+                contributor_rank.rank = rank
+                contributor_rank.observations = contributor.observations
+                contributor_rank.save()
 
 
 class Contribution(models.Model):
