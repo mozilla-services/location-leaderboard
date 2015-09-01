@@ -29,15 +29,11 @@ class ContributionConfigTests(TestCase):
         })
 
 
-class ContributorTestMixin(object):
+class SubmitContributionTests(CountryTestMixin, TestCase):
 
     def setUp(self):
-        super(ContributorTestMixin, self).setUp()
+        super(SubmitContributionTests, self).setUp()
         self.contributor = ContributorFactory()
-
-
-class SubmitContributionTests(CountryTestMixin, ContributorTestMixin,
-                              TestCase):
 
     def test_submit_multiple_observations(self):
         now = time.time()
@@ -186,7 +182,11 @@ class SubmitContributionTests(CountryTestMixin, ContributorTestMixin,
         self.assertIn('gzip error', response.content)
 
 
-class UpdateContributorTests(ContributorTestMixin, TestCase):
+class UpdateContributorTests(TestCase):
+
+    def setUp(self):
+        super(UpdateContributorTests, self).setUp()
+        self.contributor = ContributorFactory()
 
     def test_update_contributor_saves_to_db(self):
         new_name = 'new name'
