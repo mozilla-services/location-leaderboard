@@ -78,16 +78,10 @@ class TestCountryManager(TestCase):
         self.assertEqual(nearest_country, country1)
 
 
-class CountryTestMixin(object):
+class TestTileManager(TestCase):
 
     def setUp(self):
-        super(CountryTestMixin, self).setUp()
-
-        self.country = CountryFactory.build()
-        self.country.save()
-
-
-class TestTileManager(CountryTestMixin, TestCase):
+        self.country = CountryFactory()
 
     def test_get_or_create_nearest_tile_rounds_coords(self):
         easting = 12345
@@ -106,7 +100,10 @@ class TestTileManager(CountryTestMixin, TestCase):
         self.assertEqual(tile.northing, 67000)
 
 
-class TestTile(CountryTestMixin, TestCase):
+class TestTile(TestCase):
+
+    def setUp(self):
+        self.country = CountryFactory()
 
     def test_save_sets_polygon_and_country(self):
         tile = Tile(easting=0, northing=0)

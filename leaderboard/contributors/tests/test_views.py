@@ -8,9 +8,7 @@ from django.test import TestCase
 from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.models import Tile
-from leaderboard.locations.tests.test_models import (
-    CountryTestMixin,
-)
+from leaderboard.locations.tests.test_models import CountryFactory
 from leaderboard.utils.compression import gzip_compress
 
 
@@ -29,10 +27,11 @@ class ContributionConfigTests(TestCase):
         })
 
 
-class SubmitContributionTests(CountryTestMixin, TestCase):
+class SubmitContributionTests(TestCase):
 
     def setUp(self):
         super(SubmitContributionTests, self).setUp()
+        self.country = CountryFactory()
         self.contributor = ContributorFactory()
 
     def test_submit_multiple_observations(self):
