@@ -60,11 +60,11 @@ class LeadersGlobalListTests(TestCase):
             'previous': None,
             'results': [
                 {
-                    'contributor': contributor2.name,
+                    'name': contributor2.name,
                     'observations': 4,
                     'rank': 1,
                 }, {
-                    'contributor': contributor1.name,
+                    'name': contributor1.name,
                     'observations': 3,
                     'rank': 2,
                 }
@@ -155,7 +155,7 @@ class LeaderCountryListViewTests(TestCase):
             'count': 1,
             'previous': None,
             'results': [{
-                'contributor': contributor.name,
+                'name': contributor.name,
                 'observations': 2,
                 'rank': 1,
             }],

@@ -253,7 +253,7 @@ Get Leaders
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/contributors/all/`
+  `https://leaderboard.services.mozilla.com/api/v1/leaders/global/`
 
 * **Method:**
 
@@ -277,7 +277,7 @@ Get Leaders
         next: <str>,
         results: [
           {
-            contributor: <str>,
+            name: <str>,
             observations: <int>,
             rank: <int>
           }
@@ -287,7 +287,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/all/?offset=20",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/global/?offset=20",
           dataType: "json",
           data: {
             country_id: 1,
@@ -305,7 +305,7 @@ Get Country Leaders
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/contributors/country/<country_id: str>/`
+  `https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/`
 
 * **Method:**
 
@@ -331,7 +331,7 @@ Get Country Leaders
 
         [
           {
-            contributor: <str>,
+            name: <str>,
             observations: <int>,
             rank: <int>
           }
@@ -344,7 +344,7 @@ Get Country Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/country/ca/?offset=20",
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/?offset=20",
           dataType: "json",
           data: {
             country_id: 1,

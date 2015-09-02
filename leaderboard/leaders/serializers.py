@@ -8,9 +8,9 @@ class LeaderSerializer(serializers.ModelSerializer):
     Serialize a contributor with their name and the
     number of observations they've made.
     """
-    contributor = serializers.SlugRelatedField(
-        slug_field='name', read_only=True)
+    name = serializers.SlugRelatedField(
+        source='contributor', slug_field='name', read_only=True)
 
     class Meta:
         model = ContributorRank
-        fields = ('contributor', 'observations', 'rank')
+        fields = ('name', 'observations', 'rank')
