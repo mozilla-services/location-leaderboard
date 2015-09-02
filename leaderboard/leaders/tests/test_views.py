@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from leaderboard.leaders.serializers import ContributorRankSerializer
 from leaderboard.contributors.models import (
     Contribution,
     ContributorRank,
@@ -14,6 +15,67 @@ from leaderboard.locations.tests.test_models import (
     CountryFactory,
     TileFactory,
 )
+
+
+class LeaderProfileTests(TestCase):
+
+    def test_get_leader_profile_returns_ranks_and_observations(self):
+        today = datetime.date.today()
+
+        contributor = ContributorFactory()
+
+        country1 = CountryFactory()
+        country2 = CountryFactory()
+
+        for country in (country1, country2):
+            for i in range(3):
+                Contribution.objects.create(
+                    contributor=contributor,
+                    date=today,
+                    observations=1,
+                    tile=TileFactory(country=country),
+                )
+
+        # Create the contributor ranks
+        ContributorRank.compute_ranks()
+
+        response = self.client.get(
+            reverse(
+                'leaders-profile',
+                kwargs={'uid': contributor.uid},
+            ),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        profile_data = json.loads(response.content)
+        self.assertEqual(profile_data['uid'], contributor.uid)
+        self.assertEqual(profile_data['name'], contributor.name)
+        self.assertEqual(len(profile_data['ranks']), 3)
+        self.assertIn({
+            'country': ContributorRankSerializer.GLOBAL_SLUG,
+            'observations': 6,
+            'rank': 1
+        }, profile_data['ranks'])
+        self.assertIn({
+            'country': country1.iso2,
+            'observations': 3,
+            'rank': 1
+        }, profile_data['ranks'])
+        self.assertIn({
+            'country': country2.iso2,
+            'observations': 3,
+            'rank': 1
+        }, profile_data['ranks'])
+
+    def test_bad_uid_raises_404(self):
+        response = self.client.get(
+            reverse(
+                'leaders-profile',
+                kwargs={'uid': 'asdf'},
+            ),
+        )
+
+        self.assertEqual(response.status_code, 404)
 
 
 class LeadersGlobalListTests(TestCase):
