@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from leaderboard.contributors.models import ContributorCountryRank
+from leaderboard.contributors.models import ContributorRank
 
 
 class LeaderSerializer(serializers.ModelSerializer):
@@ -12,5 +12,5 @@ class LeaderSerializer(serializers.ModelSerializer):
         slug_field='name', read_only=True)
 
     class Meta:
-        model = ContributorCountryRank
+        model = ContributorRank
         fields = ('contributor', 'observations', 'rank')

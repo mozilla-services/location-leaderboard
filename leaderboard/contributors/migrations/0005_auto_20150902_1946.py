@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ContributorCountryRank',
+            name='ContributorRank',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('observations', models.IntegerField(null=True, blank=True)),
@@ -21,9 +21,12 @@ class Migration(migrations.Migration):
                 ('contributor', models.ForeignKey(to='contributors.Contributor')),
                 ('country', models.ForeignKey(blank=True, to='locations.Country', null=True)),
             ],
+            options={
+                'ordering': ('-observations',),
+            },
         ),
         migrations.AlterUniqueTogether(
-            name='contributorcountryrank',
+            name='contributorrank',
             unique_together=set([('contributor', 'country')]),
         ),
     ]
