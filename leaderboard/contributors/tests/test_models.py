@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from leaderboard.contributors.models import (
     Contributor,
-    ContributorCountryRank,
+    ContributorRank,
     Contribution,
 )
 from leaderboard.locations.tests.test_models import (
@@ -122,7 +122,7 @@ class TestContributorQuerySet(TestCase):
         self.assertEqual(annotated_contributor.observations, 20)
 
 
-class TestContributorCountryRank(TestCase):
+class TestContributorRank(TestCase):
 
     def create_contribution(self, contributor, country):
         return Contribution.objects.create(
@@ -161,7 +161,7 @@ class TestContributorCountryRank(TestCase):
             self.create_contribution(self.contributor2, self.country2)
 
         # Compute the global and country ranks
-        ContributorCountryRank.compute_ranks()
+        ContributorRank.compute_ranks()
 
     def test_compute_ranks_generates_one_rank_globally_and_per_country(self):
         # There are now 6 rank objects
@@ -169,12 +169,12 @@ class TestContributorCountryRank(TestCase):
         # 1 global
         # 1 self.country1
         # 1 self.country2
-        self.assertEqual(ContributorCountryRank.objects.count(), 6)
+        self.assertEqual(ContributorRank.objects.count(), 6)
 
     def test_compute_ranks_sums_and_ranks_global_contributions(self):
         # Contributor1 is the global leader with 7 contributions
         contributor1_global_rank = (
-            ContributorCountryRank.objects.all_global().get(
+            ContributorRank.objects.all_global().get(
                 contributor=self.contributor1)
         )
         self.assertEqual(contributor1_global_rank.observations, 7)
@@ -182,7 +182,7 @@ class TestContributorCountryRank(TestCase):
 
         # Contributor2 is the global second with 6 contributions
         contributor2_global_rank = (
-            ContributorCountryRank.objects.all_global().get(
+            ContributorRank.objects.all_global().get(
                 contributor=self.contributor2)
         )
         self.assertEqual(contributor2_global_rank.observations, 6)
@@ -190,31 +190,31 @@ class TestContributorCountryRank(TestCase):
 
     def test_compute_ranks_sums_and_ranks_country_contributions(self):
         # Contributor2 is the self.country1 leader with 3 contributions
-        contributor2_country1_rank = ContributorCountryRank.objects.get(
+        contributor2_country1_rank = ContributorRank.objects.get(
             contributor=self.contributor2, country=self.country1)
         self.assertEqual(contributor2_country1_rank.observations, 3)
         self.assertEqual(contributor2_country1_rank.rank, 1)
 
         # Contributor1 is the self.country1 second with 2 contributions
-        contributor1_country1_rank = ContributorCountryRank.objects.get(
+        contributor1_country1_rank = ContributorRank.objects.get(
             contributor=self.contributor1, country=self.country1)
         self.assertEqual(contributor1_country1_rank.observations, 2)
         self.assertEqual(contributor1_country1_rank.rank, 2)
 
         # Contributor1 is the self.country2 leader with 5 contributions
-        contributor1_country2_rank = ContributorCountryRank.objects.get(
+        contributor1_country2_rank = ContributorRank.objects.get(
             contributor=self.contributor1, country=self.country2)
         self.assertEqual(contributor1_country2_rank.observations, 5)
         self.assertEqual(contributor1_country2_rank.rank, 1)
 
         # Contributor2 is the self.country2 second with 3 contributions
-        contributor2_country2_rank = ContributorCountryRank.objects.get(
+        contributor2_country2_rank = ContributorRank.objects.get(
             contributor=self.contributor2, country=self.country2)
         self.assertEqual(contributor2_country2_rank.observations, 3)
         self.assertEqual(contributor2_country2_rank.rank, 2)
 
     def test_contributor_ranks_are_ordered_by_decreasing_observations(self):
-        ranks = ContributorCountryRank.objects.all_global()
+        ranks = ContributorRank.objects.all_global()
 
         self.assertEqual(
             [rank.contributor for rank in ranks],
@@ -222,5 +222,5 @@ class TestContributorCountryRank(TestCase):
         )
 
     def test_compute_ranks_ignores_contributors_with_no_contributions(self):
-        self.assertFalse(ContributorCountryRank.objects.filter(
+        self.assertFalse(ContributorRank.objects.filter(
             contributor=self.contributor3).exists())

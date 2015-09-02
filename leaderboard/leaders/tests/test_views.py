@@ -7,7 +7,7 @@ from django.test import TestCase
 
 from leaderboard.contributors.models import (
     Contribution,
-    ContributorCountryRank,
+    ContributorRank,
 )
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.tests.test_models import (
@@ -49,7 +49,7 @@ class LeadersGlobalListTests(TestCase):
         ContributorFactory()
 
         # Create the contributor ranks
-        ContributorCountryRank.compute_ranks()
+        ContributorRank.compute_ranks()
 
         response = self.client.get(reverse('leaders-global-list'))
         self.assertEqual(response.status_code, 200)
@@ -87,7 +87,7 @@ class LeadersGlobalListTests(TestCase):
             ).save()
 
         # Create the contributor ranks
-        ContributorCountryRank.compute_ranks()
+        ContributorRank.compute_ranks()
 
         response = self.client.get(reverse('leaders-global-list'))
         self.assertEqual(response.status_code, 200)
@@ -140,7 +140,7 @@ class LeaderCountryListViewTests(TestCase):
         contribution3.save()
 
         # Create the contributor ranks
-        ContributorCountryRank.compute_ranks()
+        ContributorRank.compute_ranks()
 
         response = self.client.get(
             reverse(

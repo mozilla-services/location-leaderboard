@@ -46,9 +46,9 @@ class Contributor(models.Model):
         return self.name
 
 
-class ContributorCountryRankQuerySet(models.QuerySet):
+class ContributorRankQuerySet(models.QuerySet):
     """
-    A queryset for ContributorCountryRank objects which knows that
+    A queryset for ContributorRank objects which knows that
     when country is set to None it refers to a global rank.
     """
 
@@ -59,7 +59,7 @@ class ContributorCountryRankQuerySet(models.QuerySet):
         return self.filter(country=None)
 
 
-class ContributorCountryRank(models.Model):
+class ContributorRank(models.Model):
     """
     The rank and number of observations for a contributor
     for each country they've contributed to, and globally where
@@ -71,7 +71,7 @@ class ContributorCountryRank(models.Model):
     observations = models.IntegerField(blank=True, null=True)
     rank = models.IntegerField(blank=True, null=True)
 
-    objects = ContributorCountryRankQuerySet.as_manager()
+    objects = ContributorRankQuerySet.as_manager()
 
     class Meta:
         unique_together = ('contributor', 'country')
@@ -103,7 +103,7 @@ class ContributorCountryRank(models.Model):
                     contributors.annotate_observations(), start=1):
 
                 contributor_rank, created = (
-                    ContributorCountryRank.objects.get_or_create(
+                    ContributorRank.objects.get_or_create(
                         contributor=contributor, country=country)
                 )
 
