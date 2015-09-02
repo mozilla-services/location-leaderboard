@@ -134,7 +134,7 @@ Add Stumbles
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/contributions/add_stumbles/`
+  `https://leaderboard.services.mozilla.com/api/v1/contributions/`
 
 * **Method:**
 
@@ -214,7 +214,7 @@ Add Stumbles
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/add_stumbles/",
+          url: "https://leaderboard.services.mozilla.com/api/v1/",
           dataType: "json",
           beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer fksdf90sek4jk50');
