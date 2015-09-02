@@ -67,7 +67,7 @@ class ContributorRank(models.Model):
     """
     # When country is None, store the global rank and observations
     country = models.ForeignKey('locations.Country', blank=True, null=True)
-    contributor = models.ForeignKey(Contributor)
+    contributor = models.ForeignKey(Contributor, related_name='ranks')
     observations = models.IntegerField(blank=True, null=True)
     rank = models.IntegerField(blank=True, null=True)
 

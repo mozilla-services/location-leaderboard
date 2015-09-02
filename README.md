@@ -78,7 +78,7 @@ Update Contributor Name
 
 * **Data Params**
 
-  * ** PATCH body (JSON encoded)**
+  * **PATCH body (JSON encoded)**
 
           {
             name: <str>,
@@ -105,11 +105,11 @@ Update Contributor Name
 
 * **Error Responses:**
 
-  * **Code:** 400 INVALID  <br />
-    **Content:** `{"detail":"JSON parse error - Expecting object: line 1 column 1 (char 0)"}`
+  * **Code:** 400 INVALID  
+  * **Content:** `{"detail":"JSON parse error - Expecting object: line 1 column 1 (char 0)"}`
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{"detail":"Unable to determine a valid Firefox Accounts authorization token"}`
+  * **Code:** 401 UNAUTHORIZED 
+  * **Content:** `{"detail":"Unable to determine a valid Firefox Accounts authorization token"}`
 
 * **Sample Call:**
 
@@ -142,11 +142,11 @@ Add Stumbles
 
 * **Data Params**
 
-  The data submitted in a single POST request describes how many observations 
+  The data submitted in a single POST request describes how many observations
   were made by a contributor.  Each observation is made at a given time and place,
   however to reduce the size of the data sent, the observations are grouped into 'tiles'.
   The tile size is requested from the server, and is measured in meters.  Observations are
-  then grouped into tiles of that size and summed.  Each data point sent 
+  then grouped into tiles of that size and summed.  Each data point sent
   describes the coordinates of a point within that tile (the server will round the coordinates
   provided to the nearest containing tile), and the number of observations made within that
   tile.
@@ -205,10 +205,10 @@ Add Stumbles
 
 * **Error Responses:**
 
-  * **Code:** 400 INVALID  <br />
+  * **Code:** 400 INVALID
     **Content:** `{"detail":"JSON parse error - Expecting object: line 1 column 1 (char 0)"}`
 
-  * **Code:** 401 UNAUTHORIZED <br />
+  * **Code:** 401 UNAUTHORIZED
     **Content:** `{"detail":"Unable to determine a valid Firefox Accounts authorization token"}`
 
 * **Sample Call:**
@@ -247,9 +247,66 @@ Add Stumbles
           }
         });
 
+Get Leader
+----
+  Get a leader that has contributed, and their rank globally and in each country
+  that they have contributed to.
+
+* **URL**
+
+  `https://leaderboard.services.mozilla.com/api/v1/leaders/profile/<uid: str>/`
+
+* **Method:**
+
+  `GET`
+
+* **GET Params**
+
+  * uid: `str`
+
+  The uid of the contributor.
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+        {
+          uid: <str>,
+          name: <str>,
+          ranks: [
+            {
+              country: <str>,
+              observations: <int>,
+              rank: <int>
+            }
+          ]
+        }
+
+* **Error Responses:**
+
+  * **Code:** 404 NOT FOUND
+  * **Content:** `{"detail":"Not found."}`
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/profile/abcdefg/",
+          dataType: "json",
+          data: {
+            country_id: 1,
+          }
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
+
 Get Leaders
 ----
-  Get all leaders that have contributed, sorted by the highest contributions. 
+  Get all leaders that have contributed, sorted by the highest contributions.
 
 * **URL**
 
@@ -315,7 +372,7 @@ Get Country Leaders
 
   * country_id : `str`
 
-  A country_id is a 2 letter ISO country code which can be found [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2). 
+  A country_id is a 2 letter ISO country code which can be found [here](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 
 * **GET Params**
 
@@ -339,7 +396,9 @@ Get Country Leaders
 
 * **Error Responses:**
 
-  None
+  * **Code:** 404 NOT FOUND
+  * **Content:** `{"detail":"Unknown country code."}`
+
 
 * **Sample Call:**
 

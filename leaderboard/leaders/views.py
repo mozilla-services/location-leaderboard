@@ -1,16 +1,23 @@
 from rest_framework.exceptions import NotFound
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
 
 from leaderboard.locations.models import Country
-from leaderboard.contributors.models import ContributorRank
+from leaderboard.contributors.models import Contributor, ContributorRank
 from leaderboard.leaders.serializers import (
-    LeaderSerializer,
+    LeaderProfileSerializer,
+    LeaderListSerializer,
 )
+
+
+class LeaderProfileView(RetrieveAPIView):
+    queryset = Contributor.objects.all()
+    lookup_field = 'uid'
+    serializer_class = LeaderProfileSerializer
 
 
 class LeadersGlobalListView(ListAPIView):
     queryset = ContributorRank.objects.all_global()
-    serializer_class = LeaderSerializer
+    serializer_class = LeaderListSerializer
 
 
 class LeadersCountryListView(LeadersGlobalListView):
