@@ -125,6 +125,9 @@ if 'TRAVIS' in os.environ:
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': (
+        'rest_framework.pagination.LimitOffsetPagination'
+    ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),

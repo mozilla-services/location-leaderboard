@@ -261,7 +261,7 @@ Get Leaders
 
 * **GET Params**
 
-  * page: `int`
+  * offset: `int`
 
   Each page contains 20 leaders.
 
@@ -287,7 +287,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/all/?page=1",
+          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/all/?offset=20",
           dataType: "json",
           data: {
             country_id: 1,
@@ -319,7 +319,7 @@ Get Country Leaders
 
 * **GET Params**
 
-  * page: `int`
+  * offset: `int`
 
   Each page contains 20 leaders.
 
@@ -344,7 +344,7 @@ Get Country Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/country/ca/?page=1",
+          url: "https://leaderboard.services.mozilla.com/api/v1/contributors/country/ca/?offset=20",
           dataType: "json",
           data: {
             country_id: 1,

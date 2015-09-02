@@ -95,7 +95,10 @@ class LeadersGlobalListTests(TestCase):
         contributors_data = json.loads(response.content)
         self.assertEqual(len(contributors_data['results']), page_size)
 
-        response = self.client.get(reverse('leaders-global-list'), {'page': 2})
+        response = self.client.get(
+            reverse('leaders-global-list'),
+            {'offset': page_size},
+        )
         self.assertEqual(response.status_code, 200)
 
         contributors_data = json.loads(response.content)
