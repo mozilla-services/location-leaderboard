@@ -1,6 +1,7 @@
 import datetime
 
 import factory
+from faker import Factory as FakerFactory
 from django.test import TestCase
 
 from leaderboard.contributors.models import (
@@ -14,10 +15,13 @@ from leaderboard.locations.tests.test_models import (
 )
 
 
+faker = FakerFactory.create()
+
+
 class ContributorFactory(factory.DjangoModelFactory):
     access_token = factory.Sequence(lambda n: str(n))
     uid = factory.Sequence(lambda n: str(n))
-    name = factory.Sequence(lambda n: 'Contributor {}'.format(n))
+    name = factory.LazyAttribute(lambda o: faker.name())
     email = factory.Sequence(
         lambda n: 'contributor{}@contribute.org'.format(n))
 

@@ -1,27 +1,38 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block page_title %}{% endblock %}
 
 {% block content %}
-<hgroup id="main-feature" class="center">
-    <h1>Mozilla Location Service Leaderboard</h1>
-    <h3>Contributing to mapping the world!</h3>
-</hgroup>
+<div class="section">
+    <div id="map" class="col span_6_of_12"></div>
+    <div id="leaders" class="col span_6_of_12">
+        <div class="section">
+            <h3>Region: <span id="leaders-region">Global</span></h3>
+        </div>
+        <div class="section">
+            <button id="previous-button" class="button col span_3_of_12">Previous</button>
+            <h3 id="leaders-count" class="center col span_6_of_12"></h3>
+            <button id="next-button" class="button col span_3_of_12">Next</button>
+        </div>
 
-<article>
-    <section>
-        <h2>Overview</h2>
-        <p>
-            The Mozilla Location Service Leaderboard tracks the contributions made to the 
-            <a href="https://location.services.mozilla.com/">Mozilla Location Service</a>.
-            This leaderboard shows the contributions of individual community members, who 
-            are using one of the client applications and contribute back data to us - we 
-            call this activity stumbling. Joining this competition is optional and you 
-            can contribute data anonymously. You only show up on the leaderboard if you 
-            have collected at least ten reports.
-        </p>
-    </section>
-    <section>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Contributions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="section">
+    <div class="col span_12_of_12">
         <h2>How do I contribute?</h2>
 
         <p>
@@ -43,6 +54,46 @@
                 Mozilla Stumbler on Github</a>
             to contribute to its development.
         </p>
-    </section>
-</article>
+    </div>
+</div>
+
+<div class="section">
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+
+    {% verbatim %}
+    <script id="region-template" type="text/x-handlebars-template">
+        {{region}}
+        {{#unless global}}
+            (<a href="" class="region-global-button">Global</a>)
+        {{/unless}}
+    </script>
+
+    <script id="leader-template" type="text/x-handlebars-template">
+        <tr>
+            <td>{{rank}}</td>
+            <td>{{name}}</td>
+            <td>{{observations}}</td>
+        </tr>
+    </script>
+
+    <script id="leaders-count-template" type="text/x-handlebars-template">
+        {{start}} - {{stop}} of {{total}}
+    </script>
+    {% endverbatim %}
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.1/handlebars.js"></script>
+    <script src="{% static "js/build/leaderboard.js" %}"></script>
+    <script>
+        $(function () {
+            leaderboard({
+                global_url: '{% url "leaders-global-list" %}'
+            });
+        });
+    </script>
 {% endblock %}

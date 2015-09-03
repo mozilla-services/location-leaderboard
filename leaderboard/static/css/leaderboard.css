@@ -1,3 +1,10 @@
-.header-logo * {
-  display: inline-block;
+#site-title img {
+  float: left;
+  margin-top: 20px;
+}
+#map {
+  height: 480px;
+}
+#leaders table {
+  width: 100%;
 }
