@@ -77,11 +77,18 @@ function loadUrl(dataUrl, countryName) {
       $('#leaders tbody').append(html);
     }
 
-    $('#leaders-count').html(leadersCountTemplate({
-        start: data.results[0].rank,
-        stop: data.results[data.results.length-1].rank,
-        total: data.count
-    }));
+    if (data.results.length) {
+      $('#leaders-count').html(leadersCountTemplate({
+          start: data.results[0].rank,
+          stop: data.results[data.results.length-1].rank,
+          total: data.count
+      }));
+      $('#leaders table').show();
+    } else {
+      $('#leaders-count').html('No results.');
+      $('#leaders table').hide();
+    }
+
   });
 }
 

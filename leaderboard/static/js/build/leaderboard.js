@@ -8,7 +8,7 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c7ef24e8.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_4454d532.js","/")
 },{"+7ZJp0":8,"./leaders.js":2,"./map.js":3,"buffer":5}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var getUrlParameter = _dereq_('./url_param.js');
@@ -90,11 +90,18 @@ function loadUrl(dataUrl, countryName) {
       $('#leaders tbody').append(html);
     }
 
-    $('#leaders-count').html(leadersCountTemplate({
-        start: data.results[0].rank,
-        stop: data.results[data.results.length-1].rank,
-        total: data.count
-    }));
+    if (data.results.length) {
+      $('#leaders-count').html(leadersCountTemplate({
+          start: data.results[0].rank,
+          stop: data.results[data.results.length-1].rank,
+          total: data.count
+      }));
+      $('#leaders table').show();
+    } else {
+      $('#leaders-count').html('No results.');
+      $('#leaders table').hide();
+    }
+
   });
 }
 
