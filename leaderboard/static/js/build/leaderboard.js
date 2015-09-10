@@ -8,10 +8,27 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e9afda3d.js","/")
-},{"+7ZJp0":8,"./leaders.js":2,"./map.js":3,"buffer":5}],2:[function(_dereq_,module,exports){
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e663a2e0.js","/")
+},{"+7ZJp0":9,"./leaders.js":3,"./map.js":4,"buffer":6}],2:[function(_dereq_,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+module.exports = function(elem) {
+    var $elem = $(elem);
+    var $window = $(window);
+
+    var docViewTop = $window.scrollTop();
+    var docViewBottom = docViewTop + $window.height();
+
+    var elemTop = $elem.offset().top;
+    var elemBottom = elemTop + $elem.height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/is_visible.js","/")
+},{"+7ZJp0":9,"buffer":6}],3:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var getUrlParameter = _dereq_('./url_param.js');
+var isVisible = _dereq_('./is_visible.js');
 
 var regionSource   = $("#region-template").html();
 var regionTemplate = Handlebars.compile(regionSource);
@@ -46,6 +63,10 @@ function pushHistory(dataUrl, countryName) {
 }
 
 function loadUrl(dataUrl, countryName) {
+  if (!isVisible('#leaders')) {
+    $('html,body').animate({scrollTop: $('#leaders').offset().top},'slow');
+  }
+  
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
     regionName = countryName;
@@ -148,7 +169,7 @@ module.exports = {
 }
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leaders.js","/")
-},{"+7ZJp0":8,"./url_param.js":4,"buffer":5}],3:[function(_dereq_,module,exports){
+},{"+7ZJp0":9,"./is_visible.js":2,"./url_param.js":5,"buffer":6}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var leaders = _dereq_('./leaders.js');
 
@@ -205,7 +226,7 @@ module.exports = {
 
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/map.js","/")
-},{"+7ZJp0":8,"./leaders.js":2,"buffer":5}],4:[function(_dereq_,module,exports){
+},{"+7ZJp0":9,"./leaders.js":3,"buffer":6}],5:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(sParam) {
   var sPageURL = window.location.search.substring(1),
@@ -223,7 +244,7 @@ module.exports = function(sParam) {
 }
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/url_param.js","/")
-},{"+7ZJp0":8,"buffer":5}],5:[function(_dereq_,module,exports){
+},{"+7ZJp0":9,"buffer":6}],6:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1336,7 +1357,7 @@ function assert (test, message) {
 }
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/index.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer")
-},{"+7ZJp0":8,"base64-js":6,"buffer":5,"ieee754":7}],6:[function(_dereq_,module,exports){
+},{"+7ZJp0":9,"base64-js":7,"buffer":6,"ieee754":8}],7:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -1464,7 +1485,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib")
-},{"+7ZJp0":8,"buffer":5}],7:[function(_dereq_,module,exports){
+},{"+7ZJp0":9,"buffer":6}],8:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -1552,7 +1573,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754")
-},{"+7ZJp0":8,"buffer":5}],8:[function(_dereq_,module,exports){
+},{"+7ZJp0":9,"buffer":6}],9:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 // shim for using process in browser
 
@@ -1619,6 +1640,6 @@ process.chdir = function (dir) {
 };
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/process/browser.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/process")
-},{"+7ZJp0":8,"buffer":5}]},{},[1])
+},{"+7ZJp0":9,"buffer":6}]},{},[1])
 (1)
 });

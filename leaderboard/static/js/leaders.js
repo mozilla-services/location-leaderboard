@@ -1,4 +1,5 @@
 var getUrlParameter = require('./url_param.js');
+var isVisible = require('./is_visible.js');
 
 var regionSource   = $("#region-template").html();
 var regionTemplate = Handlebars.compile(regionSource);
@@ -33,6 +34,10 @@ function pushHistory(dataUrl, countryName) {
 }
 
 function loadUrl(dataUrl, countryName) {
+  if (!isVisible('#leaders')) {
+    $('html,body').animate({scrollTop: $('#leaders').offset().top},'slow');
+  }
+  
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
     regionName = countryName;
