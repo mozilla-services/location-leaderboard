@@ -9,6 +9,7 @@ var leaderTemplate = Handlebars.compile(leaderSource);
 var leadersCountSource   = $("#leaders-count-template").html();
 var leadersCountTemplate = Handlebars.compile(leadersCountSource);
 
+var globalName = 'Global';
 var globalUrl;
 
 var nextUrl;
@@ -32,7 +33,6 @@ function pushHistory(dataUrl, countryName) {
 }
 
 function loadUrl(dataUrl, countryName) {
-  var globalName = 'Global';
 
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
@@ -52,7 +52,18 @@ function loadUrl(dataUrl, countryName) {
     $('#leaders tbody').html('');
 
     nextUrl = data.next;
+    if (nextUrl) {
+      $('#next-button').show();
+    } else {
+      $('#next-button').hide();
+    }
+
     prevUrl = data.previous;
+    if (prevUrl) {
+      $('#previous-button').show();
+    } else {
+      $('#previous-button').hide();
+    }
 
     for(var i in data.results) {
       var result = data.results[i];
