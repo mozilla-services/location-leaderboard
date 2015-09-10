@@ -8,7 +8,7 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c78bfef7.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c7ef24e8.js","/")
 },{"+7ZJp0":8,"./leaders.js":2,"./map.js":3,"buffer":5}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var getUrlParameter = _dereq_('./url_param.js');
@@ -156,15 +156,16 @@ function setupMap() {
 
   $.getJSON('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson', function (data) {
     var countryStyle = {
-      'weight': 3,
+      'fillOpacity': 0,
+      'opacity': 0
     };
 
     var countryStyleHover = {
-      'weight': 4,
+      'weight': 1,
+      'opacity': 1
     };
 
     var countryStyleClick = {
-      'weight': 5,
     };
 
     function onEachFeature(country_data, layer) {
@@ -185,7 +186,7 @@ function setupMap() {
         leaders.requestUrl(dataUrl, countryName);
       });
     }
-    L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
+    L.geoJson(data, {onEachFeature: onEachFeature, style: countryStyle}).addTo(map);
   });
 }
 

@@ -11,15 +11,16 @@ function setupMap() {
 
   $.getJSON('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson', function (data) {
     var countryStyle = {
-      'weight': 3,
+      'fillOpacity': 0,
+      'opacity': 0
     };
 
     var countryStyleHover = {
-      'weight': 4,
+      'weight': 1,
+      'opacity': 1
     };
 
     var countryStyleClick = {
-      'weight': 5,
     };
 
     function onEachFeature(country_data, layer) {
@@ -40,7 +41,7 @@ function setupMap() {
         leaders.requestUrl(dataUrl, countryName);
       });
     }
-    L.geoJson(data, {onEachFeature: onEachFeature}).addTo(map);
+    L.geoJson(data, {onEachFeature: onEachFeature, style: countryStyle}).addTo(map);
   });
 }
 
