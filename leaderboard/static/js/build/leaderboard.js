@@ -8,7 +8,7 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e663a2e0.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e811fd58.js","/")
 },{"+7ZJp0":9,"./leaders.js":3,"./map.js":4,"buffer":6}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(elem) {
@@ -177,10 +177,15 @@ function setupMap() {
   var map = L.map('map').setView([30, 0], 2);
   var src = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZWUpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA'
   L.tileLayer(src, {
-  attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="http://openstreetmap.org/copyright">© OpenStreetMap</a> <a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">Improve this map</a>',
-  maxZoom: 18,
-  minZoom: 2
+    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="http://openstreetmap.org/copyright">© OpenStreetMap</a> <a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">Improve this map</a>',
+    maxZoom: 18,
+    minZoom: 2
   }).addTo(map);
+
+  var popup = L.popup()
+      .setLatLng(L.latLng(20, 0))
+      .setContent('<h3 class="center">Click on a country to see its local leaderboard!</h3>')
+      .openOn(map);
 
   $.getJSON('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson', function (data) {
     var countryStyle = {
