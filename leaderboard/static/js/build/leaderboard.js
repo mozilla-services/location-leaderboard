@@ -8,7 +8,7 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6edbc855.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e55f7ef3.js","/")
 },{"+7ZJp0":8,"./leaders.js":2,"./map.js":3,"buffer":5}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var getUrlParameter = _dereq_('./url_param.js');
@@ -46,22 +46,15 @@ function pushHistory(dataUrl, countryName) {
 }
 
 function loadUrl(dataUrl, countryName) {
-
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
     regionName = countryName;
   }
 
-  var regionHtml = regionTemplate({region: regionName, global: regionName == globalName});
-
-  $('#leaders-region').html(regionHtml);
-
-  $('.region-global-button').on('click', function (e) {
-      e.preventDefault();
-      requestUrl(globalUrl);
-  });
-
   $.getJSON(dataUrl, function (data) {
+    var regionHtml = regionTemplate({count: data.count, region: regionName, global: regionName == globalName});
+    $('#leaders-region').html(regionHtml);
+
     $('#leaders tbody').html('');
 
     nextUrl = data.next;
@@ -96,11 +89,18 @@ function loadUrl(dataUrl, countryName) {
           stop: data.results[data.results.length-1].rank,
           total: data.count
       }));
+      $('#no-results').hide();
       $('#leaders table').show();
     } else {
-      $('#leaders-count').html('No results.');
+      $('#no-results').show();
       $('#leaders table').hide();
     }
+  
+    $('.region-global-button').on('click', function (e) {
+        e.preventDefault();
+        requestUrl(globalUrl);
+    });
+
 
   });
 }

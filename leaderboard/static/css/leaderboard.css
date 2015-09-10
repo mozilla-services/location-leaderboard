@@ -11,3 +11,6 @@
 #leaders button {
   width: 100%;
 }
+#leaders #no-results {
+  display: none;
+}

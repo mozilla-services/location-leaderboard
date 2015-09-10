@@ -33,22 +33,15 @@ function pushHistory(dataUrl, countryName) {
 }
 
 function loadUrl(dataUrl, countryName) {
-
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
     regionName = countryName;
   }
 
-  var regionHtml = regionTemplate({region: regionName, global: regionName == globalName});
-
-  $('#leaders-region').html(regionHtml);
-
-  $('.region-global-button').on('click', function (e) {
-      e.preventDefault();
-      requestUrl(globalUrl);
-  });
-
   $.getJSON(dataUrl, function (data) {
+    var regionHtml = regionTemplate({count: data.count, region: regionName, global: regionName == globalName});
+    $('#leaders-region').html(regionHtml);
+
     $('#leaders tbody').html('');
 
     nextUrl = data.next;
@@ -83,11 +76,18 @@ function loadUrl(dataUrl, countryName) {
           stop: data.results[data.results.length-1].rank,
           total: data.count
       }));
+      $('#no-results').hide();
       $('#leaders table').show();
     } else {
-      $('#leaders-count').html('No results.');
+      $('#no-results').show();
       $('#leaders table').hide();
     }
+  
+    $('.region-global-button').on('click', function (e) {
+        e.preventDefault();
+        requestUrl(globalUrl);
+    });
+
 
   });
 }
