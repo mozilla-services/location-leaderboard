@@ -8,7 +8,7 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_4454d532.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6edbc855.js","/")
 },{"+7ZJp0":8,"./leaders.js":2,"./map.js":3,"buffer":5}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var getUrlParameter = _dereq_('./url_param.js');
@@ -66,16 +66,16 @@ function loadUrl(dataUrl, countryName) {
 
     nextUrl = data.next;
     if (nextUrl) {
-      $('#next-button').show();
+      $('#next-button').removeClass('insensitive');
     } else {
-      $('#next-button').hide();
+      $('#next-button').addClass('insensitive');
     }
 
     prevUrl = data.previous;
     if (prevUrl) {
-      $('#previous-button').show();
+      $('#previous-button').removeClass('insensitive');
     } else {
-      $('#previous-button').hide();
+      $('#previous-button').addClass('insensitive');
     }
 
     for(var i in data.results) {

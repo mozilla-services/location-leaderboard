@@ -53,16 +53,16 @@ function loadUrl(dataUrl, countryName) {
 
     nextUrl = data.next;
     if (nextUrl) {
-      $('#next-button').show();
+      $('#next-button').removeClass('insensitive');
     } else {
-      $('#next-button').hide();
+      $('#next-button').addClass('insensitive');
     }
 
     prevUrl = data.previous;
     if (prevUrl) {
-      $('#previous-button').show();
+      $('#previous-button').removeClass('insensitive');
     } else {
-      $('#previous-button').hide();
+      $('#previous-button').addClass('insensitive');
     }
 
     for(var i in data.results) {
