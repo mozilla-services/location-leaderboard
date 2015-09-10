@@ -8,7 +8,7 @@ module.exports = function (config) {
     leaders.init(config);
 }
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ddee1f47.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_48092085.js","/")
 },{"+7ZJp0":8,"./leaders.js":2,"./map.js":3,"buffer":5}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var getUrlParameter = _dereq_('./url_param.js');
@@ -22,7 +22,7 @@ var leaderTemplate = Handlebars.compile(leaderSource);
 var leadersCountSource   = $("#leaders-count-template").html();
 var leadersCountTemplate = Handlebars.compile(leadersCountSource);
 
-var globalUrl = '/api/v1/leaders/global/';
+var globalUrl;
 
 var nextUrl;
 var prevUrl;
@@ -94,7 +94,9 @@ function requestUrl(url, countryName) {
   }
 }
 
-function setupLeaders() {
+function setupLeaders(config) {
+  globalUrl = config.globalUrl;
+
   var startUrl = globalUrl;
 
   var paramUrl = getUrlParameter('data');
@@ -119,13 +121,9 @@ function setupLeaders() {
   requestUrl(startUrl, countryName);
 }
 
-function init(config) {
-  setupLeaders(config);
-}
-
 module.exports = {
   init: function (config) {
-    init(config);
+    setupLeaders(config);
   },
 
   requestUrl: requestUrl,

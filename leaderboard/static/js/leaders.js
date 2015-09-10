@@ -9,7 +9,7 @@ var leaderTemplate = Handlebars.compile(leaderSource);
 var leadersCountSource   = $("#leaders-count-template").html();
 var leadersCountTemplate = Handlebars.compile(leadersCountSource);
 
-var globalUrl = '/api/v1/leaders/global/';
+var globalUrl;
 
 var nextUrl;
 var prevUrl;
@@ -81,7 +81,9 @@ function requestUrl(url, countryName) {
   }
 }
 
-function setupLeaders() {
+function setupLeaders(config) {
+  globalUrl = config.globalUrl;
+
   var startUrl = globalUrl;
 
   var paramUrl = getUrlParameter('data');
@@ -106,13 +108,9 @@ function setupLeaders() {
   requestUrl(startUrl, countryName);
 }
 
-function init(config) {
-  setupLeaders(config);
-}
-
 module.exports = {
   init: function (config) {
-    init(config);
+    setupLeaders(config);
   },
 
   requestUrl: requestUrl,
