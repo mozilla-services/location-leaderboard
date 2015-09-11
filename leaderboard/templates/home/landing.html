@@ -91,10 +91,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.1/handlebars.js"></script>
     <script src="{% static "js/build/leaderboard.js" %}"></script>
     <script>
-        $(function () {
-            leaderboard({
-                globalUrl: '{% url "leaders-global-list" %}'
-            });
+      $(function () {
+        Tabzilla.disableEasterEgg()
+        leaderboard({
+          globalUrl: '{% url "leaders-global-list" %}'
         });
+      });
     </script>
 {% endblock %}
