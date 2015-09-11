@@ -1,0 +1,29 @@
+{
+  "name": "leaderboard-server",
+  "version": "1.0.0",
+  "description": "A server for collecting contributions to the Mozilla Location Services project. ",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "base64-js": "^0.0.8",
+    "gulp-browserify": "^0.5.1",
+    "gulp-less": "^3.0.3",
+    "gulp-livereload": "^3.8.0",
+    "jshint": "^2.8.0",
+    "less": "^2.5.1",
+    "merge-stream": "^0.1.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "./manage.py test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JaredKerim-Mozilla/leaderboard-server.git"
+  },
+  "author": "Jared Kerim",
+  "license": "MPL",
+  "bugs": {
+    "url": "https://github.com/JaredKerim-Mozilla/leaderboard-server/issues"
+  },
+  "homepage": "https://github.com/JaredKerim-Mozilla/leaderboard-server"
+}
