@@ -19,7 +19,8 @@ var prevUrl;
 function pushHistory(dataUrl, countryName) {
   var urlParser = document.createElement('a');
   urlParser.href = dataUrl;
-  var stateUrl = btoa(encodeURIComponent(urlParser.pathname + urlParser.search));
+  var stateUrl = btoa(
+    encodeURIComponent(urlParser.pathname + urlParser.search));
 
   var urlParams = '?data=' + stateUrl;
   if (typeof countryName !== 'undefined') {
@@ -44,7 +45,11 @@ function loadUrl(dataUrl, countryName) {
   }
 
   $.getJSON(dataUrl, function (data) {
-    var regionHtml = regionTemplate({count: data.count, region: regionName, global: regionName == globalName});
+    var regionHtml = regionTemplate({
+      count: data.count,
+      region: regionName,
+      global: regionName == globalName
+    });
     $('#leaders-region').html(regionHtml);
 
     $('#leaders tbody').html('');
@@ -67,7 +72,8 @@ function loadUrl(dataUrl, countryName) {
       var result = data.results[i];
 
       if (typeof Intl !== 'undefined') {
-        result.observations = new Intl.NumberFormat().format(result.observations);
+        result.observations = new Intl.NumberFormat().format(
+          result.observations);
       }
 
       var html = leaderTemplate(result);
@@ -126,7 +132,7 @@ function setupLeaders(config) {
 
   window.onpopstate = function (e) {
     loadUrl(e.state.url);
-  }
+  };
 
   requestUrl(startUrl, countryName);
 }
@@ -137,4 +143,4 @@ module.exports = {
   },
 
   requestUrl: requestUrl,
-}
+};
