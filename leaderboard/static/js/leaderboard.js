@@ -1,7 +1,8 @@
-var map = require('./map.js');
-var leaders = require('./leaders.js');
+var Leaderboard = require('./react.leaderboard.js');
 
 module.exports = function (config) {
-  map.init(config);
-  leaders.init(config);
+  React.render(
+    <Leaderboard globalUrl={config.globalUrl} />,
+    document.getElementById('leaderboard-container')
+  );
 };

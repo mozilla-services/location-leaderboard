@@ -2,15 +2,12 @@
   float: left;
   margin-top: 20px;
 }
-#map {
+#leaderboard #leaders-map {
   height: 550px;
 }
-#leaders table {
+#leaderboard #leaders-table table {
   width: 100%;
 }
-#leaders button {
+#leaderboard #leaders-table button {
   width: 100%;
-}
-#leaders #no-results {
-  display: none;
 }
