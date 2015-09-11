@@ -4,25 +4,25 @@ var map = _dereq_('./map.js');
 var leaders = _dereq_('./leaders.js');
 
 module.exports = function (config) {
-    map.init(config);
-    leaders.init(config);
-}
+  map.init(config);
+  leaders.init(config);
+};
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_75bca366.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_358bb201.js","/")
 },{"+7ZJp0":9,"./leaders.js":3,"./map.js":4,"buffer":6}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(elem) {
-    var $elem = $(elem);
-    var $window = $(window);
+  var $elem = $(elem);
+  var $window = $(window);
 
-    var docViewTop = $window.scrollTop();
-    var docViewBottom = docViewTop + $window.height();
+  var docViewTop = $window.scrollTop();
+  var docViewBottom = docViewTop + $window.height();
 
-    var elemTop = $elem.offset().top;
-    var elemBottom = elemTop + $elem.height();
+  var elemTop = $elem.offset().top;
+  var elemBottom = elemTop + $elem.height();
 
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-}
+  return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+};
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/is_visible.js","/")
 },{"+7ZJp0":9,"buffer":6}],3:[function(_dereq_,module,exports){
@@ -46,34 +46,39 @@ var nextUrl;
 var prevUrl;
 
 function pushHistory(dataUrl, countryName) {
-    var urlParser = document.createElement('a');
-    urlParser.href = dataUrl;
-    var stateUrl = btoa(encodeURIComponent(urlParser.pathname + urlParser.search));
+  var urlParser = document.createElement('a');
+  urlParser.href = dataUrl;
+  var stateUrl = btoa(
+    encodeURIComponent(urlParser.pathname + urlParser.search));
 
-    var urlParams = '?data=' + stateUrl;
-    if (typeof countryName !== 'undefined') {
-      urlParams += '&country=' + countryName;
-    }
+  var urlParams = '?data=' + stateUrl;
+  if (typeof countryName !== 'undefined') {
+    urlParams += '&country=' + countryName;
+  }
 
-    history.pushState(
-        {url: dataUrl, countryName: countryName},
-        '',
-        urlParams
-    );
+  history.pushState(
+    {url: dataUrl, countryName: countryName},
+    '',
+    urlParams
+  );
 }
 
 function loadUrl(dataUrl, countryName) {
   if (!isVisible('#leaders')) {
     $('html,body').animate({scrollTop: $('#leaders').offset().top},'slow');
   }
-  
+
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
     regionName = countryName;
   }
 
   $.getJSON(dataUrl, function (data) {
-    var regionHtml = regionTemplate({count: data.count, region: regionName, global: regionName == globalName});
+    var regionHtml = regionTemplate({
+      count: data.count,
+      region: regionName,
+      global: regionName == globalName
+    });
     $('#leaders-region').html(regionHtml);
 
     $('#leaders tbody').html('');
@@ -96,7 +101,8 @@ function loadUrl(dataUrl, countryName) {
       var result = data.results[i];
 
       if (typeof Intl !== 'undefined') {
-        result.observations = new Intl.NumberFormat().format(result.observations);
+        result.observations = new Intl.NumberFormat().format(
+          result.observations);
       }
 
       var html = leaderTemplate(result);
@@ -116,7 +122,7 @@ function loadUrl(dataUrl, countryName) {
       $('#no-results').show();
       $('#leaders table').hide();
     }
-  
+
     $('.region-global-button').on('click', function (e) {
         e.preventDefault();
         requestUrl(globalUrl);
@@ -155,7 +161,7 @@ function setupLeaders(config) {
 
   window.onpopstate = function (e) {
     loadUrl(e.state.url);
-  }
+  };
 
   requestUrl(startUrl, countryName);
 }
@@ -166,7 +172,7 @@ module.exports = {
   },
 
   requestUrl: requestUrl,
-}
+};
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leaders.js","/")
 },{"+7ZJp0":9,"./is_visible.js":2,"./url_param.js":5,"buffer":6}],4:[function(_dereq_,module,exports){
@@ -174,62 +180,83 @@ module.exports = {
 var leaders = _dereq_('./leaders.js');
 
 function setupMap() {
-  var map = L.map('map').setView([30, 0], 2);
-  map.setMaxBounds(L.latLngBounds(L.latLng(-85.0511, -180.0), L.latLng(85.0511, 180.0)));
-  var src = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZWUpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA'
+  var map = L.map('map', {
+    maxBounds: L.latLngBounds(
+      L.latLng(-85.0511, -180.0),
+      L.latLng(85.0511, 180.0)
+    )
+  }).setView([30, 0], 2);
+
+  var src = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/' +
+    '{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW' +
+    'UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA';
   L.tileLayer(src, {
-    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="http://openstreetmap.org/copyright">© OpenStreetMap</a> <a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">Improve this map</a>',
+    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> ' +
+      '<a href="http://openstreetmap.org/copyright">© OpenStreetMap</a>' +
+      '<a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">' +
+      'Improve this map</a>',
     maxZoom: 18,
     minZoom: 2
   }).addTo(map);
 
   var popup = L.popup()
       .setLatLng(L.latLng(20, 0))
-      .setContent('<h3 class="center">Click on a country to see its local leaderboard!</h3>')
+      .setContent(
+        '<h3 class="center">Click on a country to see its local ' +
+        'leaderboard!</h3>'
+      )
       .openOn(map);
 
-  $.getJSON('https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/master/countries.geojson', function (data) {
-    var countryStyle = {
-      'fillOpacity': 0,
-      'opacity': 0
-    };
+  $.getJSON(
+    'https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/' +
+    'master/countries.geojson',
+    function (data) {
+      var countryStyle = {
+        'fillOpacity': 0,
+        'opacity': 0
+      };
 
-    var countryStyleHover = {
-      'weight': 1,
-      'opacity': 1
-    };
+      var countryStyleHover = {
+        'weight': 1,
+        'opacity': 1
+      };
 
-    var countryStyleClick = {
-    };
+      var countryStyleClick = {
+      };
 
-    function onEachFeature(country_data, layer) {
-      layer.on('mouseover', function (e) {
-        // change the countryStyle to the hover version
-        layer.setStyle(countryStyleHover);
-      });
+      function onEachFeature(country_data, layer) {
+        layer.on('mouseover', function (e) {
+          // change the countryStyle to the hover version
+          layer.setStyle(countryStyleHover);
+        });
 
-      layer.on('mouseout', function (e) {
-        // reverting the countryStyle back
-        layer.setStyle(countryStyle);
-      });
+        layer.on('mouseout', function (e) {
+          // reverting the countryStyle back
+          layer.setStyle(countryStyle);
+        });
 
-      layer.on('click', function (e) {
-        var countryIso2 = e.target.feature.properties.iso_a2;
-        var countryName = e.target.feature.properties.name;
-        var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
-        leaders.requestUrl(dataUrl, countryName);
-      });
+        layer.on('click', function (e) {
+          var countryIso2 = e.target.feature.properties.iso_a2;
+          var countryName = e.target.feature.properties.name;
+          var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
+          leaders.requestUrl(dataUrl, countryName);
+        });
+      }
+      L.geoJson(
+        data, {
+          onEachFeature: onEachFeature,
+          style: countryStyle
+        }
+      ).addTo(map);
     }
-    L.geoJson(data, {onEachFeature: onEachFeature, style: countryStyle}).addTo(map);
-  });
+  );
 }
 
 module.exports = {
   init: function (config) {
     setupMap();
   }
-}
-
+};
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/map.js","/")
 },{"+7ZJp0":9,"./leaders.js":3,"buffer":6}],5:[function(_dereq_,module,exports){
@@ -244,10 +271,11 @@ module.exports = function(sParam) {
       sParameterName = sURLVariables[i].split('=');
 
       if (sParameterName[0] === sParam) {
-          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+          return sParameterName[1] === undefined ?
+            true : decodeURIComponent(sParameterName[1]);
       }
   }
-}
+};
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/url_param.js","/")
 },{"+7ZJp0":9,"buffer":6}],6:[function(_dereq_,module,exports){
