@@ -1,7 +1,10 @@
 var leaders = require('./leaders.js');
 
 function setupMap() {
-  var map = L.map('map').setView([30, 0], 2);
+  var map = L.map('map', {
+    maxBounds: L.latLngBounds(L.latLng(-85.0511, -180.0), L.latLng(85.0511, 180.0)))
+  }).setView([30, 0], 2);
+
   var src = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZWUpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA'
   L.tileLayer(src, {
     attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> <a href="http://openstreetmap.org/copyright">© OpenStreetMap</a> <a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">Improve this map</a>',

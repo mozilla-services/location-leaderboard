@@ -17,27 +17,27 @@ var nextUrl;
 var prevUrl;
 
 function pushHistory(dataUrl, countryName) {
-    var urlParser = document.createElement('a');
-    urlParser.href = dataUrl;
-    var stateUrl = btoa(encodeURIComponent(urlParser.pathname + urlParser.search));
+  var urlParser = document.createElement('a');
+  urlParser.href = dataUrl;
+  var stateUrl = btoa(encodeURIComponent(urlParser.pathname + urlParser.search));
 
-    var urlParams = '?data=' + stateUrl;
-    if (typeof countryName !== 'undefined') {
-      urlParams += '&country=' + countryName;
-    }
+  var urlParams = '?data=' + stateUrl;
+  if (typeof countryName !== 'undefined') {
+    urlParams += '&country=' + countryName;
+  }
 
-    history.pushState(
-        {url: dataUrl, countryName: countryName},
-        '',
-        urlParams
-    );
+  history.pushState(
+    {url: dataUrl, countryName: countryName},
+    '',
+    urlParams
+  );
 }
 
 function loadUrl(dataUrl, countryName) {
   if (!isVisible('#leaders')) {
     $('html,body').animate({scrollTop: $('#leaders').offset().top},'slow');
   }
-  
+
   var regionName = globalName;
   if (typeof countryName !== 'undefined') {
     regionName = countryName;
@@ -87,7 +87,7 @@ function loadUrl(dataUrl, countryName) {
       $('#no-results').show();
       $('#leaders table').hide();
     }
-  
+
     $('.region-global-button').on('click', function (e) {
         e.preventDefault();
         requestUrl(globalUrl);
