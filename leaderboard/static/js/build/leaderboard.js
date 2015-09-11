@@ -8,7 +8,7 @@ module.exports = function (config) {
   leaders.init(config);
 };
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_358bb201.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d22c0d4.js","/")
 },{"+7ZJp0":9,"./leaders.js":3,"./map.js":4,"buffer":6}],2:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = function(elem) {
@@ -181,6 +181,7 @@ var leaders = _dereq_('./leaders.js');
 
 function setupMap() {
   var map = L.map('map', {
+    closePopupOnClick: true,
     maxBounds: L.latLngBounds(
       L.latLng(-85.0511, -180.0),
       L.latLng(85.0511, 180.0)
@@ -236,6 +237,8 @@ function setupMap() {
         });
 
         layer.on('click', function (e) {
+          map.closePopup(popup);
+
           var countryIso2 = e.target.feature.properties.iso_a2;
           var countryName = e.target.feature.properties.name;
           var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';

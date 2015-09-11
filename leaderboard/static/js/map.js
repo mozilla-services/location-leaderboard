@@ -2,6 +2,7 @@ var leaders = require('./leaders.js');
 
 function setupMap() {
   var map = L.map('map', {
+    closePopupOnClick: true,
     maxBounds: L.latLngBounds(
       L.latLng(-85.0511, -180.0),
       L.latLng(85.0511, 180.0)
@@ -57,6 +58,8 @@ function setupMap() {
         });
 
         layer.on('click', function (e) {
+          map.closePopup(popup);
+
           var countryIso2 = e.target.feature.properties.iso_a2;
           var countryName = e.target.feature.properties.name;
           var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
