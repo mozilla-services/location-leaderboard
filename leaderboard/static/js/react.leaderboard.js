@@ -16,10 +16,17 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var isMobile = window.matchMedia("only screen and (max-width: 480px)");
+
+    var map;
+    if (!isMobile.matches) {
+      map = <LeaderMap />;
+    }
+
     return (
       <div id="leaderboard" className="section">
         <div className="col span_8_of_12">
-          <LeaderMap />
+          {map}
         </div>
         <div className="col span_4_of_12">
           <LeaderTable name={this.state.name} url={this.state.url} />
@@ -28,7 +35,13 @@ module.exports = React.createClass({
     );
   },
 
+  handleResize: function () {
+    this.forceUpdate();
+  },
+
   componentWillMount: function () {
+    window.addEventListener('resize', this.handleResize);
+
     dispatcher.on('updateUrl', function (data) {
       this.updateUrl(data);
     }.bind(this));

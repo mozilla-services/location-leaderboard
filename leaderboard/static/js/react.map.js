@@ -1,10 +1,20 @@
 var dispatcher = require('./dispatcher.js');
 var leaders = require('./react.leaders.js');
+var ReactScriptLoader = require('./ReactScriptLoader/ReactScriptLoader.js');
 
 module.exports = React.createClass({
+  mixins: [ReactScriptLoader.ReactScriptLoaderMixin],
+
+  getScriptURL: function () {
+    return 'http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js';
+  },
+
   render: function() {
     return (
-      <div id="leaders-map"></div>
+      <div>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+        <div id="leaders-map"></div>
+      </div>
     );
   },
 
@@ -60,7 +70,7 @@ module.exports = React.createClass({
     );
   },
 
-  componentDidMount: function () {
+  onScriptLoaded: function () {
     var map = L.map('leaders-map', {
       closePopupOnClick: true,
       maxBounds: L.latLngBounds(
@@ -88,5 +98,8 @@ module.exports = React.createClass({
     ).openOn(map);
 
     this.loadCountryBoundaries(map, popup);
+  },
+
+  onScriptError: function () {
   }
 });
