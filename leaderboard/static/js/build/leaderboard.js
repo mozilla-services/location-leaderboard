@@ -1,287 +1,276 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.leaderboard=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var map = _dereq_('./map.js');
-var leaders = _dereq_('./leaders.js');
+module.exports = {
+  fire: function (eventName, eventData) {
+    var customEvent = new CustomEvent(eventName, {
+      detail: eventData
+    });
+
+    window.dispatchEvent(customEvent);
+  },
+  on: function (eventName, callback) {
+    window.addEventListener(eventName, function(e) {
+      callback.call(this, e.detail);
+    });
+  }
+};
+
+
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/dispatcher.js","/")
+},{"+7ZJp0":9,"buffer":6}],2:[function(_dereq_,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+var Leaderboard = _dereq_('./react.leaderboard.js');
 
 module.exports = function (config) {
-  map.init(config);
-  leaders.init(config);
-};
-
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d22c0d4.js","/")
-},{"+7ZJp0":9,"./leaders.js":3,"./map.js":4,"buffer":6}],2:[function(_dereq_,module,exports){
-(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = function(elem) {
-  var $elem = $(elem);
-  var $window = $(window);
-
-  var docViewTop = $window.scrollTop();
-  var docViewBottom = docViewTop + $window.height();
-
-  var elemTop = $elem.offset().top;
-  var elemBottom = elemTop + $elem.height();
-
-  return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-};
-
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/is_visible.js","/")
-},{"+7ZJp0":9,"buffer":6}],3:[function(_dereq_,module,exports){
-(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var getUrlParameter = _dereq_('./url_param.js');
-var isVisible = _dereq_('./is_visible.js');
-
-var regionSource   = $("#region-template").html();
-var regionTemplate = Handlebars.compile(regionSource);
-
-var leaderSource   = $("#leader-template").html();
-var leaderTemplate = Handlebars.compile(leaderSource);
-
-var leadersCountSource   = $("#leaders-count-template").html();
-var leadersCountTemplate = Handlebars.compile(leadersCountSource);
-
-var globalName = 'Global';
-var globalUrl;
-
-var nextUrl;
-var prevUrl;
-
-function pushHistory(dataUrl, countryName) {
-  var urlParser = document.createElement('a');
-  urlParser.href = dataUrl;
-  var stateUrl = btoa(
-    encodeURIComponent(urlParser.pathname + urlParser.search));
-
-  var urlParams = '?data=' + stateUrl;
-  if (typeof countryName !== 'undefined') {
-    urlParams += '&country=' + countryName;
-  }
-
-  history.pushState(
-    {url: dataUrl, countryName: countryName},
-    '',
-    urlParams
+  React.render(
+    React.createElement(Leaderboard, {globalUrl: config.globalUrl}),
+    document.getElementById('leaderboard-container')
   );
-}
-
-function loadUrl(dataUrl, countryName) {
-  if (!isVisible('#leaders')) {
-    $('html,body').animate({scrollTop: $('#leaders').offset().top},'slow');
-  }
-
-  var regionName = globalName;
-  if (typeof countryName !== 'undefined') {
-    regionName = countryName;
-  }
-
-  $.getJSON(dataUrl, function (data) {
-    var regionHtml = regionTemplate({
-      count: data.count,
-      region: regionName,
-      global: regionName == globalName
-    });
-    $('#leaders-region').html(regionHtml);
-
-    $('#leaders tbody').html('');
-
-    nextUrl = data.next;
-    if (nextUrl) {
-      $('#next-button').removeClass('insensitive');
-    } else {
-      $('#next-button').addClass('insensitive');
-    }
-
-    prevUrl = data.previous;
-    if (prevUrl) {
-      $('#previous-button').removeClass('insensitive');
-    } else {
-      $('#previous-button').addClass('insensitive');
-    }
-
-    for(var i in data.results) {
-      var result = data.results[i];
-
-      if (typeof Intl !== 'undefined') {
-        result.observations = new Intl.NumberFormat().format(
-          result.observations);
-      }
-
-      var html = leaderTemplate(result);
-
-      $('#leaders tbody').append(html);
-    }
-
-    if (data.results.length) {
-      $('#leaders-count').html(leadersCountTemplate({
-          start: data.results[0].rank,
-          stop: data.results[data.results.length-1].rank,
-          total: data.count
-      }));
-      $('#no-results').hide();
-      $('#leaders table').show();
-    } else {
-      $('#no-results').show();
-      $('#leaders table').hide();
-    }
-
-    $('.region-global-button').on('click', function (e) {
-        e.preventDefault();
-        requestUrl(globalUrl);
-    });
+};
 
 
-  });
-}
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_2e2a41b5.js","/")
+},{"+7ZJp0":9,"./react.leaderboard.js":3,"buffer":6}],3:[function(_dereq_,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+var dispatcher = _dereq_('./dispatcher.js');
 
-function requestUrl(url, countryName) {
-  if (url) {
-    loadUrl(url, countryName);
-    pushHistory(url, countryName);
-  }
-}
+var LeaderMap = _dereq_('./react.map.js');
+var LeaderTable = _dereq_('./react.leaders.js');
 
-function setupLeaders(config) {
-  globalUrl = config.globalUrl;
-
-  var startUrl = globalUrl;
-
-  var paramUrl = getUrlParameter('data');
-  if (typeof paramUrl !== 'undefined') {
-      startUrl = decodeURIComponent(atob(paramUrl));
-  }
-
-  var countryName = getUrlParameter('country');
-
-  $('#next-button').on('click', function (e) {
-    requestUrl(nextUrl);
-  });
-
-  $('#previous-button').on('click', function (e) {
-    requestUrl(prevUrl);
-  });
-
-  window.onpopstate = function (e) {
-    loadUrl(e.state.url);
-  };
-
-  requestUrl(startUrl, countryName);
-}
-
-module.exports = {
-  init: function (config) {
-    setupLeaders(config);
+module.exports = React.createClass({displayName: "exports",
+  getInitialState: function () {
+    return {
+      url: this.props.globalUrl,
+      name: 'Global'
+    };
   },
 
-  requestUrl: requestUrl,
-};
+  updateUrl: function (data) {
+    this.setState({url: data.url, name: data.name || 'Global'});
+  },
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leaders.js","/")
-},{"+7ZJp0":9,"./is_visible.js":2,"./url_param.js":5,"buffer":6}],4:[function(_dereq_,module,exports){
-(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-var leaders = _dereq_('./leaders.js');
-
-function setupMap() {
-  var map = L.map('map', {
-    closePopupOnClick: true,
-    maxBounds: L.latLngBounds(
-      L.latLng(-85.0511, -180.0),
-      L.latLng(85.0511, 180.0)
-    )
-  }).setView([30, 0], 2);
-
-  var src = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/' +
-    '{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW' +
-    'UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA';
-  L.tileLayer(src, {
-    attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> ' +
-      '<a href="http://openstreetmap.org/copyright">© OpenStreetMap</a>' +
-      '<a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">' +
-      'Improve this map</a>',
-    maxZoom: 18,
-    minZoom: 2
-  }).addTo(map);
-
-  var popup = L.popup()
-      .setLatLng(L.latLng(20, 0))
-      .setContent(
-        '<h3 class="center">Click on a country to see its local ' +
-        'leaderboard!</h3>'
+  render: function() {
+    return (
+      React.createElement("div", {id: "leaderboard", className: "section"}, 
+        React.createElement("div", {className: "col span_8_of_12"}, 
+          React.createElement(LeaderMap, null)
+        ), 
+        React.createElement("div", {className: "col span_4_of_12"}, 
+          React.createElement(LeaderTable, {name: this.state.name, url: this.state.url})
+        )
       )
-      .openOn(map);
+    );
+  },
 
-  $.getJSON(
-    'https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/' +
-    'master/countries.geojson',
-    function (data) {
-      var countryStyle = {
-        'fillOpacity': 0,
-        'opacity': 0
-      };
-
-      var countryStyleHover = {
-        'weight': 1,
-        'opacity': 1
-      };
-
-      var countryStyleClick = {
-      };
-
-      function onEachFeature(country_data, layer) {
-        layer.on('mouseover', function (e) {
-          // change the countryStyle to the hover version
-          layer.setStyle(countryStyleHover);
-        });
-
-        layer.on('mouseout', function (e) {
-          // reverting the countryStyle back
-          layer.setStyle(countryStyle);
-        });
-
-        layer.on('click', function (e) {
-          map.closePopup(popup);
-
-          var countryIso2 = e.target.feature.properties.iso_a2;
-          var countryName = e.target.feature.properties.name;
-          var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
-          leaders.requestUrl(dataUrl, countryName);
-        });
-      }
-      L.geoJson(
-        data, {
-          onEachFeature: onEachFeature,
-          style: countryStyle
-        }
-      ).addTo(map);
-    }
-  );
-}
-
-module.exports = {
-  init: function (config) {
-    setupMap();
+  componentWillMount: function () {
+    dispatcher.on('updateUrl', function (data) {
+      this.updateUrl(data);
+    }.bind(this));
   }
-};
+});
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/map.js","/")
-},{"+7ZJp0":9,"./leaders.js":3,"buffer":6}],5:[function(_dereq_,module,exports){
+
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/react.leaderboard.js","/")
+},{"+7ZJp0":9,"./dispatcher.js":1,"./react.leaders.js":4,"./react.map.js":5,"buffer":6}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-module.exports = function(sParam) {
-  var sPageURL = window.location.search.substring(1),
-      sURLVariables = sPageURL.split('&'),
-      sParameterName,
-      i;
+var dispatcher = _dereq_('./dispatcher.js');
 
-  for (i = 0; i < sURLVariables.length; i++) {
-      sParameterName = sURLVariables[i].split('=');
+var LeadersButton = React.createClass({displayName: "LeadersButton",
+  handleClick: function () {
+    dispatcher.fire('updateUrl', {url: this.props.url});
+  },
 
-      if (sParameterName[0] === sParam) {
-          return sParameterName[1] === undefined ?
-            true : decodeURIComponent(sParameterName[1]);
-      }
+  render: function() {
+    var classes = 'button ';
+    classes += this.props.url === null ? 'insensitive' : '';
+    return (
+        React.createElement("button", {onClick: this.handleClick, className: classes}, this.props.name)
+    );
+  },
+});
+
+var LeadersHeader = React.createClass({displayName: "LeadersHeader",
+  render: function() {
+    return (
+      React.createElement("div", {className: "section"}, 
+        React.createElement("div", {className: "col span_3_of_12"}, 
+          React.createElement(LeadersButton, {name: "Previous", url: this.props.prevUrl})
+        ), 
+        React.createElement("div", {id: "leaders-region", className: "center col span_6_of_12"}, 
+          React.createElement("h3", null, this.props.name)
+        ), 
+        React.createElement("div", {className: "col span_3_of_12"}, 
+          React.createElement(LeadersButton, {name: "Next", url: this.props.nextUrl})
+        )
+      )
+    );
+  },
+});
+
+var LeadersTable = React.createClass({displayName: "LeadersTable",
+  render: function() {
+    return (
+      React.createElement("table", {className: "table"}, 
+        React.createElement("thead", null, 
+          React.createElement("tr", null, 
+            React.createElement("th", null, "Rank"), 
+            React.createElement("th", null, "Name"), 
+            React.createElement("th", null, "Contributions")
+          )
+        ), 
+        React.createElement("tbody", null, 
+          this.props.leaders.map(function (leader) {
+            return (
+              React.createElement("tr", null, 
+                React.createElement("td", null, leader.rank), 
+                React.createElement("td", null, leader.name), 
+                React.createElement("td", null, leader.observations)
+              )
+            )
+          })
+        )
+      )
+    );
+  },
+});
+
+module.exports = React.createClass({displayName: "exports",
+  getInitialState: function () {
+    return {leaders: [], prevUrl: null, nextUrl: null};
+  },
+
+  loadData: function (url) {
+    $.getJSON(url, function (data) {
+      this.setState({
+        leaders: data.results,
+        nextUrl: data.next,
+        prevUrl: data.previous
+      });
+    }.bind(this));
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.loadData(nextProps.url);
+  },
+
+  componentDidMount: function () {
+    this.loadData(this.props.url);
+  },
+
+  render: function() {
+    return (
+      React.createElement("div", {id: "leaders-table"}, 
+        React.createElement(LeadersHeader, {
+          name: this.props.name, 
+          prevUrl: this.state.prevUrl, 
+          nextUrl: this.state.nextUrl}
+        ), 
+        React.createElement(LeadersTable, {leaders: this.state.leaders})
+      )
+    );
   }
-};
+});
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/url_param.js","/")
-},{"+7ZJp0":9,"buffer":6}],6:[function(_dereq_,module,exports){
+
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/react.leaders.js","/")
+},{"+7ZJp0":9,"./dispatcher.js":1,"buffer":6}],5:[function(_dereq_,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+var dispatcher = _dereq_('./dispatcher.js');
+var leaders = _dereq_('./react.leaders.js');
+
+module.exports = React.createClass({displayName: "exports",
+  render: function() {
+    return (
+      React.createElement("div", {id: "leaders-map"})
+    );
+  },
+
+  loadCountryBoundaries: function(map, popup) {
+    $.getJSON(
+      'https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/' +
+      'master/countries.geojson',
+      function (data) {
+        var countryStyle = {
+          'fillOpacity': 0,
+          'opacity': 0
+        };
+
+        var countryStyleHover = {
+          'weight': 1,
+          'opacity': 1
+        };
+
+        var countryStyleClick = {
+        };
+
+        var onEachFeature = function(country_data, layer) {
+          layer.on('mouseover', function (e) {
+            // change the countryStyle to the hover version
+            layer.setStyle(countryStyleHover);
+          });
+
+          layer.on('mouseout', function (e) {
+            // reverting the countryStyle back
+            layer.setStyle(countryStyle);
+          });
+
+          layer.on('click', function (e) {
+            map.closePopup(popup);
+
+            var countryIso2 = e.target.feature.properties.iso_a2;
+            var countryName = e.target.feature.properties.name;
+            var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
+            dispatcher.fire('updateUrl', {
+              url: dataUrl,
+              name: countryName,
+            });
+          });
+        };
+
+        L.geoJson(
+          data, {
+            onEachFeature: onEachFeature,
+            style: countryStyle
+          }
+        ).addTo(map);
+      }
+    );
+  },
+
+  componentDidMount: function () {
+    var map = L.map('leaders-map', {
+      closePopupOnClick: true,
+      maxBounds: L.latLngBounds(
+        L.latLng(-85.0511, -180.0),
+        L.latLng(85.0511, 180.0)
+      )
+    }).setView([30, 0], 2);
+
+    var tilesUrl = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/' +
+      '{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW' +
+      'UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA';
+
+    L.tileLayer(tilesUrl, {
+      attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> ' +
+        '<a href="http://openstreetmap.org/copyright">© OpenStreetMap</a>' +
+        '<a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">' +
+        'Improve this map</a>',
+      maxZoom: 18,
+      minZoom: 2
+    }).addTo(map);
+
+    var popup = L.popup().setLatLng(L.latLng(20, 0)).setContent(
+      '<h3 class="center">Click on a country to see its local ' +
+      'leaderboard!</h3>'
+    ).openOn(map);
+
+    this.loadCountryBoundaries(map, popup);
+  }
+});
+
+
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/react.map.js","/")
+},{"+7ZJp0":9,"./dispatcher.js":1,"./react.leaders.js":4,"buffer":6}],6:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1677,6 +1666,6 @@ process.chdir = function (dir) {
 };
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/process/browser.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/process")
-},{"+7ZJp0":9,"buffer":6}]},{},[1])
-(1)
+},{"+7ZJp0":9,"buffer":6}]},{},[2])
+(2)
 });
