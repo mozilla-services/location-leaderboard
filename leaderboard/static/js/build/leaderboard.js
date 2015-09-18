@@ -1,5 +1,148 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.leaderboard=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+
+// A dictionary mapping script URLs to a dictionary mapping
+// component key to component for all components that are waiting
+// for the script to load.
+var scriptObservers = {};
+
+// A dictionary mapping script URL to a boolean value indicating if the script
+// has already been loaded.
+var loadedScripts = {};
+
+// A dictionary mapping script URL to a boolean value indicating if the script
+// has failed to load.
+var erroredScripts = {};
+
+// A counter used to generate a unique id for each component that uses
+// ScriptLoaderMixin.
+var idCount = 0;
+
+var ReactScriptLoader = {
+	componentDidMount: function(key, component, scriptURL) {
+		if (typeof component.onScriptLoaded !== 'function') {
+			throw new Error('ScriptLoader: Component class must implement onScriptLoaded()');
+		}
+		if (typeof component.onScriptError !== 'function') {
+			throw new Error('ScriptLoader: Component class must implement onScriptError()');
+		}
+		if (loadedScripts[scriptURL]) {
+			component.onScriptLoaded();
+			return;
+		}
+		if (erroredScripts[scriptURL]) {
+			component.onScriptError();
+			return;
+		}
+
+		// If the script is loading, add the component to the script's observers
+		// and return. Otherwise, initialize the script's observers with the component
+		// and start loading the script.
+		if (scriptObservers[scriptURL]) {
+			scriptObservers[scriptURL][key] = component;
+			return;
+		}
+
+		var observers = {};
+		observers[key] = component;
+		scriptObservers[scriptURL] = observers;
+
+		var script = document.createElement('script');
+
+		if (typeof component.onScriptTagCreated === 'function') {
+			component.onScriptTagCreated(script);
+		}
+
+		script.src = scriptURL;
+		script.async = 1;
+
+		var callObserverFuncAndRemoveObserver = function(func) {
+			var observers = scriptObservers[scriptURL];
+			for (var key in observers) {
+				var observer = observers[key];
+				var removeObserver = func(observer);
+				if (removeObserver) {
+					delete scriptObservers[scriptURL][key];
+				}
+			}
+			//delete scriptObservers[scriptURL];
+		}
+		script.onload = function() {
+			loadedScripts[scriptURL] = true;
+			callObserverFuncAndRemoveObserver(function(observer) {
+				if (observer.deferOnScriptLoaded && observer.deferOnScriptLoaded()) {
+					return false;
+				}
+				observer.onScriptLoaded();
+				return true;
+			});
+		};
+		script.onerror = function(event) {
+			erroredScripts[scriptURL] = true;
+			callObserverFuncAndRemoveObserver(function(observer) {
+				observer.onScriptError();
+				return true;
+			});
+		};
+		// (old) MSIE browsers may call 'onreadystatechange' instead of 'onload'
+    		script.onreadystatechange = function() {
+      			if (this.readyState == 'loaded') {
+        			// wait for other events, then call onload if default onload hadn't been called
+        			window.setTimeout(function() {
+          				if (loadedScripts[scriptURL] !== true) script.onload();
+        			}, 0);
+      			}
+    		};
+		
+		document.body.appendChild(script);
+	},
+	componentWillUnmount: function(key, scriptURL) {
+		// If the component is waiting for the script to load, remove the
+		// component from the script's observers before unmounting the component.
+		var observers = scriptObservers[scriptURL];
+		if (observers) {
+			delete observers[key];
+		}
+	},
+	triggerOnScriptLoaded: function(scriptURL) {
+		if (!loadedScripts[scriptURL]) {
+			throw new Error('Error: only call this function after the script has in fact loaded.');
+		}
+		var observers = scriptObservers[scriptURL];
+		for (var key in observers) {
+			var observer = observers[key];
+			observer.onScriptLoaded();
+		}
+		delete scriptObservers[scriptURL];
+	}
+};
+
+var ReactScriptLoaderMixin = {
+	componentDidMount: function() {
+		if (typeof this.getScriptURL !== 'function') {
+			throw new Error("ScriptLoaderMixin: Component class must implement getScriptURL().")
+		}
+		ReactScriptLoader.componentDidMount(this.__getScriptLoaderID(), this, this.getScriptURL());
+	},
+	componentWillUnmount: function() {
+		ReactScriptLoader.componentWillUnmount(this.__getScriptLoaderID(), this.getScriptURL());
+	},
+	__getScriptLoaderID: function() {
+		if (typeof this.__reactScriptLoaderID === 'undefined') {
+			this.__reactScriptLoaderID = 'id' + idCount++;
+		}
+
+		return this.__reactScriptLoaderID;
+	},
+};
+
+exports.ReactScriptLoaderMixin = ReactScriptLoaderMixin;
+exports.ReactScriptLoader = ReactScriptLoader;
+
+
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/ReactScriptLoader/ReactScriptLoader.js","/ReactScriptLoader")
+},{"+7ZJp0":10,"buffer":7}],2:[function(_dereq_,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 module.exports = {
   fire: function (eventName, eventData) {
     var customEvent = new CustomEvent(eventName, {
@@ -17,7 +160,7 @@ module.exports = {
 
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/dispatcher.js","/")
-},{"+7ZJp0":9,"buffer":6}],2:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"buffer":7}],3:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var Leaderboard = _dereq_('./react.leaderboard.js');
 
@@ -29,8 +172,8 @@ module.exports = function (config) {
 };
 
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_2e2a41b5.js","/")
-},{"+7ZJp0":9,"./react.leaderboard.js":3,"buffer":6}],3:[function(_dereq_,module,exports){
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8213b48c.js","/")
+},{"+7ZJp0":10,"./react.leaderboard.js":4,"buffer":7}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
 
@@ -50,10 +193,17 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
+    var isMobile = window.matchMedia("only screen and (max-width: 480px)");
+
+    var map;
+    if (!isMobile.matches) {
+      map = React.createElement(LeaderMap, null);
+    }
+
     return (
       React.createElement("div", {id: "leaderboard", className: "section"}, 
         React.createElement("div", {className: "col span_8_of_12"}, 
-          React.createElement(LeaderMap, null)
+          map
         ), 
         React.createElement("div", {className: "col span_4_of_12"}, 
           React.createElement(LeaderTable, {name: this.state.name, url: this.state.url})
@@ -62,7 +212,13 @@ module.exports = React.createClass({displayName: "exports",
     );
   },
 
+  handleResize: function () {
+    this.forceUpdate();
+  },
+
   componentWillMount: function () {
+    window.addEventListener('resize', this.handleResize);
+
     dispatcher.on('updateUrl', function (data) {
       this.updateUrl(data);
     }.bind(this));
@@ -71,7 +227,7 @@ module.exports = React.createClass({displayName: "exports",
 
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/react.leaderboard.js","/")
-},{"+7ZJp0":9,"./dispatcher.js":1,"./react.leaders.js":4,"./react.map.js":5,"buffer":6}],4:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"./dispatcher.js":2,"./react.leaders.js":5,"./react.map.js":6,"buffer":7}],5:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
 
@@ -173,15 +329,25 @@ module.exports = React.createClass({displayName: "exports",
 
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/react.leaders.js","/")
-},{"+7ZJp0":9,"./dispatcher.js":1,"buffer":6}],5:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"./dispatcher.js":2,"buffer":7}],6:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
 var leaders = _dereq_('./react.leaders.js');
+var ReactScriptLoader = _dereq_('./ReactScriptLoader/ReactScriptLoader.js');
 
 module.exports = React.createClass({displayName: "exports",
+  mixins: [ReactScriptLoader.ReactScriptLoaderMixin],
+
+  getScriptURL: function () {
+    return 'http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js';
+  },
+
   render: function() {
     return (
-      React.createElement("div", {id: "leaders-map"})
+      React.createElement("div", null, 
+        React.createElement("link", {rel: "stylesheet", href: "http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"}), 
+        React.createElement("div", {id: "leaders-map"})
+      )
     );
   },
 
@@ -237,7 +403,7 @@ module.exports = React.createClass({displayName: "exports",
     );
   },
 
-  componentDidMount: function () {
+  onScriptLoaded: function () {
     var map = L.map('leaders-map', {
       closePopupOnClick: true,
       maxBounds: L.latLngBounds(
@@ -265,12 +431,15 @@ module.exports = React.createClass({displayName: "exports",
     ).openOn(map);
 
     this.loadCountryBoundaries(map, popup);
+  },
+
+  onScriptError: function () {
   }
 });
 
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/react.map.js","/")
-},{"+7ZJp0":9,"./dispatcher.js":1,"./react.leaders.js":4,"buffer":6}],6:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"./ReactScriptLoader/ReactScriptLoader.js":1,"./dispatcher.js":2,"./react.leaders.js":5,"buffer":7}],7:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1383,7 +1552,7 @@ function assert (test, message) {
 }
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/index.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer")
-},{"+7ZJp0":9,"base64-js":7,"buffer":6,"ieee754":8}],7:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"base64-js":8,"buffer":7,"ieee754":9}],8:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -1511,7 +1680,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib/b64.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/base64-js/lib")
-},{"+7ZJp0":9,"buffer":6}],8:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"buffer":7}],9:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -1599,7 +1768,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754/index.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/buffer/node_modules/ieee754")
-},{"+7ZJp0":9,"buffer":6}],9:[function(_dereq_,module,exports){
+},{"+7ZJp0":10,"buffer":7}],10:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 // shim for using process in browser
 
@@ -1666,6 +1835,6 @@ process.chdir = function (dir) {
 };
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/process/browser.js","/../../../node_modules/gulp-browserify/node_modules/browserify/node_modules/process")
-},{"+7ZJp0":9,"buffer":6}]},{},[2])
-(2)
+},{"+7ZJp0":10,"buffer":7}]},{},[3])
+(3)
 });
