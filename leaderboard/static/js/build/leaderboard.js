@@ -172,7 +172,7 @@ module.exports = function (config) {
 };
 
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8213b48c.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ce38b985.js","/")
 },{"+7ZJp0":10,"./react.leaderboard.js":4,"buffer":7}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
@@ -233,7 +233,9 @@ var dispatcher = _dereq_('./dispatcher.js');
 
 var LeadersButton = React.createClass({displayName: "LeadersButton",
   handleClick: function () {
-    dispatcher.fire('updateUrl', {url: this.props.url});
+    if(this.props.url !== null) {
+      dispatcher.fire('updateUrl', {url: this.props.url});
+    }
   },
 
   render: function() {

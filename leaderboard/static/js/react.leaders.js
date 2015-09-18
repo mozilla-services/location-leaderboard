@@ -2,7 +2,9 @@ var dispatcher = require('./dispatcher.js');
 
 var LeadersButton = React.createClass({
   handleClick: function () {
-    dispatcher.fire('updateUrl', {url: this.props.url});
+    if(this.props.url !== null) {
+      dispatcher.fire('updateUrl', {url: this.props.url});
+    }
   },
 
   render: function() {
