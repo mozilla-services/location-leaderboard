@@ -41,6 +41,7 @@ INSTALLED_APPS = (
 
     'rest_framework',
     'leaderboard.sandstone',
+    'rest_framework_gis',
 
     'leaderboard.contributors',
     'leaderboard.locations',

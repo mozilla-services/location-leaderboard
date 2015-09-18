@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^api/v1/contributors/',
         include('leaderboard.contributors.contributor_urls')),
     url(r'^api/v1/leaders/', include('leaderboard.leaders.urls')),
+    url(r'^api/v1/locations/', include('leaderboard.locations.urls')),
     url(r'^', include('leaderboard.home.urls')),
 ]

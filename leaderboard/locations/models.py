@@ -8,11 +8,26 @@ from leaderboard.locations.projected_geos import (
 )
 
 
+class CountryQuerySet(models.query.GeoQuerySet):
+    """
+    A queryset for Countries which will annotate
+    the number of observations made in that country.
+    """
+
+    def annotate_observations(self):
+        return self.annotate(
+            observations=models.Sum('contributorrank__observations'),
+        ).filter(observations__gt=0)
+
+
 class CountryManager(models.GeoManager):
     """
     A model manager for Countries which allows you to
     query countries which are closest to a point.
     """
+
+    def get_queryset(self):
+        return CountryQuerySet(self.model, using=self._db)
 
     def nearest_to_point(self, point):
         country = self.get_queryset().distance(point).order_by('distance')[:1]
