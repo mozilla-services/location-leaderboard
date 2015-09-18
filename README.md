@@ -16,6 +16,68 @@ the top contributions.
 
 # API Interface
 
+Get Countries
+----
+  Get a list of all countries that have been contributed to, the total number of contributions,
+  and their shapes.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/api/v1/locations/countries/
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      {
+        iso2: <str>,
+        name: <str>,
+        observations: <int>,
+        geometry: {
+          type: "MultiPolygon",
+          coordinates: [
+            [
+              [
+                [<float>, <float>],
+              ]
+            ]
+          ]
+        }
+      }
+
+* **Error Responses:**
+
+  None
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/locations/countries/",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
 Get Contribution Config
 ----
   Get the configuration parameters necessary to prepare contribution data for submission.
