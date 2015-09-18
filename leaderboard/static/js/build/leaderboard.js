@@ -172,7 +172,7 @@ module.exports = function (config) {
 };
 
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_bba4be7e.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8b6eb613.js","/")
 },{"+7ZJp0":10,"./react.leaderboard.js":4,"buffer":7}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
@@ -347,7 +347,9 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement(LeadersHeader, {
           name: this.props.name}
         ), 
-        React.createElement(LeadersTable, {leaders: this.state.leaders}), 
+        React.createElement("div", {id: "leaders-table-content"}, 
+          React.createElement(LeadersTable, {leaders: this.state.leaders})
+        ), 
         React.createElement(LeadersFooter, {
           total: this.state.total, 
           start: start, 

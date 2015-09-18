@@ -5,6 +5,13 @@
 #leaderboard #leaders-map {
   height: 550px;
 }
+@media only screen and (min-width: 480px) {
+  #leaderboard #leaders-table #leaders-table-content {
+    width: 100%;
+    height: 474px;
+    overflow-y: auto;
+  }
+}
 #leaderboard #leaders-table table {
   width: 100%;
 }

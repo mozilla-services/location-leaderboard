@@ -116,7 +116,9 @@ module.exports = React.createClass({
         <LeadersHeader
           name={this.props.name}
         />
-        <LeadersTable leaders={this.state.leaders} />
+        <div id="leaders-table-content">
+          <LeadersTable leaders={this.state.leaders} />
+        </div>
         <LeadersFooter
           total={this.state.total}
           start={start}
