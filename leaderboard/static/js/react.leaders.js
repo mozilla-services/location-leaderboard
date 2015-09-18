@@ -20,11 +20,23 @@ var LeadersHeader = React.createClass({
   render: function() {
     return (
       <div className="section">
+        <div className="center col span_12_of_12">
+          <h3>{this.props.name}</h3>
+        </div>
+      </div>
+    );
+  },
+});
+
+var LeadersFooter = React.createClass({
+  render: function() {
+    return (
+      <div className="section">
         <div className="col span_3_of_12">
           <LeadersButton name="Previous" url={this.props.prevUrl} />
         </div>
-        <div id="leaders-region" className="center col span_6_of_12">
-          <h3>{this.props.name}</h3>
+        <div className="center col span_6_of_12">
+          <span>{this.props.start} - {this.props.stop} of {this.props.total}</span>
         </div>
         <div className="col span_3_of_12">
           <LeadersButton name="Next" url={this.props.nextUrl} />
@@ -63,12 +75,18 @@ var LeadersTable = React.createClass({
 
 module.exports = React.createClass({
   getInitialState: function () {
-    return {leaders: [], prevUrl: null, nextUrl: null};
+    return {
+      total: 0,
+      leaders: [],
+      prevUrl: null,
+      nextUrl: null
+    };
   },
 
   loadData: function (url) {
     $.getJSON(url, function (data) {
       this.setState({
+        total: data.count,
         leaders: data.results,
         nextUrl: data.next,
         prevUrl: data.previous
@@ -85,14 +103,27 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var start = 0,
+        stop = 0;
+
+    if (this.state.leaders.length > 0) {
+      start = this.state.leaders[0].rank;
+      stop = this.state.leaders[this.state.leaders.length - 1].rank;
+    }
+
     return (
       <div id="leaders-table">
         <LeadersHeader
           name={this.props.name}
+        />
+        <LeadersTable leaders={this.state.leaders} />
+        <LeadersFooter
+          total={this.state.total}
+          start={start}
+          stop={stop}
           prevUrl={this.state.prevUrl}
           nextUrl={this.state.nextUrl}
         />
-        <LeadersTable leaders={this.state.leaders} />
       </div>
     );
   }

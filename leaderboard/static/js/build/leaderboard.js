@@ -172,7 +172,7 @@ module.exports = function (config) {
 };
 
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ce38b985.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_bba4be7e.js","/")
 },{"+7ZJp0":10,"./react.leaderboard.js":4,"buffer":7}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
@@ -251,11 +251,23 @@ var LeadersHeader = React.createClass({displayName: "LeadersHeader",
   render: function() {
     return (
       React.createElement("div", {className: "section"}, 
+        React.createElement("div", {className: "center col span_12_of_12"}, 
+          React.createElement("h3", null, this.props.name)
+        )
+      )
+    );
+  },
+});
+
+var LeadersFooter = React.createClass({displayName: "LeadersFooter",
+  render: function() {
+    return (
+      React.createElement("div", {className: "section"}, 
         React.createElement("div", {className: "col span_3_of_12"}, 
           React.createElement(LeadersButton, {name: "Previous", url: this.props.prevUrl})
         ), 
-        React.createElement("div", {id: "leaders-region", className: "center col span_6_of_12"}, 
-          React.createElement("h3", null, this.props.name)
+        React.createElement("div", {className: "center col span_6_of_12"}, 
+          React.createElement("span", null, this.props.start, " - ", this.props.stop, " of ", this.props.total)
         ), 
         React.createElement("div", {className: "col span_3_of_12"}, 
           React.createElement(LeadersButton, {name: "Next", url: this.props.nextUrl})
@@ -294,12 +306,18 @@ var LeadersTable = React.createClass({displayName: "LeadersTable",
 
 module.exports = React.createClass({displayName: "exports",
   getInitialState: function () {
-    return {leaders: [], prevUrl: null, nextUrl: null};
+    return {
+      total: 0,
+      leaders: [],
+      prevUrl: null,
+      nextUrl: null
+    };
   },
 
   loadData: function (url) {
     $.getJSON(url, function (data) {
       this.setState({
+        total: data.count,
         leaders: data.results,
         nextUrl: data.next,
         prevUrl: data.previous
@@ -316,14 +334,27 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
+    var start = 0,
+        stop = 0;
+
+    if (this.state.leaders.length > 0) {
+      start = this.state.leaders[0].rank;
+      stop = this.state.leaders[this.state.leaders.length - 1].rank;
+    }
+
     return (
       React.createElement("div", {id: "leaders-table"}, 
         React.createElement(LeadersHeader, {
-          name: this.props.name, 
+          name: this.props.name}
+        ), 
+        React.createElement(LeadersTable, {leaders: this.state.leaders}), 
+        React.createElement(LeadersFooter, {
+          total: this.state.total, 
+          start: start, 
+          stop: stop, 
           prevUrl: this.state.prevUrl, 
           nextUrl: this.state.nextUrl}
-        ), 
-        React.createElement(LeadersTable, {leaders: this.state.leaders})
+        )
       )
     );
   }
