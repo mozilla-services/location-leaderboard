@@ -6,7 +6,7 @@ var LeaderTable = require('./react.leaders.js');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      url: this.props.globalUrl,
+      url: this.props.config.globalUrl,
       name: 'Global'
     };
   },
@@ -20,7 +20,7 @@ module.exports = React.createClass({
 
     var map;
     if (!isMobile.matches) {
-      map = <LeaderMap countriesJSONUrl={this.props.countriesJSONUrl} />;
+      map = <LeaderMap config={this.props.config} />;
     }
 
     return (

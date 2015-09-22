@@ -41,13 +41,16 @@
 {% block js %}
     {{ block.super }}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="{% static "lib/react/react.js" %}"></script>
 
     <script src="{% static "js/build/leaderboard.js" %}"></script>
     <script>
       $(function () {
         Tabzilla.disableEasterEgg()
         leaderboard({
+          leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
+          leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
+
           countriesJSONUrl: '{% static "geojson/countries.geo.json" %}',
           globalUrl: '{% url "leaders-global-list" %}'
         });

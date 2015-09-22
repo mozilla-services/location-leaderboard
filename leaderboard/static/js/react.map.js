@@ -6,13 +6,13 @@ module.exports = React.createClass({
   mixins: [ReactScriptLoader.ReactScriptLoaderMixin],
 
   getScriptURL: function () {
-    return 'http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js';
+    return this.props.config.leafletJSUrl;
   },
 
   render: function() {
     return (
       <div>
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+        <link rel="stylesheet" href={this.props.config.leafletCSSUrl} />
         <div id="leaders-map"></div>
       </div>
     );
@@ -20,7 +20,7 @@ module.exports = React.createClass({
 
   loadCountryBoundaries: function(map, popup) {
     $.getJSON(
-      this.props.countriesJSONUrl,
+      this.props.config.countriesJSONUrl,
       function (data) {
         var countryStyle = {
           'fillOpacity': 0,

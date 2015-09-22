@@ -166,16 +166,13 @@ var Leaderboard = _dereq_('./react.leaderboard.js');
 
 module.exports = function (config) {
   React.render(
-    React.createElement(Leaderboard, {
-      globalUrl: config.globalUrl, 
-      countriesJSONUrl: config.countriesJSONUrl}
-    ),
+    React.createElement(Leaderboard, {config: config}),
     document.getElementById('leaderboard-container')
   );
 };
 
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f6090b25.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_aebd0097.js","/")
 },{"+7ZJp0":10,"./react.leaderboard.js":4,"buffer":7}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
@@ -186,7 +183,7 @@ var LeaderTable = _dereq_('./react.leaders.js');
 module.exports = React.createClass({displayName: "exports",
   getInitialState: function () {
     return {
-      url: this.props.globalUrl,
+      url: this.props.config.globalUrl,
       name: 'Global'
     };
   },
@@ -200,7 +197,7 @@ module.exports = React.createClass({displayName: "exports",
 
     var map;
     if (!isMobile.matches) {
-      map = React.createElement(LeaderMap, {countriesJSONUrl: this.props.countriesJSONUrl});
+      map = React.createElement(LeaderMap, {config: this.props.config});
     }
 
     return (
@@ -377,13 +374,13 @@ module.exports = React.createClass({displayName: "exports",
   mixins: [ReactScriptLoader.ReactScriptLoaderMixin],
 
   getScriptURL: function () {
-    return 'http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js';
+    return this.props.config.leafletJSUrl;
   },
 
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement("link", {rel: "stylesheet", href: "http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"}), 
+        React.createElement("link", {rel: "stylesheet", href: this.props.config.leafletCSSUrl}), 
         React.createElement("div", {id: "leaders-map"})
       )
     );
@@ -391,7 +388,7 @@ module.exports = React.createClass({displayName: "exports",
 
   loadCountryBoundaries: function(map, popup) {
     $.getJSON(
-      this.props.countriesJSONUrl,
+      this.props.config.countriesJSONUrl,
       function (data) {
         var countryStyle = {
           'fillOpacity': 0,
