@@ -43,3 +43,6 @@ node_modules
 
 # Static Files
 leaderboard/served/
+
+# GeoJSON Files
+leaderboard/static/geojson/
