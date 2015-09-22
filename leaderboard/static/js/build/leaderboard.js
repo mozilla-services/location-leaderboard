@@ -172,7 +172,7 @@ module.exports = function (config) {
 };
 
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_aebd0097.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8b96be2e.js","/")
 },{"+7ZJp0":10,"./react.leaderboard.js":4,"buffer":7}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 var dispatcher = _dereq_('./dispatcher.js');
@@ -387,6 +387,8 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   loadCountryBoundaries: function(map, popup) {
+    var countryLeadersUrl = this.props.config.countryLeadersUrl;
+
     $.getJSON(
       this.props.config.countriesJSONUrl,
       function (data) {
@@ -419,7 +421,7 @@ module.exports = React.createClass({displayName: "exports",
 
             var countryIso2 = e.target.feature.properties.ISO2;
             var countryName = e.target.feature.properties.name;
-            var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
+            var dataUrl = countryLeadersUrl.replace('XX', countryIso2);
             dispatcher.fire('updateUrl', {
               url: dataUrl,
               name: countryName,

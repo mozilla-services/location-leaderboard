@@ -19,6 +19,8 @@ module.exports = React.createClass({
   },
 
   loadCountryBoundaries: function(map, popup) {
+    var countryLeadersUrl = this.props.config.countryLeadersUrl;
+
     $.getJSON(
       this.props.config.countriesJSONUrl,
       function (data) {
@@ -51,7 +53,7 @@ module.exports = React.createClass({
 
             var countryIso2 = e.target.feature.properties.ISO2;
             var countryName = e.target.feature.properties.name;
-            var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
+            var dataUrl = countryLeadersUrl.replace('XX', countryIso2);
             dispatcher.fire('updateUrl', {
               url: dataUrl,
               name: countryName,

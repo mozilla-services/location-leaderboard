@@ -52,7 +52,8 @@
           leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
 
           countriesJSONUrl: '{% static "geojson/countries.geo.json" %}',
-          globalUrl: '{% url "leaders-global-list" %}'
+          globalUrl: '{% url "leaders-global-list" %}',
+          countryLeadersUrl: '{% url "leaders-country-list" country_id="XX" %}'
         });
       });
     </script>
