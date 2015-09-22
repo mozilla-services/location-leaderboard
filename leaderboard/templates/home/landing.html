@@ -48,6 +48,7 @@
       $(function () {
         Tabzilla.disableEasterEgg()
         leaderboard({
+          countriesJSONUrl: '{% static "geojson/countries.geo.json" %}',
           globalUrl: '{% url "leaders-global-list" %}'
         });
       });

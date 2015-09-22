@@ -20,7 +20,7 @@ module.exports = React.createClass({
 
     var map;
     if (!isMobile.matches) {
-      map = <LeaderMap />;
+      map = <LeaderMap countriesJSONUrl={this.props.countriesJSONUrl} />;
     }
 
     return (

@@ -20,8 +20,7 @@ module.exports = React.createClass({
 
   loadCountryBoundaries: function(map, popup) {
     $.getJSON(
-      'https://raw.githubusercontent.com/datasets/geo-boundaries-world-110m/' +
-      'master/countries.geojson',
+      this.props.countriesJSONUrl,
       function (data) {
         var countryStyle = {
           'fillOpacity': 0,
@@ -50,7 +49,7 @@ module.exports = React.createClass({
           layer.on('click', function (e) {
             map.closePopup(popup);
 
-            var countryIso2 = e.target.feature.properties.iso_a2;
+            var countryIso2 = e.target.feature.properties.ISO2;
             var countryName = e.target.feature.properties.name;
             var dataUrl = '/api/v1/leaders/country/' + countryIso2 + '/';
             dispatcher.fire('updateUrl', {
