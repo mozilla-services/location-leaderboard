@@ -41,6 +41,9 @@ settings_local.py
 # Node
 node_modules
 
+# Build Files
+leaderboard/static/js/build/
+
 # Static Files
 leaderboard/served/
 
