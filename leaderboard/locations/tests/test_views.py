@@ -45,6 +45,5 @@ class TestCountryListVIew(TestCase):
             self.assertIn({
                 'iso2': country.iso2,
                 'name': country.name,
-                'geometry': json.loads(country.geometry.geojson),
                 'observations': 30,
             }, countries_data)
