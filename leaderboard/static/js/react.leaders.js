@@ -95,7 +95,9 @@ module.exports = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    this.loadData(nextProps.url);
+    if(this.props.url != nextProps.url) {
+      this.loadData(nextProps.url);
+    }
   },
 
   componentDidMount: function () {
