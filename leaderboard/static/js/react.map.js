@@ -1,5 +1,5 @@
 var dispatcher = require('./dispatcher.js');
-var ReactScriptLoader = require('./ReactScriptLoader/ReactScriptLoader.js');
+var ReactScriptLoader = require('../lib/ReactScriptLoader/ReactScriptLoader.js');
 
 module.exports = React.createClass({
   mixins: [ReactScriptLoader.ReactScriptLoaderMixin],
