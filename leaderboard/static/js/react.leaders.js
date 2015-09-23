@@ -84,7 +84,9 @@ module.exports = React.createClass({
   },
 
   loadData: function (url) {
-    $.getJSON(url, function (data) {
+    window.fetch(url).then(function(response) {
+      return response.json()
+    }).then(function(data) {
       this.setState({
         total: data.count,
         leaders: data.results,

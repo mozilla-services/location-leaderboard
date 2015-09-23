@@ -42,10 +42,11 @@
     {{ block.super }}
 
     <script src="{% static "lib/react/react.js" %}"></script>
-
+    <script src="{% static "lib/fetch/fetch.js" %}"></script>
     <script src="{% static "js/build/leaderboard.js" %}"></script>
+
     <script>
-      $(function () {
+      window.onload = function () {
         Tabzilla.disableEasterEgg()
         leaderboard({
           leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
@@ -55,6 +56,6 @@
           globalUrl: '{% url "leaders-global-list" %}',
           countryLeadersUrl: '{% url "leaders-country-list" country_id="XX" %}'
         });
-      });
+      }
     </script>
 {% endblock %}
