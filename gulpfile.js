@@ -7,7 +7,7 @@ var gulp = require('gulp'),
     reactify = require('reactify'),
     browserify = require('gulp-browserify');
 
-var collectstatic = 'python manage.py collectstatic -c --noinput | tail -n 1'
+var collectstatic = 'python manage.py collectstatic --noinput | tail -n 1'
 
 var sandstone_less_path = './leaderboard/sandstone/static/sandstone/less/*.less';
 var leaderboard_less_path = './leaderboard/static/less/*.less';
