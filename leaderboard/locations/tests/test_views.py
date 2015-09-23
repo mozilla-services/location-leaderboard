@@ -38,7 +38,7 @@ class TestCountryListVIew(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        countries_data = json.loads(response.content)['results']
+        countries_data = json.loads(response.content)
         self.assertEqual(len(countries_data), len(countries))
 
         for country in countries:
@@ -46,4 +46,8 @@ class TestCountryListVIew(TestCase):
                 'iso2': country.iso2,
                 'name': country.name,
                 'observations': 30,
+                'leaders_url': reverse(
+                    'leaders-country-list',
+                    kwargs={'country_id': country.iso2},
+                ),
             }, countries_data)

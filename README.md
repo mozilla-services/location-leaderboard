@@ -51,16 +51,7 @@ Get Countries
         iso2: <str>,
         name: <str>,
         observations: <int>,
-        geometry: {
-          type: "MultiPolygon",
-          coordinates: [
-            [
-              [
-                [<float>, <float>],
-              ]
-            ]
-          ]
-        }
+        leaders_url: <str>
       }
 
 * **Error Responses:**

@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.gis.db import models
 
@@ -60,6 +61,13 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def leaders_url(self):
+        return reverse(
+            'leaders-country-list',
+            kwargs={'country_id': self.iso2},
+        )
 
 
 class TileManager(models.GeoManager):
