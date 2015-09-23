@@ -1,5 +1,4 @@
 var dispatcher = require('./dispatcher.js');
-var leaders = require('./react.leaders.js');
 var ReactScriptLoader = require('./ReactScriptLoader/ReactScriptLoader.js');
 
 module.exports = React.createClass({
