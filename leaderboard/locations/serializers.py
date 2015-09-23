@@ -8,4 +8,4 @@ class CountrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = ('iso2', 'name', 'observations')
+        fields = ('iso2', 'name', 'observations', 'leaders_url')

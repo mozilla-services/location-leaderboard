@@ -6,7 +6,7 @@ var LeaderTable = require('./react.leaders.js');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      url: this.props.config.globalUrl,
+      url: this.props.config.globalLeadersUrl,
       name: 'Global'
     };
   },
