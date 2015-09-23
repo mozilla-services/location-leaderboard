@@ -20,54 +20,53 @@ module.exports = React.createClass({
   loadCountryBoundaries: function(map, popup) {
     var countryLeadersUrl = this.props.config.countryLeadersUrl;
 
-    $.getJSON(
-      this.props.config.countriesJSONUrl,
-      function (data) {
-        var countryStyle = {
-          'fillOpacity': 0,
-          'opacity': 0
-        };
+    var countryStyle = {
+      'fillOpacity': 0,
+      'opacity': 0
+    };
 
-        var countryStyleHover = {
-          'weight': 1,
-          'opacity': 1
-        };
+    var countryStyleHover = {
+      'weight': 1,
+      'opacity': 1
+    };
 
-        var countryStyleClick = {
-        };
+    var countryStyleClick = {
+    };
 
-        var onEachFeature = function(country_data, layer) {
-          layer.on('mouseover', function (e) {
-            // change the countryStyle to the hover version
-            layer.setStyle(countryStyleHover);
-          });
+    var onEachFeature = function(country_data, layer) {
+      layer.on('mouseover', function (e) {
+        // change the countryStyle to the hover version
+        layer.setStyle(countryStyleHover);
+      });
 
-          layer.on('mouseout', function (e) {
-            // reverting the countryStyle back
-            layer.setStyle(countryStyle);
-          });
+      layer.on('mouseout', function (e) {
+        // reverting the countryStyle back
+        layer.setStyle(countryStyle);
+      });
 
-          layer.on('click', function (e) {
-            map.closePopup(popup);
+      layer.on('click', function (e) {
+        map.closePopup(popup);
 
-            var countryIso2 = e.target.feature.properties.alpha2;
-            var countryName = e.target.feature.properties.name;
-            var dataUrl = countryLeadersUrl.replace('XX', countryIso2);
-            dispatcher.fire('updateUrl', {
-              url: dataUrl,
-              name: countryName,
-            });
-          });
-        };
+        var countryIso2 = e.target.feature.properties.alpha2;
+        var countryName = e.target.feature.properties.name;
+        var dataUrl = countryLeadersUrl.replace('XX', countryIso2);
+        dispatcher.fire('updateUrl', {
+          url: dataUrl,
+          name: countryName,
+        });
+      });
+    };
 
-        L.geoJson(
-          data, {
-            onEachFeature: onEachFeature,
-            style: countryStyle
-          }
-        ).addTo(map);
-      }
-    );
+    window.fetch(this.props.config.countriesJSONUrl).then(function(response) {
+      return response.json()
+    }).then(function(data) {
+      L.geoJson(
+        data, {
+          onEachFeature: onEachFeature,
+          style: countryStyle
+        }
+      ).addTo(map);
+    });
   },
 
   onScriptLoaded: function () {
