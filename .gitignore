@@ -46,6 +46,3 @@ leaderboard/static/js/build/
 
 # Static Files
 leaderboard/served/
-
-# GeoJSON Files
-leaderboard/static/geojson/

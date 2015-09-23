@@ -51,7 +51,7 @@
           leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
           leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
 
-          countriesJSONUrl: '{% static "geojson/countries.geo.json" %}',
+          countriesJSONUrl: '{% static "geojson/countries.named.geojson" %}',
           globalUrl: '{% url "leaders-global-list" %}',
           countryLeadersUrl: '{% url "leaders-country-list" country_id="XX" %}'
         });

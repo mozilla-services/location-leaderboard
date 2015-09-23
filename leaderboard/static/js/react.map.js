@@ -51,7 +51,7 @@ module.exports = React.createClass({
           layer.on('click', function (e) {
             map.closePopup(popup);
 
-            var countryIso2 = e.target.feature.properties.ISO2;
+            var countryIso2 = e.target.feature.properties.alpha2;
             var countryName = e.target.feature.properties.name;
             var dataUrl = countryLeadersUrl.replace('XX', countryIso2);
             dispatcher.fire('updateUrl', {
