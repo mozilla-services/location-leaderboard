@@ -18,11 +18,18 @@ module.exports = React.createClass({
   },
 
   loadCountryBoundaries: function(map, popup) {
-    var countryLeadersUrl = this.props.config.countryLeadersUrl;
+    var selectedCountry;
 
-    var countryStyle = {
+    var countryStyleEmpty = {
       'fillOpacity': 0,
-      'opacity': 0
+      'opacity': 0,
+      'weight': 0
+    };
+
+    var countryStyleFilled = {
+      'fillOpacity': 0.1,
+      'opacity': 0,
+      'weight': 0
     };
 
     var countryStyleHover = {
@@ -31,31 +38,46 @@ module.exports = React.createClass({
     };
 
     var countryStyleClick = {
+      'fillOpacity': 0.3,
+      'opacity': 0.3,
+      'weight': 0
     };
 
-    var onEachFeature = function(country_data, layer) {
-      layer.on('mouseover', function (e) {
-        // change the countryStyle to the hover version
-        layer.setStyle(countryStyleHover);
-      });
+    var onEachFeature = function(countryShapeInfo, layer) {
+      var countryInfo = this.props.config.countries[countryShapeInfo.properties.alpha2];
 
-      layer.on('mouseout', function (e) {
-        // reverting the countryStyle back
-        layer.setStyle(countryStyle);
-      });
+      if (countryInfo !== undefined) {
+        layer.setStyle(countryStyleFilled);
 
-      layer.on('click', function (e) {
-        map.closePopup(popup);
-
-        var countryIso2 = e.target.feature.properties.alpha2;
-        var countryName = e.target.feature.properties.name;
-        var dataUrl = countryLeadersUrl.replace('XX', countryIso2);
-        dispatcher.fire('updateUrl', {
-          url: dataUrl,
-          name: countryName,
+        layer.on('mouseover', function (e) {
+          // change the countryStyle to the hover version
+          layer.setStyle(countryStyleHover);
         });
-      });
-    };
+
+        layer.on('mouseout', function (e) {
+          // reverting the countryStyle back
+          if (layer !== selectedCountry) {
+            layer.setStyle(countryStyleFilled);
+          } else if (selectedCountry !== undefined) {
+            selectedCountry.setStyle(countryStyleClick);
+          }
+        });
+
+        layer.on('click', function (e) {
+          if (selectedCountry && layer !== selectedCountry) {
+            selectedCountry.setStyle(countryStyleFilled);
+          }
+          map.closePopup(popup);
+          layer.setStyle(countryStyleClick);
+          selectedCountry = layer;
+
+          dispatcher.fire('updateUrl', {
+            url: countryInfo.leaders_url,
+            name: countryInfo.name
+          });
+        });
+      }
+    }.bind(this);
 
     window.fetch(this.props.config.countriesJSONUrl).then(function(response) {
       return response.json()
@@ -63,7 +85,7 @@ module.exports = React.createClass({
       L.geoJson(
         data, {
           onEachFeature: onEachFeature,
-          style: countryStyle
+          style: countryStyleEmpty
         }
       ).addTo(map);
     });

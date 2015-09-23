@@ -53,8 +53,8 @@
           leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
 
           countriesJSONUrl: '{% static "geojson/countries.named.geojson" %}',
-          globalUrl: '{% url "leaders-global-list" %}',
-          countryLeadersUrl: '{% url "leaders-country-list" country_id="XX" %}'
+          countriesInfoUrl: '{% url "countries-list" %}',
+          globalLeadersUrl: '{% url "leaders-global-list" %}',
         });
       }
     </script>
