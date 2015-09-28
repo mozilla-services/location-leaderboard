@@ -3,7 +3,11 @@ var dispatcher = require('./dispatcher.js');
 var LeadersButton = React.createClass({
   handleClick: function () {
     if(this.props.url !== null) {
-      dispatcher.fire('updateUrl', {url: this.props.url});
+      dispatcher.fire('updateSelection', {
+        name: this.props.selection.name,
+        iso2: this.props.selection.iso2,
+        url: this.props.url
+      });
     }
   },
 
@@ -17,11 +21,36 @@ var LeadersButton = React.createClass({
 });
 
 var LeadersHeader = React.createClass({
+  handleChange: function (e) {
+    var countryIso2 = e.target.value;
+    var countryInfo = this.props.config.countries[countryIso2];
+    var selectionInfo;
+    if (countryInfo !== undefined) {
+      var selectionInfo = {
+        url: countryInfo.leaders_url,
+        name: countryInfo.name,
+        iso2: countryInfo.iso2
+      };
+    }
+
+    dispatcher.fire('updateSelection', selectionInfo);
+  },
+
   render: function() {
+    var countries = this.props.config.countries;
+    var selection = this.props.selection;
+
     return (
       <div className="section">
-        <div className="center col span_12_of_12">
-          <h3>{this.props.name}</h3>
+        <div className="col span_12_of_12">
+          <select value={selection.iso2} onChange={this.handleChange}>
+            <option>All Countries</option>
+            {Object.keys(countries).map(function(countryIso2) {
+              return (
+                <option value={countryIso2}>{countries[countryIso2].name}</option>
+              )
+            })}
+          </select>
         </div>
       </div>
     );
@@ -33,13 +62,13 @@ var LeadersFooter = React.createClass({
     return (
       <div className="section">
         <div className="col span_3_of_12">
-          <LeadersButton name="Previous" url={this.props.prevUrl} />
+          <LeadersButton name="Previous" selection={this.props.selection} url={this.props.prevUrl} />
         </div>
         <div className="center col span_6_of_12">
           <span>{this.props.start} - {this.props.stop} of {this.props.total}</span>
         </div>
         <div className="col span_3_of_12">
-          <LeadersButton name="Next" url={this.props.nextUrl} />
+          <LeadersButton name="Next" selection={this.props.selection} url={this.props.nextUrl} />
         </div>
       </div>
     );
@@ -97,13 +126,13 @@ module.exports = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    if(this.props.url != nextProps.url) {
-      this.loadData(nextProps.url);
+    if(this.props.selection.url != nextProps.selection.url) {
+      this.loadData(nextProps.selection.url);
     }
   },
 
   componentDidMount: function () {
-    this.loadData(this.props.url);
+    this.loadData(this.props.selection.url);
   },
 
   render: function() {
@@ -118,12 +147,14 @@ module.exports = React.createClass({
     return (
       <div id="leaders-table">
         <LeadersHeader
-          name={this.props.name}
+          config={this.props.config}
+          selection={this.props.selection}
         />
         <div id="leaders-table-content">
           <LeadersTable leaders={this.state.leaders} />
         </div>
         <LeadersFooter
+          selection={this.props.selection}
           total={this.state.total}
           start={start}
           stop={stop}

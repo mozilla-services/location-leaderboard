@@ -4,23 +4,29 @@ var LeaderMap = require('./react.map.js');
 var LeaderTable = require('./react.leaders.js');
 
 module.exports = React.createClass({
-  getInitialState: function () {
+  defaultSelection : function () {
     return {
       url: this.props.config.globalLeadersUrl,
+      iso2: '',
       name: 'Global'
+    }
+  },
+
+  getInitialState: function () {
+    return {
+      selection: this.defaultSelection()
     };
   },
 
-  updateUrl: function (data) {
-    this.setState({url: data.url, name: data.name || 'Global'});
+  isMobile: function () {
+    return window.matchMedia("only screen and (max-width: 480px)").matches;
   },
 
   render: function() {
-    var isMobile = window.matchMedia("only screen and (max-width: 480px)");
-
     var map;
-    if (!isMobile.matches) {
-      map = <LeaderMap config={this.props.config} />;
+
+    if (!this.isMobile()) {
+      map = <LeaderMap config={this.props.config} selection={this.state.selection} />;
     }
 
     return (
@@ -29,7 +35,7 @@ module.exports = React.createClass({
           {map}
         </div>
         <div className="col span_4_of_12">
-          <LeaderTable name={this.state.name} url={this.state.url} />
+          <LeaderTable config={this.props.config} selection={this.state.selection} />
         </div>
       </div>
     );
@@ -42,8 +48,12 @@ module.exports = React.createClass({
   componentWillMount: function () {
     window.addEventListener('resize', this.handleResize);
 
-    dispatcher.on('updateUrl', function (data) {
-      this.updateUrl(data);
+    dispatcher.on('updateSelection', function (selection) {
+      if (selection === null) {
+        this.setState({selection: this.defaultSelection()});
+      } else {
+        this.setState({selection: selection});
+      }
     }.bind(this));
   }
 });
