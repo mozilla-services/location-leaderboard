@@ -59,6 +59,9 @@ class Country(models.Model):
 
     objects = CountryManager()
 
+    class Meta:
+        ordering = ('name',)
+
     def __unicode__(self):
         return self.name
 
