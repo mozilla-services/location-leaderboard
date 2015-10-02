@@ -23,7 +23,7 @@ var LeadersButton = React.createClass({
 var LeadersHeader = React.createClass({
   handleChange: function (e) {
     var countryIso2 = e.target.value;
-    var countryInfo = this.props.config.countries[countryIso2];
+    var countryInfo = this.props.countries[countryIso2];
     var selectionInfo;
     if (countryInfo !== undefined) {
       var selectionInfo = {
@@ -37,7 +37,7 @@ var LeadersHeader = React.createClass({
   },
 
   render: function() {
-    var countries = this.props.config.countries;
+    var countries = this.props.countries;
     var selection = this.props.selection;
 
     return (
@@ -62,13 +62,21 @@ var LeadersFooter = React.createClass({
     return (
       <div className="section">
         <div className="col span_3_of_12">
-          <LeadersButton name="Previous" selection={this.props.selection} url={this.props.prevUrl} />
+          <LeadersButton
+            name="Previous"
+            selection={this.props.selection}
+            url={this.props.prevUrl}
+          />
         </div>
         <div className="center col span_6_of_12">
           <span>{this.props.start} - {this.props.stop} of {this.props.total}</span>
         </div>
         <div className="col span_3_of_12">
-          <LeadersButton name="Next" selection={this.props.selection} url={this.props.nextUrl} />
+          <LeadersButton
+            name="Next"
+            selection={this.props.selection}
+            url={this.props.nextUrl}
+          />
         </div>
       </div>
     );
@@ -148,6 +156,7 @@ module.exports = React.createClass({
       <div id="leaders-table">
         <LeadersHeader
           config={this.props.config}
+          countries={this.props.countries}
           selection={this.props.selection}
         />
         <div id="leaders-table-content">

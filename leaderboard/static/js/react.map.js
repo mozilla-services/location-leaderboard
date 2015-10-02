@@ -68,7 +68,7 @@ module.exports = React.createClass({
 
   loadCountryBoundaries: function () {
     var onEachFeature = function (countryShapeInfo, layer) {
-      var countryInfo = this.props.config.countries[countryShapeInfo.properties.alpha2];
+      var countryInfo = this.props.countries[countryShapeInfo.properties.alpha2];
 
       if (countryInfo === undefined) {
         return;

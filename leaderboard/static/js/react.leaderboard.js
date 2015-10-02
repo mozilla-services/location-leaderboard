@@ -14,6 +14,7 @@ module.exports = React.createClass({
 
   getInitialState: function () {
     return {
+      countries: [],
       selection: this.defaultSelection()
     };
   },
@@ -26,7 +27,12 @@ module.exports = React.createClass({
     var map;
 
     if (!this.isMobile()) {
-      map = <LeaderMap config={this.props.config} selection={this.state.selection} />;
+      map = <LeaderMap
+        key={this.state.countries}
+        config={this.props.config}
+        countries={this.state.countries}
+        selection={this.state.selection}
+      />;
     }
 
     return (
@@ -35,7 +41,11 @@ module.exports = React.createClass({
           {map}
         </div>
         <div className="col span_4_of_12">
-          <LeaderTable config={this.props.config} selection={this.state.selection} />
+          <LeaderTable
+            config={this.props.config}
+            countries={this.state.countries}
+            selection={this.state.selection}
+          />
         </div>
       </div>
     );
@@ -54,6 +64,19 @@ module.exports = React.createClass({
       } else {
         this.setState({selection: selection});
       }
+    }.bind(this));
+  },
+
+  componentDidMount: function () {
+    window.fetch(this.props.config.countriesInfoUrl).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      var countries = {};
+      for(var country_i in data) {
+        var country = data[country_i];
+        countries[country.iso2] = country;
+      }
+      this.setState({countries: countries});
     }.bind(this));
   }
 });
