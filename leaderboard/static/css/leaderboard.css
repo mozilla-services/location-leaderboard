@@ -12,6 +12,9 @@
     overflow-y: auto;
   }
 }
+#leaderboard #leaders-table select {
+  width: 100%;
+}
 #leaderboard #leaders-table table {
   width: 100%;
 }
