@@ -105,8 +105,11 @@ class Tile(models.Model):
     objects = TileManager()
 
     def __unicode__(self):
-        return '{easting},{northing}'.format(
-            northing=self.northing, easting=self.easting)
+        return u'{country}: {easting},{northing}'.format(
+            country=self.country,
+            northing=self.northing,
+            easting=self.easting,
+        )
 
     def save(self, *args, **kwargs):
         # If we are saving a new tile, we want to automatically

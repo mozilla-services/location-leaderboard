@@ -78,7 +78,7 @@ class ContributorRank(models.Model):
         ordering = ('-observations',)
 
     def __unicode__(self):
-        return '{rank}: {contributor} for {country}'.format(
+        return u'{rank}: {contributor} for {country}'.format(
             rank=self.rank,
             contributor=self.contributor,
             country=self.country,
@@ -125,7 +125,7 @@ class Contribution(models.Model):
         unique_together = ('date', 'tile', 'contributor')
 
     def __unicode__(self):
-        return '{user}-{date}-{tile}: {observations}'.format(
+        return u'{user}-{date}-{tile}: {observations}'.format(
             user=self.contributor,
             date=self.date,
             tile=self.tile,
