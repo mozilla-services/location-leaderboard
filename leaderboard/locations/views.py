@@ -6,5 +6,8 @@ from leaderboard.locations.serializers import CountrySerializer
 
 class ListCountriesView(ListAPIView):
     serializer_class = CountrySerializer
-    queryset = Country.objects.all().annotate_observations()
+    queryset = (Country.objects
+                       .all()
+                       .annotate_observations()
+                       .only('name', 'iso2'))
     pagination_class = None
