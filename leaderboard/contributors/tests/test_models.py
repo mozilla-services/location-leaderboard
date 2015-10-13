@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 import factory
 from faker import Factory as FakerFactory
@@ -19,11 +20,10 @@ faker = FakerFactory.create()
 
 
 class ContributorFactory(factory.DjangoModelFactory):
-    access_token = factory.Sequence(lambda n: str(n))
-    uid = factory.Sequence(lambda n: str(n))
+    access_token = factory.LazyAttribute(lambda o: str(uuid.uuid4().hex))
+    uid = factory.LazyAttribute(lambda o: str(uuid.uuid4().hex))
     name = factory.LazyAttribute(lambda o: faker.name())
-    email = factory.Sequence(
-        lambda n: 'contributor{}@contribute.org'.format(n))
+    email = factory.LazyAttribute(lambda o: '{}@example.com'.format(o.name))
 
     class Meta:
         model = Contributor
