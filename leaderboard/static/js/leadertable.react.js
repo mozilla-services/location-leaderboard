@@ -1,4 +1,5 @@
 var dispatcher = require('./dispatcher.js');
+var React = require('react');
 
 var LeadersButton = React.createClass({
   handleClick: function () {
@@ -47,7 +48,7 @@ var LeadersHeader = React.createClass({
             <option>All Countries</option>
             {Object.keys(countries).map(function(countryIso2) {
               return (
-                <option value={countryIso2}>{countries[countryIso2].name}</option>
+                <option key={countryIso2} value={countryIso2}>{countries[countryIso2].name}</option>
               )
             })}
           </select>
@@ -97,7 +98,7 @@ var LeadersTable = React.createClass({
         <tbody>
           {this.props.leaders.map(function (leader) {
             return (
-              <tr>
+              <tr key={leader.name}>
                 <td>{leader.rank}</td>
                 <td>{leader.name}</td>
                 <td>{leader.observations}</td>
