@@ -1,4 +1,5 @@
 var dispatcher = require('./dispatcher.js');
+var React = require('react');
 var ReactScriptLoader = require('../lib/ReactScriptLoader/ReactScriptLoader.js');
 
 // Style constants
