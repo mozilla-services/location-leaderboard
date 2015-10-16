@@ -47,7 +47,6 @@
 
     <script>
       window.onload = function () {
-        Tabzilla.disableEasterEgg()
         leaderboard({
           leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
           leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
@@ -56,6 +55,11 @@
           countriesInfoUrl: '{% url "countries-list" %}',
           globalLeadersUrl: '{% url "leaders-global-list" %}',
         });
+
+        try {
+          Tabzilla.disableEasterEgg()
+        } catch (e) {
+        }
       }
     </script>
 {% endblock %}
