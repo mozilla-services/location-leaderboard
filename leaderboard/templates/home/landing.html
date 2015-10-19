@@ -41,8 +41,9 @@
 {% block js %}
     {{ block.super }}
 
+    <script src="{% static "lib/react/react.js" %}"></script>
     <script src="{% static "lib/fetch/fetch.js" %}"></script>
-    <script src="{% static "js/build/leaderboard.react.js" %}"></script>
+    <script src="{% static "js/build/leaderboard.js" %}"></script>
 
     <script>
       window.onload = function () {

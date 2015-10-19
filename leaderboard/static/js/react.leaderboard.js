@@ -1,11 +1,9 @@
 var dispatcher = require('./dispatcher.js');
-var React = require('react');
-var ReactDOM = require('react-dom');
 
-var LeaderMap = require('./leadermap.react.js');
-var LeaderTable = require('./leadertable.react.js');
+var LeaderMap = require('./react.map.js');
+var LeaderTable = require('./react.leaders.js');
 
-var Leaderboard = React.createClass({
+module.exports = React.createClass({
   defaultSelection : function () {
     return {
       url: this.props.config.globalLeadersUrl,
@@ -82,10 +80,3 @@ var Leaderboard = React.createClass({
     }.bind(this));
   }
 });
-
-module.exports = function (config) {
-  ReactDOM.render(
-    <Leaderboard config={config} />,
-    document.getElementById('leaderboard-container')
-  );
-};
