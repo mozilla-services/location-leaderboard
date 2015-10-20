@@ -40,7 +40,7 @@ less_task('less-leaderboard', [leaderboard_less_path], './leaderboard/static/css
 // Basic usage 
 gulp.task('scripts', function() {
   // Single entry point to browserify 
-  gulp.src('./leaderboard/static/js/leaderboard.js')
+  gulp.src('./leaderboard/static/js/leaderboard.react.js')
     .pipe(
       browserify({
         transform: [reactify],
@@ -65,4 +65,4 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('default', ['watch']);
+gulp.task('default', ['scripts', 'watch']);
