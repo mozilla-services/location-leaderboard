@@ -1,4 +1,5 @@
 var dispatcher = require('./dispatcher.js');
+var cachedFetch = require('./cachedfetch.js');
 var ReactScriptLoader = require('../lib/ReactScriptLoader/ReactScriptLoader.js');
 
 // Style constants
@@ -32,7 +33,7 @@ module.exports = React.createClass({
   popup: null,
 
   getScriptURL: function () {
-    return this.props.config.leafletJSUrl;
+    return this.props.leafletJSUrl;
   },
 
   countryLayers: {},
@@ -60,7 +61,7 @@ module.exports = React.createClass({
   render: function () {
     return (
       <div>
-        <link rel="stylesheet" href={this.props.config.leafletCSSUrl} />
+        <link rel="stylesheet" href={this.props.leafletCSSUrl} />
         <div id="leaders-map"></div>
       </div>
     );
@@ -68,46 +69,45 @@ module.exports = React.createClass({
 
   loadCountryBoundaries: function () {
     var onEachFeature = function (countryShapeInfo, layer) {
-      var countryInfo = this.props.countries[countryShapeInfo.properties.alpha2];
+      cachedFetch.get('countriesInfo').then(function (countriesInfo) {
+        var countryInfo = countriesInfo[countryShapeInfo.properties.alpha2];
 
-      if (countryInfo === undefined) {
-        return;
-      }
-
-      this.countryLayers[countryInfo.iso2] = layer;
-
-      layer.setStyle(countryStyleFilled);
-
-      var currentStyle;
-
-      layer.on('mouseover', function (e) {
-        layer.setStyle(countryStyleHover);
-      });
-
-      layer.on('mouseout', function (e) {
-        if (countryInfo.iso2 === this.props.selection.iso2) {
-          layer.setStyle(countryStyleSelected);
-        } else {
-          layer.setStyle(countryStyleFilled);
+        if (countryInfo === undefined) {
+          return;
         }
-      }.bind(this));
 
-      layer.on('click', function (e) {
-        this.map.closePopup(this.popup);
+        this.countryLayers[countryInfo.iso2] = layer;
 
-        dispatcher.fire('updateSelection', {
-          url: countryInfo.leaders_url,
-          name: countryInfo.name,
-          iso2: countryInfo.iso2
+        layer.setStyle(countryStyleFilled);
+
+        var currentStyle;
+
+        layer.on('mouseover', function (e) {
+          layer.setStyle(countryStyleHover);
         });
+
+        layer.on('mouseout', function (e) {
+          if (countryInfo.iso2 === this.props.selection.iso2) {
+            layer.setStyle(countryStyleSelected);
+          } else {
+            layer.setStyle(countryStyleFilled);
+          }
+        }.bind(this));
+
+        layer.on('click', function (e) {
+          this.map.closePopup(this.popup);
+
+          dispatcher.fire('updateSelection', {
+            url: countryInfo.leaders_url,
+            iso2: countryInfo.iso2
+          });
+        }.bind(this));
       }.bind(this));
     }.bind(this);
 
-    window.fetch(this.props.config.countriesJSONUrl).then(function (response) {
-      return response.json()
-    }).then(function (data) {
+    cachedFetch.get('countriesGeo').then(function (countriesGeo) {
       L.geoJson(
-        data, {
+        countriesGeo, {
           onEachFeature: onEachFeature,
           style: countryStyleEmpty
         }
