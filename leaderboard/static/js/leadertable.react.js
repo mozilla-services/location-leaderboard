@@ -1,12 +1,12 @@
-var dispatcher = require('./dispatcher.js');
-var cachedFetch = require('./cachedfetch.js');
-var getUrlParameters = require('./parseurl.js').getUrlParameters;
-var getLeadersKey = require('./leaderskey.js');
+var dispatcher = require("./dispatcher.js");
+var cachedFetch = require("./cachedfetch.js");
+var getUrlParameters = require("./parseurl.js").getUrlParameters;
+var getLeadersKey = require("./leaderskey.js");
 
 var LeadersButton = React.createClass({
   handleClick: function () {
     if(this.props.offset != null) {
-      dispatcher.fire('updateSelection', {
+      dispatcher.fire("updateSelection", {
         iso2: this.props.selection.iso2,
         offset: this.props.offset
       });
@@ -14,8 +14,8 @@ var LeadersButton = React.createClass({
   },
 
   render: function() {
-    var classes = 'button ';
-    classes += (this.props.offset == null) ? 'insensitive' : '';
+    var classes = "button ";
+    classes += (this.props.offset == null) ? "insensitive" : "";
     return (
         <button onClick={this.handleClick} className={classes}>{this.props.name}</button>
     );
@@ -30,13 +30,13 @@ var LeadersHeader = React.createClass({
   },
 
   componentWillMount: function () {
-    cachedFetch.get('countriesInfo').then(function (countriesInfo) {
+    cachedFetch.get("countriesInfo").then(function (countriesInfo) {
       this.setState({countries: countriesInfo});
     }.bind(this));
   },
 
   handleChange: function (e) {
-    dispatcher.fire('updateSelection', {iso2: e.target.value});
+    dispatcher.fire("updateSelection", {iso2: e.target.value});
   },
 
   render: function() {

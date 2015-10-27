@@ -1,29 +1,29 @@
-var dispatcher = require('./dispatcher.js');
-var cachedFetch = require('./cachedfetch.js');
-var ReactScriptLoader = require('../lib/ReactScriptLoader/ReactScriptLoader.js');
+var dispatcher = require("./dispatcher.js");
+var cachedFetch = require("./cachedfetch.js");
+var ReactScriptLoader = require("../lib/ReactScriptLoader/ReactScriptLoader.js");
 
 // Style constants
 var countryStyleEmpty = {
-  'fillOpacity': 0,
-  'opacity': 0,
-  'weight': 0
+  "fillOpacity": 0,
+  "opacity": 0,
+  "weight": 0
 };
 
 var countryStyleFilled = {
-  'fillOpacity': 0.1,
-  'opacity': 0,
-  'weight': 0
+  "fillOpacity": 0.1,
+  "opacity": 0,
+  "weight": 0
 };
 
 var countryStyleHover = {
-  'weight': 1,
-  'opacity': 1
+  "weight": 1,
+  "opacity": 1
 };
 
 var countryStyleSelected = {
-  'fillOpacity': 0.3,
-  'opacity': 0.3,
-  'weight': 0
+  "fillOpacity": 0.3,
+  "opacity": 0.3,
+  "weight": 0
 };
 
 module.exports = React.createClass({
@@ -75,11 +75,11 @@ module.exports = React.createClass({
 
       layer.setStyle(countryStyleFilled);
 
-      layer.on('mouseover', function (e) {
+      layer.on("mouseover", function (e) {
         layer.setStyle(countryStyleHover);
       });
 
-      layer.on('mouseout', function (e) {
+      layer.on("mouseout", function (e) {
         if (countryIso2 === this.props.selection.iso2) {
           layer.setStyle(countryStyleSelected);
         } else {
@@ -87,16 +87,16 @@ module.exports = React.createClass({
         }
       }.bind(this));
 
-      layer.on('click', function (e) {
+      layer.on("click", function (e) {
         this.map.closePopup(this.popup);
 
-        dispatcher.fire('updateSelection', {
+        dispatcher.fire("updateSelection", {
           iso2: countryIso2
         });
       }.bind(this));
     }.bind(this);
 
-    cachedFetch.get('countriesGeo').then(function (countriesGeo) {
+    cachedFetch.get("countriesGeo").then(function (countriesGeo) {
       L.geoJson(
         countriesGeo, {
           onEachFeature: onEachFeature,
@@ -107,7 +107,7 @@ module.exports = React.createClass({
   },
 
   onScriptLoaded: function () {
-    this.map = L.map('leaders-map', {
+    this.map = L.map("leaders-map", {
       closePopupOnClick: true,
       maxBounds: L.latLngBounds(
         L.latLng(-85.0511, -190.0),
@@ -115,22 +115,22 @@ module.exports = React.createClass({
       )
     }).setView([30, 0], 2);
 
-    var tilesUrl = 'https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/' +
-      '{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW' +
-      'UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA';
+    var tilesUrl = "https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/" +
+      "{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW" +
+      "UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA";
 
     L.tileLayer(tilesUrl, {
-      attribution: '<a href="https://www.mapbox.com/about/maps">© Mapbox</a> ' +
-        '<a href="http://openstreetmap.org/copyright">© OpenStreetMap</a>' +
-        '<a href="http://mapbox.com/map-feedback/" class="mapbox-improve-map">' +
-        'Improve this map</a>',
+      attribution: "<a href=\"https://www.mapbox.com/about/maps\">© Mapbox</a> " +
+        "<a href=\"http://openstreetmap.org/copyright\">© OpenStreetMap</a>" +
+        "<a href=\"http://mapbox.com/map-feedback/\" class=\"mapbox-improve-map\">" +
+        "Improve this map</a>",
       maxZoom: 18,
       minZoom: 2
     }).addTo(this.map);
 
     this.popup = L.popup().setLatLng(L.latLng(20, 0)).setContent(
-      '<h3 class="center">Click on a country to see its local ' +
-      'leaderboard!</h3>'
+      "<h3 class=\"center\">Click on a country to see its local " +
+      "leaderboard!</h3>"
     ).openOn(this.map);
 
     this.loadCountryBoundaries();
