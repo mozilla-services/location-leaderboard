@@ -1,10 +1,10 @@
 var dispatcher = require('./dispatcher.js');
+var cachedFetch = require('./cachedfetch.js');
 
 var LeadersButton = React.createClass({
   handleClick: function () {
     if(this.props.url !== null) {
       dispatcher.fire('updateSelection', {
-        name: this.props.selection.name,
         iso2: this.props.selection.iso2,
         url: this.props.url
       });
@@ -21,23 +21,37 @@ var LeadersButton = React.createClass({
 });
 
 var LeadersHeader = React.createClass({
+  getInitialState: function () {
+    return {
+      countries: [],
+    }
+  },
+
+  componentWillMount: function () {
+    cachedFetch.get('countriesInfo').then(function (countriesInfo) {
+      this.setState({countries: countriesInfo});
+    }.bind(this));
+  },
+
   handleChange: function (e) {
     var countryIso2 = e.target.value;
-    var countryInfo = this.props.countries[countryIso2];
-    var selectionInfo;
-    if (countryInfo !== undefined) {
-      var selectionInfo = {
-        url: countryInfo.leaders_url,
-        name: countryInfo.name,
-        iso2: countryInfo.iso2
-      };
-    }
 
-    dispatcher.fire('updateSelection', selectionInfo);
+    cachedFetch.get('countriesInfo').then(function (countriesInfo) {
+      var countryInfo = countriesInfo[countryIso2];
+      var selectionInfo;
+      if (countryInfo !== undefined) {
+        selectionInfo = {
+          url: countryInfo.leaders_url,
+          iso2: countryInfo.iso2
+        };
+      }
+
+      dispatcher.fire('updateSelection', selectionInfo);
+    });
   },
 
   render: function() {
-    var countries = this.props.countries;
+    var countries = this.state.countries;
     var selection = this.props.selection;
 
     return (
@@ -120,10 +134,8 @@ module.exports = React.createClass({
     };
   },
 
-  loadData: function (url) {
-    window.fetch(url).then(function(response) {
-      return response.json()
-    }).then(function(data) {
+  loadData: function (iso2) {
+    cachedFetch.get('countryLeaders:' + iso2).then(function(data) {
       this.setState({
         total: data.count,
         leaders: data.results,
@@ -135,12 +147,12 @@ module.exports = React.createClass({
 
   componentWillReceiveProps: function (nextProps) {
     if(this.props.selection.url != nextProps.selection.url) {
-      this.loadData(nextProps.selection.url);
+      this.loadData(nextProps.selection.iso2);
     }
   },
 
   componentDidMount: function () {
-    this.loadData(this.props.selection.url);
+    this.loadData(this.props.selection.iso2);
   },
 
   render: function() {
@@ -155,8 +167,6 @@ module.exports = React.createClass({
     return (
       <div id="leaders-table">
         <LeadersHeader
-          config={this.props.config}
-          countries={this.props.countries}
           selection={this.props.selection}
         />
         <div id="leaders-table-content">

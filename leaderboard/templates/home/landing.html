@@ -48,11 +48,11 @@
 
     <script>
       window.onload = function () {
-        leaderboard({
+        leaderboard.init({
           leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
           leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
 
-          countriesJSONUrl: '{% static "geojson/countries.named.geojson" %}',
+          countriesGeoUrl: '{% static "geojson/countries.named.geojson" %}',
           countriesInfoUrl: '{% url "countries-list" %}',
           globalLeadersUrl: '{% url "leaders-global-list" %}',
         });

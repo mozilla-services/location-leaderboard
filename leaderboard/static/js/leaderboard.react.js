@@ -1,4 +1,5 @@
 var dispatcher = require('./dispatcher.js');
+var cachedFetch = require('./cachedfetch.js');
 
 var LeaderMap = require('./leadermap.react.js');
 var LeaderTable = require('./leadertable.react.js');
@@ -8,13 +9,11 @@ var Leaderboard = React.createClass({
     return {
       url: this.props.config.globalLeadersUrl,
       iso2: '',
-      name: 'Global'
     }
   },
 
   getInitialState: function () {
     return {
-      countries: [],
       selection: this.defaultSelection()
     };
   },
@@ -28,9 +27,8 @@ var Leaderboard = React.createClass({
 
     if (!this.isMobile()) {
       map = <LeaderMap
-        key={this.state.countries}
-        config={this.props.config}
-        countries={this.state.countries}
+        leafletJSUrl={this.props.config.leafletJSUrl}
+        leafletCSSUrl={this.props.config.leafletCSSUrl}
         selection={this.state.selection}
       />;
     }
@@ -43,7 +41,6 @@ var Leaderboard = React.createClass({
         <div className="col span_4_of_12">
           <LeaderTable
             config={this.props.config}
-            countries={this.state.countries}
             selection={this.state.selection}
           />
         </div>
@@ -55,35 +52,40 @@ var Leaderboard = React.createClass({
     this.forceUpdate();
   },
 
+  handleUpdateSelection: function (selection) {
+    if (selection) {
+      cachedFetch.set('countryLeaders:' + selection.iso2, selection.url);
+      this.setState({selection: selection});
+    } else {
+      this.setState({selection: this.defaultSelection()});
+    }
+  },
+
   componentWillMount: function () {
     window.addEventListener('resize', this.handleResize);
 
-    dispatcher.on('updateSelection', function (selection) {
-      if (selection === null) {
-        this.setState({selection: this.defaultSelection()});
-      } else {
-        this.setState({selection: selection});
-      }
-    }.bind(this));
-  },
-
-  componentDidMount: function () {
-    window.fetch(this.props.config.countriesInfoUrl).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      var countries = {};
-      for(var country_i in data) {
-        var country = data[country_i];
-        countries[country.iso2] = country;
-      }
-      this.setState({countries: countries});
-    }.bind(this));
+    dispatcher.on('updateSelection', this.handleUpdateSelection);
   }
 });
 
-module.exports = function (config) {
-  ReactDOM.render(
-    <Leaderboard config={config} />,
-    document.getElementById('leaderboard-container')
-  );
-};
+module.exports = {
+  init: function (config) {
+    cachedFetch.set('countryLeaders:', config.globalLeadersUrl);
+
+    cachedFetch.set('countriesGeo', config.countriesGeoUrl);
+
+    cachedFetch.set('countriesInfo', config.countriesInfoUrl, function (countriesInfo) {
+      var countries = {};
+      for(var country_i in countriesInfo) {
+        var country = countriesInfo[country_i];
+        countries[country.iso2] = country;
+      }
+      return countries;
+    });
+
+    ReactDOM.render(
+      <Leaderboard config={config} />,
+      document.getElementById('leaderboard-container')
+    );
+  }
+}
