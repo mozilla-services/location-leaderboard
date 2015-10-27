@@ -1,19 +1,21 @@
 var dispatcher = require('./dispatcher.js');
 var cachedFetch = require('./cachedfetch.js');
+var getUrlParameters = require('./parseurl.js').getUrlParameters;
+var getLeadersKey = require('./leaderskey.js');
 
 var LeadersButton = React.createClass({
   handleClick: function () {
-    if(this.props.url !== null) {
+    if(this.props.offset != null) {
       dispatcher.fire('updateSelection', {
         iso2: this.props.selection.iso2,
-        url: this.props.url
+        offset: this.props.offset
       });
     }
   },
 
   render: function() {
     var classes = 'button ';
-    classes += this.props.url === null ? 'insensitive' : '';
+    classes += (this.props.offset == null) ? 'insensitive' : '';
     return (
         <button onClick={this.handleClick} className={classes}>{this.props.name}</button>
     );
@@ -34,20 +36,7 @@ var LeadersHeader = React.createClass({
   },
 
   handleChange: function (e) {
-    var countryIso2 = e.target.value;
-
-    cachedFetch.get('countriesInfo').then(function (countriesInfo) {
-      var countryInfo = countriesInfo[countryIso2];
-      var selectionInfo;
-      if (countryInfo !== undefined) {
-        selectionInfo = {
-          url: countryInfo.leaders_url,
-          iso2: countryInfo.iso2
-        };
-      }
-
-      dispatcher.fire('updateSelection', selectionInfo);
-    });
+    dispatcher.fire('updateSelection', {iso2: e.target.value});
   },
 
   render: function() {
@@ -79,7 +68,7 @@ var LeadersFooter = React.createClass({
           <LeadersButton
             name="Previous"
             selection={this.props.selection}
-            url={this.props.prevUrl}
+            offset={this.props.prevOffset}
           />
         </div>
         <div className="center col span_6_of_12">
@@ -89,7 +78,7 @@ var LeadersFooter = React.createClass({
           <LeadersButton
             name="Next"
             selection={this.props.selection}
-            url={this.props.nextUrl}
+            offset={this.props.nextOffset}
           />
         </div>
       </div>
@@ -129,30 +118,37 @@ module.exports = React.createClass({
     return {
       total: 0,
       leaders: [],
-      prevUrl: null,
-      nextUrl: null
+      nextOffset: null,
+      prevOffset: null
     };
   },
 
-  loadData: function (iso2) {
-    cachedFetch.get('countryLeaders:' + iso2).then(function(data) {
+  loadData: function (selection) {
+    var leadersKey = getLeadersKey(selection.iso2, selection.offset);
+
+    cachedFetch.get(leadersKey).then(function(data) {
+      var nextOffset = getUrlParameters(data.next).offset;
+
+      var prevOffset;
+      if (data.previous != null) {
+        prevOffset = getUrlParameters(data.previous).offset || "0";
+      }
+
       this.setState({
         total: data.count,
         leaders: data.results,
-        nextUrl: data.next,
-        prevUrl: data.previous
+        nextOffset: nextOffset,
+        prevOffset: prevOffset
       });
     }.bind(this));
   },
 
   componentWillReceiveProps: function (nextProps) {
-    if(this.props.selection.url != nextProps.selection.url) {
-      this.loadData(nextProps.selection.iso2);
-    }
+    this.loadData(nextProps.selection);
   },
 
   componentDidMount: function () {
-    this.loadData(this.props.selection.iso2);
+    this.loadData(this.props.selection);
   },
 
   render: function() {
@@ -177,8 +173,8 @@ module.exports = React.createClass({
           total={this.state.total}
           start={start}
           stop={stop}
-          prevUrl={this.state.prevUrl}
-          nextUrl={this.state.nextUrl}
+          nextOffset={this.state.nextOffset}
+          prevOffset={this.state.prevOffset}
         />
       </div>
     );

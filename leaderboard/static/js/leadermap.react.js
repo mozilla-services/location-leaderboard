@@ -69,39 +69,30 @@ module.exports = React.createClass({
 
   loadCountryBoundaries: function () {
     var onEachFeature = function (countryShapeInfo, layer) {
-      cachedFetch.get('countriesInfo').then(function (countriesInfo) {
-        var countryInfo = countriesInfo[countryShapeInfo.properties.alpha2];
+      var countryIso2 = countryShapeInfo.properties.alpha2;
 
-        if (countryInfo === undefined) {
-          return;
+      this.countryLayers[countryIso2] = layer;
+
+      layer.setStyle(countryStyleFilled);
+
+      layer.on('mouseover', function (e) {
+        layer.setStyle(countryStyleHover);
+      });
+
+      layer.on('mouseout', function (e) {
+        if (countryIso2 === this.props.selection.iso2) {
+          layer.setStyle(countryStyleSelected);
+        } else {
+          layer.setStyle(countryStyleFilled);
         }
+      }.bind(this));
 
-        this.countryLayers[countryInfo.iso2] = layer;
+      layer.on('click', function (e) {
+        this.map.closePopup(this.popup);
 
-        layer.setStyle(countryStyleFilled);
-
-        var currentStyle;
-
-        layer.on('mouseover', function (e) {
-          layer.setStyle(countryStyleHover);
+        dispatcher.fire('updateSelection', {
+          iso2: countryIso2
         });
-
-        layer.on('mouseout', function (e) {
-          if (countryInfo.iso2 === this.props.selection.iso2) {
-            layer.setStyle(countryStyleSelected);
-          } else {
-            layer.setStyle(countryStyleFilled);
-          }
-        }.bind(this));
-
-        layer.on('click', function (e) {
-          this.map.closePopup(this.popup);
-
-          dispatcher.fire('updateSelection', {
-            url: countryInfo.leaders_url,
-            iso2: countryInfo.iso2
-          });
-        }.bind(this));
       }.bind(this));
     }.bind(this);
 

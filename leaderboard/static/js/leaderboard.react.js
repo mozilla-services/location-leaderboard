@@ -1,5 +1,6 @@
 var dispatcher = require('./dispatcher.js');
 var cachedFetch = require('./cachedfetch.js');
+var getLeadersKey = require('./leaderskey.js');
 
 var LeaderMap = require('./leadermap.react.js');
 var LeaderTable = require('./leadertable.react.js');
@@ -7,8 +8,8 @@ var LeaderTable = require('./leadertable.react.js');
 var Leaderboard = React.createClass({
   defaultSelection : function () {
     return {
-      url: this.props.config.globalLeadersUrl,
-      iso2: '',
+      iso2: null,
+      offset: null,
     }
   },
 
@@ -40,7 +41,6 @@ var Leaderboard = React.createClass({
         </div>
         <div className="col span_4_of_12">
           <LeaderTable
-            config={this.props.config}
             selection={this.state.selection}
           />
         </div>
@@ -52,25 +52,41 @@ var Leaderboard = React.createClass({
     this.forceUpdate();
   },
 
+  loadLeadersData: function (selection) {
+    return cachedFetch.get('countriesInfo').then(function (countriesInfo) {
+      var leadersUrl = this.props.config.globalLeadersUrl;
+
+      var countryInfo = countriesInfo[selection.iso2];
+      if (countryInfo !== undefined) {
+        leadersUrl = countryInfo.leaders_url;
+      }
+
+      if (selection.offset != null) {
+        leadersUrl += '?offset=' + selection.offset;
+      }
+
+      cachedFetch.set(
+        getLeadersKey(selection.iso2, selection.offset),
+        leadersUrl
+      );
+    }.bind(this));
+  },
+
   handleUpdateSelection: function (selection) {
-    if (selection) {
-      cachedFetch.set('countryLeaders:' + selection.iso2, selection.url);
+    this.loadLeadersData(selection).then(function() {
       this.setState({selection: selection});
-    } else {
-      this.setState({selection: this.defaultSelection()});
-    }
+    }.bind(this));
   },
 
   componentWillMount: function () {
     window.addEventListener('resize', this.handleResize);
-
     dispatcher.on('updateSelection', this.handleUpdateSelection);
   }
 });
 
 module.exports = {
   init: function (config) {
-    cachedFetch.set('countryLeaders:', config.globalLeadersUrl);
+    cachedFetch.set(getLeadersKey(null, null), config.globalLeadersUrl);
 
     cachedFetch.set('countriesGeo', config.countriesGeoUrl);
 
