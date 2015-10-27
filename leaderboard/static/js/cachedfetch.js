@@ -1,23 +1,26 @@
-var urlPromises = {};
-
 module.exports = {
+  keys: {},
   set: function (key, url, preprocessor) {
-    urlPromises[key] = window.fetch(url).then(function (response) {
+    if (this.keys[key] != null) {
+      return;
+    }
+
+    this.keys[key] = window.fetch(url).then(function (response) {
       return response.json();
     });
 
-    if (preprocessor !== undefined) {
-      urlPromises[key] = urlPromises[key].then(function (data) {
+    if (preprocessor != null) {
+      this.keys[key] = this.keys[key].then(function (data) {
         return preprocessor(data);
       });
     };
   },
 
   get: function (key) {
-    if (urlPromises[key] === undefined) {
+    if (this.keys[key] == null) {
       throw "Unknown key: " + key;
     }
 
-    return urlPromises[key];
+    return this.keys[key];
   }
 };
