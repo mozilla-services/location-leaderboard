@@ -47,7 +47,7 @@ var LeadersHeader = React.createClass({
       <div className="section">
         <div className="col span_12_of_12">
           <select value={selection.iso2} onChange={this.handleChange}>
-            <option>All Countries</option>
+            <option value="">All Countries</option>
             {Object.keys(countries).map(function(countryIso2) {
               return (
                 <option value={countryIso2}>{countries[countryIso2].name}</option>
@@ -124,23 +124,25 @@ module.exports = React.createClass({
   },
 
   loadData: function (selection) {
-    var leadersKey = getLeadersKey(selection.iso2, selection.offset);
+    var leadersKey = getLeadersKey(selection);
 
-    cachedFetch.get(leadersKey).then(function(data) {
-      var nextOffset = getUrlParameters(data.next).offset;
+    if (cachedFetch.keys[leadersKey] != null ) {
+      cachedFetch.get(leadersKey).then(function(data) {
+        var nextOffset = getUrlParameters(data.next).offset;
 
-      var prevOffset;
-      if (data.previous != null) {
-        prevOffset = getUrlParameters(data.previous).offset || "0";
-      }
+        var prevOffset;
+        if (data.previous != null) {
+          prevOffset = getUrlParameters(data.previous).offset || "0";
+        }
 
-      this.setState({
-        total: data.count,
-        leaders: data.results,
-        nextOffset: nextOffset,
-        prevOffset: prevOffset
-      });
-    }.bind(this));
+        this.setState({
+          total: data.count,
+          leaders: data.results,
+          nextOffset: nextOffset,
+          prevOffset: prevOffset
+        });
+      }.bind(this));
+    }
   },
 
   componentWillReceiveProps: function (nextProps) {

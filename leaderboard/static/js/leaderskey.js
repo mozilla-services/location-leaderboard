@@ -1,3 +1,3 @@
-module.exports = function (iso2, offset) {
-  return "countryLeaders:" + iso2 + ":" + offset;
+module.exports = function (selection) {
+  return "countryLeaders:" + selection.iso2 + ":" + selection.offset;
 }

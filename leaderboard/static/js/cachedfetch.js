@@ -14,6 +14,8 @@ module.exports = {
         return preprocessor(data);
       });
     };
+
+    return this.keys[key];
   },
 
   get: function (key) {
