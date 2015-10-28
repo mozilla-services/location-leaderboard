@@ -1,6 +1,6 @@
 var dispatcher = require("./dispatcher.js");
 var cachedFetch = require("./cachedfetch.js");
-var ReactScriptLoader = require("../lib/ReactScriptLoader/ReactScriptLoader.js");
+var promisescript = require('promisescript');
 
 // Style constants
 var countryStyleEmpty = {
@@ -26,17 +26,88 @@ var countryStyleSelected = {
   "weight": 0
 };
 
-module.exports = React.createClass({
-  mixins: [ReactScriptLoader.ReactScriptLoaderMixin],
+// Map content constants
+var tilesUrl = "https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/" +
+  "{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW" +
+  "UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA";
 
+var mapAttribution= "<a href=\"https://www.mapbox.com/about/maps\">© Mapbox</a> " +
+  "<a href=\"http://openstreetmap.org/copyright\">© OpenStreetMap</a>" +
+  "<a href=\"http://mapbox.com/map-feedback/\" class=\"mapbox-improve-map\">" +
+  "Improve this map</a>";
+
+var popupContent = "<h3 class=\"center\">Click on a country to see its local " +
+  "leaderboard!</h3>";
+
+module.exports = React.createClass({
   map: null,
   popup: null,
-
-  getScriptURL: function () {
-    return this.props.leafletJSUrl;
-  },
-
+  mapReady: null,
   countryLayers: {},
+
+  componentWillMount: function () {
+    var javascriptLoaded = promisescript({
+      url: this.props.leafletJSUrl,
+      type: "script"
+    });
+
+    var geoJsonLoaded = cachedFetch.get("countriesGeo");
+
+    this.mapReady = Promise.all([javascriptLoaded, geoJsonLoaded]).then(function (results) {
+      var countriesGeo = results[1];
+
+      this.map = L.map("leaders-map", {
+        closePopupOnClick: true,
+        maxBounds: L.latLngBounds(
+          L.latLng(-85.0511, -190.0),
+          L.latLng(85.0511, 190.0)
+        )
+      }).setView([30, 0], 2);
+
+      L.tileLayer(tilesUrl, {
+        attribution: mapAttribution,
+        maxZoom: 18,
+        minZoom: 2
+      }).addTo(this.map);
+
+      this.popup = L.popup().setLatLng(L.latLng(20, 0)).setContent(popupContent).openOn(this.map);
+
+      var onEachFeature = function (countryShapeInfo, layer) {
+        var countryIso2 = countryShapeInfo.properties.alpha2;
+
+        this.countryLayers[countryIso2] = layer;
+
+        layer.setStyle(countryStyleFilled);
+
+        layer.on("mouseover", function (e) {
+          layer.setStyle(countryStyleHover);
+        });
+
+        layer.on("mouseout", function (e) {
+          if (countryIso2 === this.props.selection.iso2) {
+            layer.setStyle(countryStyleSelected);
+          } else {
+            layer.setStyle(countryStyleFilled);
+          }
+        }.bind(this));
+
+        layer.on("click", function (e) {
+          this.map.closePopup(this.popup);
+
+          dispatcher.fire("updateSelection", {
+            iso2: countryIso2
+          });
+        }.bind(this));
+      }.bind(this);
+
+      L.geoJson(
+        countriesGeo, {
+          onEachFeature: onEachFeature,
+          style: countryStyleEmpty
+        }
+      ).addTo(this.map);
+    }.bind(this));
+  },
 
   updateSelectedCountry: function (newSelection) {
     var oldSelection = this.props.selection;
@@ -65,77 +136,5 @@ module.exports = React.createClass({
         <div id="leaders-map"></div>
       </div>
     );
-  },
-
-  loadCountryBoundaries: function () {
-    var onEachFeature = function (countryShapeInfo, layer) {
-      var countryIso2 = countryShapeInfo.properties.alpha2;
-
-      this.countryLayers[countryIso2] = layer;
-
-      layer.setStyle(countryStyleFilled);
-
-      layer.on("mouseover", function (e) {
-        layer.setStyle(countryStyleHover);
-      });
-
-      layer.on("mouseout", function (e) {
-        if (countryIso2 === this.props.selection.iso2) {
-          layer.setStyle(countryStyleSelected);
-        } else {
-          layer.setStyle(countryStyleFilled);
-        }
-      }.bind(this));
-
-      layer.on("click", function (e) {
-        this.map.closePopup(this.popup);
-
-        dispatcher.fire("updateSelection", {
-          iso2: countryIso2
-        });
-      }.bind(this));
-    }.bind(this);
-
-    cachedFetch.get("countriesGeo").then(function (countriesGeo) {
-      L.geoJson(
-        countriesGeo, {
-          onEachFeature: onEachFeature,
-          style: countryStyleEmpty
-        }
-      ).addTo(this.map);
-    }.bind(this));
-  },
-
-  onScriptLoaded: function () {
-    this.map = L.map("leaders-map", {
-      closePopupOnClick: true,
-      maxBounds: L.latLngBounds(
-        L.latLng(-85.0511, -190.0),
-        L.latLng(85.0511, 190.0)
-      )
-    }).setView([30, 0], 2);
-
-    var tilesUrl = "https://{s}.tiles.mapbox.com/v4/mozilla-webprod.g7ilhcl5/{z}/" +
-      "{x}/{y}.png?access_token=pk.eyJ1IjoibW96aWxsYS13ZWJwcm9kIiwiYSI6Im5ZW" +
-      "UpCb3MifQ.06LZyRt2m_MlRKsKU0gBLA";
-
-    L.tileLayer(tilesUrl, {
-      attribution: "<a href=\"https://www.mapbox.com/about/maps\">© Mapbox</a> " +
-        "<a href=\"http://openstreetmap.org/copyright\">© OpenStreetMap</a>" +
-        "<a href=\"http://mapbox.com/map-feedback/\" class=\"mapbox-improve-map\">" +
-        "Improve this map</a>",
-      maxZoom: 18,
-      minZoom: 2
-    }).addTo(this.map);
-
-    this.popup = L.popup().setLatLng(L.latLng(20, 0)).setContent(
-      "<h3 class=\"center\">Click on a country to see its local " +
-      "leaderboard!</h3>"
-    ).openOn(this.map);
-
-    this.loadCountryBoundaries();
-  },
-
-  onScriptError: function () {
   }
 });
