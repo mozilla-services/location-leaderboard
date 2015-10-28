@@ -75,7 +75,7 @@ class ContributorRank(models.Model):
 
     class Meta:
         unique_together = ('contributor', 'country')
-        ordering = ('-observations',)
+        ordering = ('rank',)
 
     def __unicode__(self):
         return u'{rank}: {contributor} for {country}'.format(
