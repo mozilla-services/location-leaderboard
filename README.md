@@ -387,6 +387,7 @@ Get Leaders
         next: <str>,
         results: [
           {
+            uid: <str>,
             name: <str>,
             observations: <int>,
             rank: <int>
@@ -441,6 +442,7 @@ Get Country Leaders
 
         [
           {
+            uid: <str>,
             name: <str>,
             observations: <int>,
             rank: <int>

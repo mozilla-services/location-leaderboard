@@ -44,9 +44,11 @@ class LeaderListSerializer(serializers.ModelSerializer):
     Serialize a contributor with their name and the
     number of observations they've made.
     """
+    uid = serializers.SlugRelatedField(
+        source='contributor', slug_field='uid', read_only=True)
     name = serializers.SlugRelatedField(
         source='contributor', slug_field='name', read_only=True)
 
     class Meta:
         model = ContributorRank
-        fields = ('name', 'observations', 'rank')
+        fields = ('uid', 'name', 'observations', 'rank')
