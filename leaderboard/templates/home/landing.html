@@ -41,8 +41,14 @@
 {% block js %}
     {{ block.super }}
 
+    {% if debug %}
+    <script src="https://fb.me/react-0.14.1.js"></script>
+    <script src="https://fb.me/react-dom-0.14.1.js"></script>
+    {% else %}
     <script src="{% static "lib/react/react-0.14.0.min.js" %}"></script>
     <script src="{% static "lib/react/react-dom-0.14.0.min.js" %}"></script>
+    {% endif %}
+
     <script src="{% static "lib/fetch/fetch.js" %}"></script>
     <script src="{% static "js/build/leaderboard.react.js" %}"></script>
 
