@@ -1,21 +1,41 @@
 var dispatcher = require("./dispatcher.js");
 var cachedFetch = require("./cachedfetch.js");
+var getUrlParameters = require('./parseurl.js').getUrlParameters;
 var getLeadersKey = require("./leaderskey.js");
 
 var LeaderMap = require("./leadermap.react.js");
 var LeaderTable = require("./leadertable.react.js");
 
 var Leaderboard = React.createClass({
-  defaultSelection : function () {
-    return {
-      iso2: null,
-      offset: null,
-    }
+  getLeadersUrl: function (selection) {
+    return cachedFetch.get("countriesInfo").then(function (countriesInfo) {
+      var leadersUrl = this.props.config.globalLeadersUrl;
+
+      var countryInfo = countriesInfo[selection.iso2];
+      if (countryInfo !== undefined) {
+        leadersUrl = countryInfo.leaders_url;
+      }
+
+      if (selection.offset != null) {
+        leadersUrl += "?offset=" + selection.offset;
+      }
+
+      return leadersUrl;
+    }.bind(this));
+  },
+
+  loadLeadersData: function (selection) {
+    return this.getLeadersUrl(selection).then(function (leadersUrl) {
+      return cachedFetch.set(getLeadersKey(selection), leadersUrl);
+    });
   },
 
   getInitialState: function () {
     return {
-      selection: this.defaultSelection()
+      selection: {
+        iso2: null,
+        offset: null
+      }
     };
   },
 
@@ -28,6 +48,7 @@ var Leaderboard = React.createClass({
 
     if (!this.isMobile()) {
       map = <LeaderMap
+        countriesGeoUrl={this.props.config.countriesGeoUrl}
         leafletJSUrl={this.props.config.leafletJSUrl}
         leafletCSSUrl={this.props.config.leafletCSSUrl}
         selection={this.state.selection}
@@ -52,27 +73,27 @@ var Leaderboard = React.createClass({
     this.forceUpdate();
   },
 
-  loadLeadersData: function (selection) {
-    return cachedFetch.get("countriesInfo").then(function (countriesInfo) {
-      var leadersUrl = this.props.config.globalLeadersUrl;
+  updateUrl: function (selection) {
+    var newUrlParams = [];
 
-      var countryInfo = countriesInfo[selection.iso2];
-      if (countryInfo !== undefined) {
-        leadersUrl = countryInfo.leaders_url;
-      }
+    if (selection.iso2 != null && selection.iso2.length > 0) {
+      newUrlParams.push("region=" + selection.iso2);
+    }
 
-      if (selection.offset != null) {
-        leadersUrl += "?offset=" + selection.offset;
-      }
+    if (selection.offset != null) {
+      newUrlParams.push("offset=" + selection.offset);
+    }
 
-      cachedFetch.set(
-        getLeadersKey(selection.iso2, selection.offset),
-        leadersUrl
-      );
-    }.bind(this));
+    var newUrl = "?";
+    if (newUrlParams.length > 0) {
+      newUrl += newUrlParams.join("&");
+    }
+
+    window.history.pushState({}, "", newUrl);
   },
 
   handleUpdateSelection: function (selection) {
+    this.updateUrl(selection);
     this.loadLeadersData(selection).then(function() {
       this.setState({selection: selection});
     }.bind(this));
@@ -81,15 +102,20 @@ var Leaderboard = React.createClass({
   componentWillMount: function () {
     window.addEventListener("resize", this.handleResize);
     dispatcher.on("updateSelection", this.handleUpdateSelection);
+  },
+
+  componentDidMount: function () {
+    var locationParams = getUrlParameters(window.location.search);
+    var selection = {
+      iso2: locationParams.region || null,
+      offset: locationParams.offset || null
+    };
+    this.handleUpdateSelection(selection);
   }
 });
 
 module.exports = {
   init: function (config) {
-    cachedFetch.set(getLeadersKey(null, null), config.globalLeadersUrl);
-
-    cachedFetch.set("countriesGeo", config.countriesGeoUrl);
-
     cachedFetch.set("countriesInfo", config.countriesInfoUrl, function (countriesInfo) {
       var countries = {};
       for(var country_i in countriesInfo) {

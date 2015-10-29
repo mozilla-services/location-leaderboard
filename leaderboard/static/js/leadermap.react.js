@@ -51,7 +51,7 @@ module.exports = React.createClass({
       type: "script"
     });
 
-    var geoJsonLoaded = cachedFetch.get("countriesGeo");
+    var geoJsonLoaded = cachedFetch.set("countriesGeo", this.props.countriesGeoUrl);
 
     this.mapReady = Promise.all([javascriptLoaded, geoJsonLoaded]).then(function (results) {
       var countriesGeo = results[1];
@@ -109,24 +109,25 @@ module.exports = React.createClass({
     }.bind(this));
   },
 
-  updateSelectedCountry: function (newSelection) {
-    var oldSelection = this.props.selection;
-    var oldSelectedLayer = this.countryLayers[oldSelection.iso2];
-    if (oldSelectedLayer !== undefined) {
-      oldSelectedLayer.setStyle(countryStyleFilled);
-    }
+  updateSelectedCountry: function (oldSelection, newSelection) {
+    this.mapReady.then(function () {
+      var oldSelectedLayer = this.countryLayers[oldSelection.iso2];
+      if (oldSelectedLayer !== undefined) {
+        oldSelectedLayer.setStyle(countryStyleFilled);
+      }
 
-    var newSelectedLayer = this.countryLayers[newSelection.iso2];
-    if (newSelectedLayer !== undefined) {
-      newSelectedLayer.setStyle(countryStyleSelected);
-      this.map.fitBounds(newSelectedLayer.getLatLngs());
-    } else {
-      this.map.fitWorld();
-    }
+      var newSelectedLayer = this.countryLayers[newSelection.iso2];
+      if (newSelectedLayer !== undefined) {
+        newSelectedLayer.setStyle(countryStyleSelected);
+        this.map.fitBounds(newSelectedLayer.getLatLngs());
+      } else {
+        this.map.fitWorld();
+      }
+    }.bind(this));
   },
 
   componentWillReceiveProps: function (newProps) {
-    this.updateSelectedCountry(newProps.selection);
+    this.updateSelectedCountry(this.props.selection, newProps.selection);
   },
 
   render: function () {
