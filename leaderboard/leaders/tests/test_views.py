@@ -122,10 +122,12 @@ class LeadersGlobalListTests(TestCase):
             'previous': None,
             'results': [
                 {
+                    'uid': contributor2.uid,
                     'name': contributor2.name,
                     'observations': 4,
                     'rank': 1,
                 }, {
+                    'uid': contributor1.uid,
                     'name': contributor1.name,
                     'observations': 3,
                     'rank': 2,
@@ -217,6 +219,7 @@ class LeaderCountryListViewTests(TestCase):
             'count': 1,
             'previous': None,
             'results': [{
+                'uid': contributor.uid,
                 'name': contributor.name,
                 'observations': 2,
                 'rank': 1,
