@@ -5,7 +5,6 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from leaderboard.leaders.serializers import ContributorRankSerializer
 from leaderboard.contributors.models import (
     Contribution,
     ContributorRank,
@@ -52,17 +51,23 @@ class LeaderProfileTests(TestCase):
         self.assertEqual(profile_data['name'], contributor.name)
         self.assertEqual(len(profile_data['ranks']), 3)
         self.assertIn({
-            'country': ContributorRankSerializer.GLOBAL_SLUG,
+            'country': None,
             'observations': 6,
             'rank': 1
         }, profile_data['ranks'])
         self.assertIn({
-            'country': country1.iso2,
+            'country': {
+                'iso2': country1.iso2,
+                'name': country1.name,
+            },
             'observations': 3,
             'rank': 1
         }, profile_data['ranks'])
         self.assertIn({
-            'country': country2.iso2,
+            'country': {
+                'iso2': country2.iso2,
+                'name': country2.name,
+            },
             'observations': 3,
             'rank': 1
         }, profile_data['ranks'])

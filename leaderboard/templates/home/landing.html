@@ -61,6 +61,8 @@
           countriesGeoUrl: '{% static "geojson/countries.named.geojson" %}',
           countriesInfoUrl: '{% url "countries-list" %}',
           globalLeadersUrl: '{% url "leaders-global-list" %}',
+          countryLeadersUrl: '{% url "leaders-country-list" country_id="XX" %}',
+          leaderProfileUrl: '{% url "leaders-profile" uid="XX" %}',
         });
 
         try {

@@ -1,6 +1,17 @@
 from rest_framework import serializers
 
 from leaderboard.contributors.models import Contributor, ContributorRank
+from leaderboard.locations.models import Country
+
+
+class ContributorRankCountrySerializer(serializers.ModelSerializer):
+    """
+    Serialize a country for a given contributor rank.
+    """
+
+    class Meta:
+        model = Country
+        fields = ('name', 'iso2')
 
 
 class ContributorRankSerializer(serializers.ModelSerializer):
@@ -10,19 +21,11 @@ class ContributorRankSerializer(serializers.ModelSerializer):
     """
     GLOBAL_SLUG = 'Global'
 
-    country = serializers.SlugRelatedField(
-        slug_field='iso2', read_only=True)
+    country = ContributorRankCountrySerializer()
 
     class Meta:
         model = ContributorRank
         fields = ('country', 'observations', 'rank')
-
-    def to_representation(self, obj):
-        data = super(ContributorRankSerializer, self).to_representation(obj)
-        # When country is set to None it denotes a global rank
-        if data['country'] is None:
-            data['country'] = self.GLOBAL_SLUG
-        return data
 
 
 class LeaderProfileSerializer(serializers.ModelSerializer):

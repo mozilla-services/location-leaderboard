@@ -1,19 +1,17 @@
 module.exports = {
   keys: {},
   set: function (key, url, preprocessor) {
-    if (this.keys[key] != null) {
-      return;
-    }
-
-    this.keys[key] = window.fetch(url).then(function (response) {
-      return response.json();
-    });
-
-    if (preprocessor != null) {
-      this.keys[key] = this.keys[key].then(function (data) {
-        return preprocessor(data);
+    if (this.keys[key] == null) {
+      this.keys[key] = window.fetch(url).then(function (response) {
+        return response.json();
       });
-    };
+
+      if (preprocessor != null) {
+        this.keys[key] = this.keys[key].then(function (data) {
+          return preprocessor(data);
+        });
+      };
+    }
 
     return this.keys[key];
   },

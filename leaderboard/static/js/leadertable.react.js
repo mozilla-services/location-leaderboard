@@ -8,7 +8,8 @@ var LeadersButton = React.createClass({
     if(this.props.offset != null) {
       dispatcher.fire("updateSelection", {
         iso2: this.props.selection.iso2,
-        offset: this.props.offset
+        offset: this.props.offset,
+        highlight: this.props.selection.highlight
       });
     }
   },
@@ -29,7 +30,7 @@ var LeadersHeader = React.createClass({
     }
   },
 
-  componentWillMount: function () {
+  componentDidMount: function () {
     cachedFetch.get("countriesInfo").then(function (countriesInfo) {
       this.setState({countries: countriesInfo});
     }.bind(this));
@@ -86,6 +87,28 @@ var LeadersFooter = React.createClass({
   },
 });
 
+var LeadersTableRow = React.createClass({
+  handleClick: function (e) {
+    e.preventDefault();
+    dispatcher.fire("updateSelection", {
+      iso2: this.props.selection.iso2,
+      offset: this.props.selection.offset,
+      profile: this.props.leader.uid
+    });
+  },
+
+  render: function () {
+    var highlighted = (this.props.selection.highlight === this.props.leader.uid) ? "highlight" : "";
+    return (
+      <tr className={highlighted}>
+        <td>{this.props.leader.rank}</td>
+        <td><a href="" onClick={this.handleClick}>{this.props.leader.name}</a></td>
+        <td>{this.props.leader.observations}</td>
+      </tr>
+    )
+  }
+});
+
 var LeadersTable = React.createClass({
   render: function() {
     return (
@@ -100,13 +123,12 @@ var LeadersTable = React.createClass({
         <tbody>
           {this.props.leaders.map(function (leader) {
             return (
-              <tr>
-                <td>{leader.rank}</td>
-                <td>{leader.name}</td>
-                <td>{leader.observations}</td>
-              </tr>
+              <LeadersTableRow
+                selection={this.props.selection}
+                leader={leader}
+              />
             )
-          })}
+          }.bind(this))}
         </tbody>
       </table>
     );
@@ -168,7 +190,10 @@ module.exports = React.createClass({
           selection={this.props.selection}
         />
         <div id="leaders-table-content">
-          <LeadersTable leaders={this.state.leaders} />
+          <LeadersTable
+            selection={this.props.selection}
+            leaders={this.state.leaders}
+          />
         </div>
         <LeadersFooter
           selection={this.props.selection}

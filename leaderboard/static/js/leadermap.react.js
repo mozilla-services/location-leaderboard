@@ -112,12 +112,12 @@ module.exports = React.createClass({
   updateSelectedCountry: function (oldSelection, newSelection) {
     this.mapReady.then(function () {
       var oldSelectedLayer = this.countryLayers[oldSelection.iso2];
-      if (oldSelectedLayer !== undefined) {
+      if (oldSelectedLayer != null) {
         oldSelectedLayer.setStyle(countryStyleFilled);
       }
 
       var newSelectedLayer = this.countryLayers[newSelection.iso2];
-      if (newSelectedLayer !== undefined) {
+      if (newSelectedLayer != null) {
         newSelectedLayer.setStyle(countryStyleSelected);
         this.map.fitBounds(newSelectedLayer.getLatLngs());
       } else {
