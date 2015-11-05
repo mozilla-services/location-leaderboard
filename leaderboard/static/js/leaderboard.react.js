@@ -63,7 +63,7 @@ var Leaderboard = React.createClass({
 
     for (var paramName in selection) {
       var paramValue = selection[paramName];
-      if (paramValue != null) {
+      if (paramValue != null && paramValue.length > 0) {
         newLocationParams.push(paramName + '=' + paramValue);
       }
     }
@@ -79,7 +79,7 @@ var Leaderboard = React.createClass({
   getLeadersUrl: function (selection) {
     var leadersUrl = this.props.config.globalLeadersUrl;
 
-    if (selection.iso2 != null) {
+    if (selection.iso2 != null && selection.iso2.length > 0) {
       leadersUrl = this.props.config.countryLeadersUrl.replace("XX", selection.iso2);
     }
 
