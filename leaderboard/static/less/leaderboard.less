@@ -11,24 +11,38 @@
     }
 
     #leaders-table {
-        @media only screen and (min-width: 480px) {
-            #leaders-table-content {
-              width: 100%;
-              height: 492px;
-              overflow-y: auto;
-            }
-        }
-
         select {
             width: 100%;
         }
 
         table {
             width: 100%;
+
+            td {
+              padding-left: 5px;
+            }
+
+            .highlight {
+              background-color: #DDD;
+            }
         }
 
         button {
             width: 100%;
         }
+    }
+}
+        
+@media only screen and (min-width: 480px) {
+    #leaders-table-content {
+      width: 100%;
+      height: 492px;
+      overflow-y: auto;
+    }
+    
+    #leaders-profile-content {
+      width: 100%;
+      height: 550px;
+      overflow-y: auto;
     }
 }

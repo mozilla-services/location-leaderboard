@@ -330,7 +330,10 @@ Get Leader
           name: <str>,
           ranks: [
             {
-              country: <str>,
+              country: {
+                iso2: <str>,
+                name: <str>
+              },
               observations: <int>,
               rank: <int>
             }

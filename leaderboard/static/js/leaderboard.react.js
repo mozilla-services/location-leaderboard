@@ -5,36 +5,16 @@ var getLeadersKey = require("./leaderskey.js");
 
 var LeaderMap = require("./leadermap.react.js");
 var LeaderTable = require("./leadertable.react.js");
+var LeaderProfile = require("./leaderprofile.react.js");
 
 var Leaderboard = React.createClass({
-  getLeadersUrl: function (selection) {
-    return cachedFetch.get("countriesInfo").then(function (countriesInfo) {
-      var leadersUrl = this.props.config.globalLeadersUrl;
-
-      var countryInfo = countriesInfo[selection.iso2];
-      if (countryInfo !== undefined) {
-        leadersUrl = countryInfo.leaders_url;
-      }
-
-      if (selection.offset != null) {
-        leadersUrl += "?offset=" + selection.offset;
-      }
-
-      return leadersUrl;
-    }.bind(this));
-  },
-
-  loadLeadersData: function (selection) {
-    return this.getLeadersUrl(selection).then(function (leadersUrl) {
-      return cachedFetch.set(getLeadersKey(selection), leadersUrl);
-    });
-  },
-
   getInitialState: function () {
     return {
       selection: {
         iso2: null,
-        offset: null
+        offset: null,
+        profile: null,
+        highlight: null
       }
     };
   },
@@ -45,6 +25,7 @@ var Leaderboard = React.createClass({
 
   render: function() {
     var map;
+    var content;
 
     if (!this.isMobile()) {
       map = <LeaderMap
@@ -55,48 +36,87 @@ var Leaderboard = React.createClass({
       />;
     }
 
+    if (this.state.selection.profile != null) {
+      content = <LeaderProfile
+        selection={this.state.selection}
+      />;
+    } else {
+      content = <LeaderTable
+        selection={this.state.selection}
+      />;
+    }
+
     return (
       <div id="leaderboard" className="section">
         <div className="col span_8_of_12">
           {map}
         </div>
         <div className="col span_4_of_12">
-          <LeaderTable
-            selection={this.state.selection}
-          />
+          {content}
         </div>
       </div>
     );
   },
 
-  handleResize: function () {
-    this.forceUpdate();
+  updateWindowLocation: function (selection) {
+    var newLocationParams = [];
+
+    for (var paramName in selection) {
+      var paramValue = selection[paramName];
+      if (paramValue != null) {
+        newLocationParams.push(paramName + '=' + paramValue);
+      }
+    }
+
+    var newLocation = "?";
+    if (newLocationParams.length > 0) {
+      newLocation += newLocationParams.join("&");
+    }
+
+    window.history.pushState({}, "", newLocation);
   },
 
-  updateUrl: function (selection) {
-    var newUrlParams = [];
+  getLeadersUrl: function (selection) {
+    var leadersUrl = this.props.config.globalLeadersUrl;
 
-    if (selection.iso2 != null && selection.iso2.length > 0) {
-      newUrlParams.push("region=" + selection.iso2);
+    if (selection.iso2 != null) {
+      leadersUrl = this.props.config.countryLeadersUrl.replace("XX", selection.iso2);
     }
 
     if (selection.offset != null) {
-      newUrlParams.push("offset=" + selection.offset);
+      leadersUrl += "?offset=" + selection.offset;
     }
 
-    var newUrl = "?";
-    if (newUrlParams.length > 0) {
-      newUrl += newUrlParams.join("&");
-    }
+    return leadersUrl;
+  },
 
-    window.history.pushState({}, "", newUrl);
+  loadLeadersData: function (selection) {
+    var leadersUrl = this.getLeadersUrl(selection);
+    return cachedFetch.set(getLeadersKey(selection), leadersUrl);
+  },
+
+  loadProfileData: function (selection) {
+    var profileUrl = this.props.config.leaderProfileUrl.replace("XX", selection.profile);
+    var profileKey = "profile:" + selection.profile;
+    return cachedFetch.set(profileKey, profileUrl);
   },
 
   handleUpdateSelection: function (selection) {
-    this.updateUrl(selection);
-    this.loadLeadersData(selection).then(function() {
-      this.setState({selection: selection});
-    }.bind(this));
+    this.updateWindowLocation(selection);
+
+    if (selection.profile != null) {
+      this.loadProfileData(selection).then(function() {
+        this.setState({selection: selection});
+      }.bind(this));
+    } else {
+      this.loadLeadersData(selection).then(function() {
+        this.setState({selection: selection});
+      }.bind(this));
+    }
+  },
+
+  handleResize: function () {
+    this.forceUpdate();
   },
 
   componentWillMount: function () {
@@ -105,12 +125,7 @@ var Leaderboard = React.createClass({
   },
 
   componentDidMount: function () {
-    var locationParams = getUrlParameters(window.location.search);
-    var selection = {
-      iso2: locationParams.region || null,
-      offset: locationParams.offset || null
-    };
-    this.handleUpdateSelection(selection);
+    this.handleUpdateSelection(getUrlParameters(window.location.search));
   }
 });
 
