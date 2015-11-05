@@ -63,7 +63,7 @@ var Leaderboard = React.createClass({
 
     for (var paramName in selection) {
       var paramValue = selection[paramName];
-      if (paramValue != null && paramValue.length > 0) {
+      if ((paramValue != null) && ((("" + paramValue).length) > 0)) {
         newLocationParams.push(paramName + '=' + paramValue);
       }
     }
