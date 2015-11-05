@@ -4,8 +4,10 @@
   "description": "A server for collecting contributions to the Mozilla Location Services project. ",
   "main": "gulpfile.js",
   "dependencies": {
+    "babelify": "^6.4.0",
     "base64-js": "^0.0.8",
     "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.0",
     "gulp-browserify": "^0.5.1",
     "gulp-less": "^3.0.3",
     "gulp-livereload": "^3.8.0",

@@ -35,9 +35,9 @@ module.exports = React.createClass({
 
   componentDidMount: function () {
     var profileKey = "profile:" + this.props.selection.profile;
-    cachedFetch.get(profileKey).then(function (profile) {
+    cachedFetch.get(profileKey).then((profile) => {
       this.setState({profile: profile});
-    }.bind(this));
+    });
   },
 
   render: function () {
@@ -53,14 +53,14 @@ module.exports = React.createClass({
             </tr>
           </thead>
           <tbody>
-            {this.state.profile.ranks.map(function (rank) {
+            {this.state.profile.ranks.map((rank) => {
               return (
                 <LeaderCountryRow
                   selection={this.props.selection}
                   rank={rank}
                 />
               )
-            }.bind(this))}
+            })}
           </tbody>
         </table>
       </div>

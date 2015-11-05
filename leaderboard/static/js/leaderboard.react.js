@@ -105,13 +105,13 @@ var Leaderboard = React.createClass({
     this.updateWindowLocation(selection);
 
     if (selection.profile != null) {
-      this.loadProfileData(selection).then(function() {
+      this.loadProfileData(selection).then(() => {
         this.setState({selection: selection});
-      }.bind(this));
+      });
     } else {
-      this.loadLeadersData(selection).then(function() {
+      this.loadLeadersData(selection).then(() => {
         this.setState({selection: selection});
-      }.bind(this));
+      });
     }
   },
 
