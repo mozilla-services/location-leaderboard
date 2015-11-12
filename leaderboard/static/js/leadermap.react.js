@@ -53,7 +53,7 @@ module.exports = React.createClass({
 
     var geoJsonLoaded = cachedFetch.set("countriesGeo", this.props.countriesGeoUrl);
 
-    this.mapReady = Promise.all([javascriptLoaded, geoJsonLoaded]).then(function (results) {
+    this.mapReady = Promise.all([javascriptLoaded, geoJsonLoaded]).then((results) => {
       var countriesGeo = results[1];
 
       this.map = L.map("leaders-map", {
@@ -72,33 +72,33 @@ module.exports = React.createClass({
 
       this.popup = L.popup().setLatLng(L.latLng(20, 0)).setContent(popupContent).openOn(this.map);
 
-      var onEachFeature = function (countryShapeInfo, layer) {
+      var onEachFeature = (countryShapeInfo, layer) => {
         var countryIso2 = countryShapeInfo.properties.alpha2;
 
         this.countryLayers[countryIso2] = layer;
 
         layer.setStyle(countryStyleFilled);
 
-        layer.on("mouseover", function (e) {
+        layer.on("mouseover", (e) => {
           layer.setStyle(countryStyleHover);
         });
 
-        layer.on("mouseout", function (e) {
+        layer.on("mouseout", (e) => {
           if (countryIso2 === this.props.selection.iso2) {
             layer.setStyle(countryStyleSelected);
           } else {
             layer.setStyle(countryStyleFilled);
           }
-        }.bind(this));
+        });
 
-        layer.on("click", function (e) {
+        layer.on("click", (e) => {
           this.map.closePopup(this.popup);
 
           dispatcher.fire("updateSelection", {
             iso2: countryIso2
           });
-        }.bind(this));
-      }.bind(this);
+        });
+      }
 
       L.geoJson(
         countriesGeo, {
@@ -106,11 +106,11 @@ module.exports = React.createClass({
           style: countryStyleEmpty
         }
       ).addTo(this.map);
-    }.bind(this));
+    });
   },
 
   updateSelectedCountry: function (oldSelection, newSelection) {
-    this.mapReady.then(function () {
+    this.mapReady.then(() => {
       var oldSelectedLayer = this.countryLayers[oldSelection.iso2];
       if (oldSelectedLayer != null) {
         oldSelectedLayer.setStyle(countryStyleFilled);
@@ -123,7 +123,7 @@ module.exports = React.createClass({
       } else {
         this.map.fitWorld();
       }
-    }.bind(this));
+    });
   },
 
   componentWillReceiveProps: function (newProps) {

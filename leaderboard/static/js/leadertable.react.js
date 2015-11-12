@@ -31,9 +31,9 @@ var LeadersHeader = React.createClass({
   },
 
   componentDidMount: function () {
-    cachedFetch.get("countriesInfo").then(function (countriesInfo) {
+    cachedFetch.get("countriesInfo").then((countriesInfo) => {
       this.setState({countries: countriesInfo});
-    }.bind(this));
+    });
   },
 
   handleChange: function (e) {
@@ -121,14 +121,14 @@ var LeadersTable = React.createClass({
           </tr>
         </thead>
         <tbody>
-          {this.props.leaders.map(function (leader) {
+          {this.props.leaders.map((leader) => {
             return (
               <LeadersTableRow
                 selection={this.props.selection}
                 leader={leader}
               />
             )
-          }.bind(this))}
+          })}
         </tbody>
       </table>
     );
@@ -149,7 +149,7 @@ module.exports = React.createClass({
     var leadersKey = getLeadersKey(selection);
 
     if (cachedFetch.keys[leadersKey] != null ) {
-      cachedFetch.get(leadersKey).then(function(data) {
+      cachedFetch.get(leadersKey).then((data) => {
         var nextOffset = getUrlParameters(data.next).offset;
 
         var prevOffset;
@@ -163,7 +163,7 @@ module.exports = React.createClass({
           nextOffset: nextOffset,
           prevOffset: prevOffset
         });
-      }.bind(this));
+      });
     }
   },
 
