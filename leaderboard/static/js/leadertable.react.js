@@ -87,7 +87,7 @@ var LeadersFooter = React.createClass({
   },
 });
 
-var LeadersTableRow = React.createClass({
+var LeaderTableRow = React.createClass({
   handleClick: function (e) {
     e.preventDefault();
     dispatcher.fire("updateSelection", {
@@ -109,7 +109,7 @@ var LeadersTableRow = React.createClass({
   }
 });
 
-var LeadersTable = React.createClass({
+var LeaderTableRows = React.createClass({
   render: function() {
     return (
       <table className="table">
@@ -123,7 +123,7 @@ var LeadersTable = React.createClass({
         <tbody>
           {this.props.leaders.map((leader) => {
             return (
-              <LeadersTableRow
+              <LeaderTableRow
                 selection={this.props.selection}
                 leader={leader}
               />
@@ -135,7 +135,7 @@ var LeadersTable = React.createClass({
   },
 });
 
-module.exports = React.createClass({
+var LeaderTable = React.createClass({
   getInitialState: function () {
     return {
       total: 0,
@@ -190,7 +190,7 @@ module.exports = React.createClass({
           selection={this.props.selection}
         />
         <div id="leaders-table-content">
-          <LeadersTable
+          <LeaderTableRows
             selection={this.props.selection}
             leaders={this.state.leaders}
           />
@@ -207,3 +207,7 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = {
+  LeaderTable: LeaderTable
+};

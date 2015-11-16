@@ -39,7 +39,7 @@ var mapAttribution= "<a href=\"https://www.mapbox.com/about/maps\">© Mapbox</a>
 var popupContent = "<h3 class=\"center\">Click on a country to see its local " +
   "leaderboard!</h3>";
 
-module.exports = React.createClass({
+var LeaderMap = React.createClass({
   map: null,
   popup: null,
   mapReady: null,
@@ -139,3 +139,7 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = {
+  LeaderMap: LeaderMap
+};

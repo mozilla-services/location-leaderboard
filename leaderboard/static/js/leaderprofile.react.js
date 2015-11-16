@@ -24,7 +24,7 @@ var LeaderCountryRow = React.createClass({
   }
 });
 
-module.exports = React.createClass({
+var LeaderProfile = React.createClass({
   getInitialState: function () {
     return {
       profile: {
@@ -67,3 +67,7 @@ module.exports = React.createClass({
     )
   }
 });
+
+module.exports = {
+  LeaderProfile: LeaderProfile
+};

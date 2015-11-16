@@ -3,9 +3,9 @@ var cachedFetch = require("./cachedfetch.js");
 var getUrlParameters = require('./parseurl.js').getUrlParameters;
 var getLeadersKey = require("./leaderskey.js");
 
-var LeaderMap = require("./leadermap.react.js");
-var LeaderTable = require("./leadertable.react.js");
-var LeaderProfile = require("./leaderprofile.react.js");
+var LeaderMap = require("./leadermap.react.js").LeaderMap;
+var LeaderTable = require("./leadertable.react.js").LeaderTable;
+var LeaderProfile = require("./leaderprofile.react.js").LeaderProfile;
 
 var Leaderboard = React.createClass({
   getInitialState: function () {
