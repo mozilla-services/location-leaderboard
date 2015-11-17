@@ -1,8 +1,8 @@
 # leaderboard-server
 
-[![Build Status](https://api.travis-ci.org/JaredKerim-Mozilla/leaderboard-server.svg)](https://travis-ci.org/JaredKerim-Mozilla/leaderboard-server)
+[![Build Status](https://travis-ci.org/mozilla-services/location-leaderboard.svg)](https://travis-ci.org/mozilla-services/location-leaderboard)
 
-[![Coverage Status](https://coveralls.io/repos/JaredKerim-Mozilla/leaderboard-server/badge.svg?branch=master&service=github)](https://coveralls.io/github/JaredKerim-Mozilla/leaderboard-server?branch=master)
+[![Coverage Status](https://coveralls.io/repos/mozilla-services/location-leaderboard/badge.svg?branch=master&service=github)](https://coveralls.io/github/mozilla-services/location-leaderboard?branch=master)
 
 Overview
 ---
