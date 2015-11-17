@@ -51,7 +51,9 @@ var LeadersHeader = React.createClass({
             <option value="">All Countries</option>
             {Object.keys(countries).map(function(countryIso2) {
               return (
-                <option value={countryIso2}>{countries[countryIso2].name}</option>
+                <option key={countryIso2} value={countryIso2}>
+                  {countries[countryIso2].name}
+                </option>
               )
             })}
           </select>
@@ -124,6 +126,7 @@ var LeaderTableRows = React.createClass({
           {this.props.leaders.map((leader) => {
             return (
               <LeaderTableRow
+                key={leader.uid}
                 selection={this.props.selection}
                 leader={leader}
               />
