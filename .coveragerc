@@ -1,11 +1,11 @@
 # .coveragerc to control coverage.py
 [run]
 include =
-    leaderboard/*
+    location-leaderboard/*
 
 omit = 
-    leaderboard/wsgi
-    leaderboard/settings*
+    location-leaderboard/wsgi
+    location-leaderboard/settings*
 
 [report]
 # Regexes for lines to exclude from consideration
