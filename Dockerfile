@@ -1,18 +1,8 @@
 FROM python:2.7
-
 ENV PYTHONUNBUFFERED 1
-
-RUN apt-get update 
-RUN apt-get install -y binutils libproj-dev gdal-bin
-
-RUN mkdir /leaderboard
-
 WORKDIR /leaderboard
-
-ADD requirements.txt /leaderboard/
-
-RUN pip install -r requirements.txt
-
-ADD . /leaderboard/
-
-CMD gunicorn -b 0.0.0.0:7001 leaderboard.wsgi
+EXPOSE 7001
+ENTRYPOINT gunicorn -b 0.0.0.0:7001 leaderboard.wsgi
+COPY . /leaderboard
+RUN apt-get update && apt-get install -y binutils libproj-dev gdal-bin && apt-get -y clean 
+RUN pip install -r requirements.txt --no-cache-dir --disable-pip-version-check
