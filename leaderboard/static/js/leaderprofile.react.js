@@ -1,3 +1,5 @@
+/*global React*/
+
 var cachedFetch = require("./cachedfetch.js");
 var dispatcher = require("./dispatcher.js");
 
@@ -20,7 +22,7 @@ var LeaderCountryRow = React.createClass({
         <td><a href="" onClick={this.handleClick}>{countryName}</a></td>
         <td>{this.props.rank.observations}</td>
       </tr>
-    )
+    );
   }
 });
 
@@ -60,12 +62,12 @@ var LeaderProfile = React.createClass({
                   selection={this.props.selection}
                   rank={rank}
                 />
-              )
+              );
             })}
           </tbody>
         </table>
       </div>
-    )
+    );
   }
 });
 

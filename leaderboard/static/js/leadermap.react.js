@@ -1,6 +1,8 @@
+/*global React L*/
+
 var dispatcher = require("./dispatcher.js");
 var cachedFetch = require("./cachedfetch.js");
-var promisescript = require('promisescript');
+var promisescript = require("promisescript");
 
 // Style constants
 var countryStyleEmpty = {
@@ -79,11 +81,11 @@ var LeaderMap = React.createClass({
 
         layer.setStyle(countryStyleFilled);
 
-        layer.on("mouseover", (e) => {
+        layer.on("mouseover", () => {
           layer.setStyle(countryStyleHover);
         });
 
-        layer.on("mouseout", (e) => {
+        layer.on("mouseout", () => {
           if (countryIso2 === this.props.selection.iso2) {
             layer.setStyle(countryStyleSelected);
           } else {
@@ -91,14 +93,14 @@ var LeaderMap = React.createClass({
           }
         });
 
-        layer.on("click", (e) => {
+        layer.on("click", () => {
           this.map.closePopup(this.popup);
 
           dispatcher.fire("updateSelection", {
             iso2: countryIso2
           });
         });
-      }
+      };
 
       L.geoJson(
         countriesGeo, {

@@ -1,3 +1,5 @@
+/*global React*/
+
 var dispatcher = require("./dispatcher.js");
 var cachedFetch = require("./cachedfetch.js");
 var getUrlParameters = require("./parseurl.js").getUrlParameters;
@@ -20,14 +22,14 @@ var LeadersButton = React.createClass({
     return (
         <button onClick={this.handleClick} className={classes}>{this.props.name}</button>
     );
-  },
+  }
 });
 
 var LeadersHeader = React.createClass({
   getInitialState: function () {
     return {
-      countries: [],
-    }
+      countries: []
+    };
   },
 
   componentDidMount: function () {
@@ -54,13 +56,13 @@ var LeadersHeader = React.createClass({
                 <option key={countryIso2} value={countryIso2}>
                   {countries[countryIso2].name}
                 </option>
-              )
+              );
             })}
           </select>
         </div>
       </div>
     );
-  },
+  }
 });
 
 var LeadersFooter = React.createClass({
@@ -86,7 +88,7 @@ var LeadersFooter = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 });
 
 var LeaderTableRow = React.createClass({
@@ -107,7 +109,7 @@ var LeaderTableRow = React.createClass({
         <td><a href="" onClick={this.handleClick}>{this.props.leader.name}</a></td>
         <td>{this.props.leader.observations}</td>
       </tr>
-    )
+    );
   }
 });
 
@@ -130,12 +132,12 @@ var LeaderTableRows = React.createClass({
                 selection={this.props.selection}
                 leader={leader}
               />
-            )
+            );
           })}
         </tbody>
       </table>
     );
-  },
+  }
 });
 
 var LeaderTable = React.createClass({
@@ -179,8 +181,8 @@ var LeaderTable = React.createClass({
   },
 
   render: function() {
-    var start = 0,
-        stop = 0;
+    var start = 0;
+    var stop = 0;
 
     if (this.state.leaders.length > 0) {
       start = this.state.leaders[0].rank;

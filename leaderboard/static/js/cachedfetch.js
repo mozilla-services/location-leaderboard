@@ -10,7 +10,7 @@ module.exports = {
         this.keys[key] = this.keys[key].then(function (data) {
           return preprocessor(data);
         });
-      };
+      }
     }
 
     return this.keys[key];

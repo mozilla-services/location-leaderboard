@@ -17,4 +17,4 @@ function getUrlParameters(url) {
 module.exports = {
   parseUrl: parseUrl,
   getUrlParameters: getUrlParameters
-}
+};
