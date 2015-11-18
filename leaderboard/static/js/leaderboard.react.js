@@ -1,6 +1,8 @@
+/*global React ReactDOM*/
+
 var dispatcher = require("./dispatcher.js");
 var cachedFetch = require("./cachedfetch.js");
-var getUrlParameters = require('./parseurl.js').getUrlParameters;
+var getUrlParameters = require("./parseurl.js").getUrlParameters;
 var getLeadersKey = require("./leaderskey.js");
 
 var LeaderMap = require("./leadermap.react.js").LeaderMap;
@@ -64,7 +66,7 @@ var Leaderboard = React.createClass({
     for (var paramName in selection) {
       var paramValue = selection[paramName];
       if ((paramValue != null) && ((("" + paramValue).length) > 0)) {
-        newLocationParams.push(paramName + '=' + paramValue);
+        newLocationParams.push(paramName + "=" + paramValue);
       }
     }
 
@@ -145,4 +147,4 @@ module.exports = {
       document.getElementById("leaderboard-container")
     );
   }
-}
+};
