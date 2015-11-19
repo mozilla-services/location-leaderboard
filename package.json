@@ -21,12 +21,13 @@
     "mocha": "^2.3.4",
     "promisescript": "^1.1.0",
     "react": "^0.14.2",
+    "react-addons-test-utils": "^0.14.2",
     "reactify": "^1.1.1",
     "skin-deep": "^0.13.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "./manage.py test"
+    "test": "mocha leaderboard/static/js/tests/ --compilers js:babel/register"
   },
   "repository": {
     "type": "git",
