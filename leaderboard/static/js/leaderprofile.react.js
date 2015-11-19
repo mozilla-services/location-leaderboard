@@ -72,5 +72,6 @@ var LeaderProfile = React.createClass({
 });
 
 module.exports = {
+  LeaderCountryRow: LeaderCountryRow,
   LeaderProfile: LeaderProfile
 };
