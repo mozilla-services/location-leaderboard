@@ -61,3 +61,58 @@ class TestFXARedirectView(MockRequestTestMixin, TestCase):
         response = self.client.get(reverse('fxa-redirect'), {'code': 'asdf'})
 
         self.assertEqual(response.status_code, 400)
+
+    def test_multiple_contributors_signin_creates_multiple_contributors(self):
+        access_token1 = 'access1'
+        authorization_data = {
+            'access_token': access_token1,
+            'auth_at': 123,
+            'expires_in': 123,
+            'scope': 'profile',
+            'token_type': 'bearer'
+        }
+        fxa_response = mock.MagicMock()
+        fxa_response.status_code = 200
+        fxa_response.content = json.dumps(authorization_data)
+        self.mock_post.return_value = fxa_response
+
+        response = self.client.get(reverse('fxa-redirect'), {'code': 'code1'})
+
+        self.assertEqual(response.status_code, 200)
+
+        response_data = json.loads(response.content)
+
+        self.assertEqual(
+            response_data,
+            {'access_token': access_token1},
+        )
+
+        self.assertEqual(Contributor.objects.count(), 1)
+        Contributor.objects.get(access_token=access_token1)
+
+        access_token2 = 'access2'
+        authorization_data = {
+            'access_token': access_token2,
+            'auth_at': 123,
+            'expires_in': 123,
+            'scope': 'profile',
+            'token_type': 'bearer'
+        }
+        fxa_response = mock.MagicMock()
+        fxa_response.status_code = 200
+        fxa_response.content = json.dumps(authorization_data)
+        self.mock_post.return_value = fxa_response
+
+        response = self.client.get(reverse('fxa-redirect'), {'code': 'code2'})
+
+        self.assertEqual(response.status_code, 200)
+
+        response_data = json.loads(response.content)
+
+        self.assertEqual(
+            response_data,
+            {'access_token': access_token2},
+        )
+
+        self.assertEqual(Contributor.objects.count(), 2)
+        Contributor.objects.get(access_token=access_token2)

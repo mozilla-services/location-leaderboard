@@ -23,7 +23,6 @@ class ContributorFactory(factory.DjangoModelFactory):
     access_token = factory.LazyAttribute(lambda o: str(uuid.uuid4().hex))
     uid = factory.LazyAttribute(lambda o: str(uuid.uuid4().hex))
     name = factory.LazyAttribute(lambda o: faker.name())
-    email = factory.LazyAttribute(lambda o: '{}@example.com'.format(o.name))
 
     class Meta:
         model = Contributor

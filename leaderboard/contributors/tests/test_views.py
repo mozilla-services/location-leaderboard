@@ -239,19 +239,3 @@ class UpdateContributorTests(TestCase):
 
         contributor = Contributor.objects.get(id=self.contributor.id)
         self.assertEqual(contributor.access_token, old_access_token)
-
-    def test_name_must_be_unique(self):
-        new_name = 'new name'
-        ContributorFactory(name=new_name)
-
-        response = self.client.patch(
-            reverse('contributors-detail', kwargs={
-                'uid': self.contributor.uid,
-            }),
-            json.dumps({'name': new_name}),
-            content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
-        )
-
-        self.assertEquals(response.status_code, 400)

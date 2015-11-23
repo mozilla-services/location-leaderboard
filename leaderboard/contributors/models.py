@@ -37,8 +37,7 @@ class Contributor(models.Model):
     """
     access_token = models.CharField(max_length=255, unique=True)
     uid = models.CharField(max_length=255, default='')
-    name = models.CharField(max_length=255, default='', unique=True)
-    email = models.EmailField(unique=True, default='')
+    name = models.CharField(max_length=255, default='')
 
     objects = ContributorQuerySet.as_manager()
 
