@@ -3,7 +3,7 @@
 var cachedFetch = require("./cachedfetch.js");
 var dispatcher = require("./dispatcher.js");
 
-var LeaderCountryRow = React.createClass({
+var LeaderProfileRow = React.createClass({
   handleClick: function (e) {
     e.preventDefault();
     dispatcher.fire("updateSelection", {
@@ -57,7 +57,7 @@ var LeaderProfile = React.createClass({
           <tbody>
             {this.state.profile.ranks.map((rank) => {
               return (
-                <LeaderCountryRow
+                <LeaderProfileRow
                   key={this.props.selection.profile + rank.observations}
                   selection={this.props.selection}
                   rank={rank}
@@ -72,6 +72,6 @@ var LeaderProfile = React.createClass({
 });
 
 module.exports = {
-  LeaderCountryRow: LeaderCountryRow,
+  LeaderProfileRow: LeaderProfileRow,
   LeaderProfile: LeaderProfile
 };

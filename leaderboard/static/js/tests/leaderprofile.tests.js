@@ -1,15 +1,17 @@
+"use strict";
+
 global.React = require("react");
 
 var expect = require("chai").expect;
-var LeaderCountryRow = require("../leaderprofile.react.js").LeaderCountryRow;
+var LeaderProfileRow = require("../leaderprofile.react.js").LeaderProfileRow;
 var skinDeep = require("skin-deep");
 
-describe("LeaderCountryRow Tests", function () {
+describe("LeaderProfileRow Tests", function () {
   var vdom, instance;
 
   beforeEach(function() {
     var tree = skinDeep.shallowRender(
-      <LeaderCountryRow
+      <LeaderProfileRow
         selection={{iso2: 'CA'}}
         rank={{
           country: null,
