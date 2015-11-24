@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -26,9 +28,14 @@ class FXARedirectView(FXAClientMixin, APIView):
             raise ValidationError('Unable to retrieve access token.')
 
         contributor, created = Contributor.objects.get_or_create(
-            access_token=access_token)
+            access_token=access_token,
+            uid=uuid4().hex,
+        )
 
         return Response(
-            {'access_token': access_token},
+            {
+                'access_token': access_token,
+                'uid': contributor.uid,
+            },
             content_type='application/json',
         )
