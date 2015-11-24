@@ -30,10 +30,8 @@ class TestFXARedirectView(MockRequestTestMixin, TestCase):
 
         response_data = json.loads(response.content)
 
-        self.assertEqual(
-            response_data,
-            {'access_token': access_token},
-        )
+        self.assertEqual(response_data['access_token'], access_token)
+        self.assertIn('uid', response_data)
 
         contributor = Contributor.objects.get()
         self.assertEqual(contributor.access_token, access_token)
@@ -82,10 +80,7 @@ class TestFXARedirectView(MockRequestTestMixin, TestCase):
 
         response_data = json.loads(response.content)
 
-        self.assertEqual(
-            response_data,
-            {'access_token': access_token1},
-        )
+        self.assertEqual(response_data['access_token'], access_token1)
 
         self.assertEqual(Contributor.objects.count(), 1)
         Contributor.objects.get(access_token=access_token1)
@@ -109,10 +104,7 @@ class TestFXARedirectView(MockRequestTestMixin, TestCase):
 
         response_data = json.loads(response.content)
 
-        self.assertEqual(
-            response_data,
-            {'access_token': access_token2},
-        )
+        self.assertEqual(response_data['access_token'], access_token2)
 
         self.assertEqual(Contributor.objects.count(), 2)
         Contributor.objects.get(access_token=access_token2)
