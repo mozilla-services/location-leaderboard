@@ -1,24 +1,16 @@
-language: python
+sudo: required
 
-python:
-  - 2.7
+services:
+  - docker
 
 addons:
   postgresql: "9.3"
 
-install:
-  - pip install -r requirements.txt
-  - pip install coveralls
-  - pip install flake8
-
 before_script:
-  - psql -U postgres -c 'CREATE DATABASE leaderboard_test;'
+  - psql -U postgres -c "CREATE DATABASE leaderboard_test;"
   - psql -U postgres -c "CREATE EXTENSION postgis" -d leaderboard_test
   - psql -U postgres -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
-  - flake8 leaderboard
+  - docker build -t leaderboard .
 
 script:
-  - coverage run manage.py test leaderboard
-
-after_success:
-  - coveralls
+  - docker run -e "TRAVIS=$TRAVIS" -e "TRAVIS_JOB_ID=$TRAVIS_JOB_ID" --net=host -t leaderboard sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
