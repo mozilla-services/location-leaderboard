@@ -174,6 +174,12 @@ class TestContributorRank(TestCase):
         # 1 self.country2
         self.assertEqual(ContributorRank.objects.count(), 6)
 
+        for contributor in (self.contributor1, self.contributor2):
+            for country in (None, self.country1, self.country2):
+                self.assertTrue(
+                    ContributorRank.objects.filter(
+                        contributor=contributor, country=country).exists())
+
     def test_compute_ranks_sums_and_ranks_global_contributions(self):
         # Contributor1 is the global leader with 7 contributions
         contributor1_global_rank = (
@@ -227,3 +233,15 @@ class TestContributorRank(TestCase):
     def test_compute_ranks_ignores_contributors_with_no_contributions(self):
         self.assertFalse(ContributorRank.objects.filter(
             contributor=self.contributor3).exists())
+
+    def test_new_contributions_updates_existing_ranks(self):
+        self.assertEqual(ContributorRank.objects.count(), 6)
+
+        self.create_contribution(self.contributor1, self.country1)
+
+        ContributorRank.compute_ranks()
+
+        self.assertEqual(ContributorRank.objects.count(), 6)
+        rank = ContributorRank.objects.get(
+            contributor=self.contributor1, country=self.country1)
+        self.assertEqual(rank.observations, 3)

@@ -1,3 +1,4 @@
+from bulk_update.helper import bulk_update
 from django.db import models
 
 from leaderboard.locations.models import Country
@@ -77,11 +78,7 @@ class ContributorRank(models.Model):
         ordering = ('rank',)
 
     def __unicode__(self):
-        return u'{rank}: {contributor} for {country}'.format(
-            rank=self.rank,
-            contributor=self.contributor,
-            country=self.country,
-        )
+        return unicode(self.id)
 
     @staticmethod
     def compute_ranks():
@@ -92,23 +89,47 @@ class ContributorRank(models.Model):
         # When country is None, compute the global ranks
         countries = [None] + list(Country.objects.all())
 
+        contributor_ranks = {
+            (rank.contributor_id, rank.country_id): rank
+            for rank in ContributorRank.objects.all()
+        }
+
+        new_contributor_ranks = []
+        updated_contributor_ranks = []
+
         for country in countries:
             contributors = Contributor.objects.all()
 
             if country:
                 contributors = contributors.filter_country(country.iso2)
 
-            for rank, contributor in enumerate(
-                    contributors.annotate_observations(), start=1):
+            ranked_contributors = enumerate(
+                contributors.annotate_observations(), start=1)
 
-                contributor_rank, created = (
-                    ContributorRank.objects.get_or_create(
-                        contributor=contributor, country=country)
-                )
+            for rank, contributor in ranked_contributors:
 
-                contributor_rank.rank = rank
-                contributor_rank.observations = contributor.observations
-                contributor_rank.save()
+                country_id = country.id if country else None
+                contributor_rank = contributor_ranks.get(
+                    (contributor.id, country_id), None)
+
+                if contributor_rank:
+                    contributor_rank.rank = rank
+                    contributor_rank.observations = contributor.observations
+                    updated_contributor_ranks.append(contributor_rank)
+                else:
+                    new_contributor_ranks.append(ContributorRank(
+                        contributor=contributor,
+                        country=country,
+                        rank=rank,
+                        observations=contributor.observations,
+                    ))
+
+        bulk_update(
+            updated_contributor_ranks,
+            update_fields=['rank', 'observations'],
+            batch_size=100,
+        )
+        ContributorRank.objects.bulk_create(new_contributor_ranks)
 
 
 class Contribution(models.Model):
