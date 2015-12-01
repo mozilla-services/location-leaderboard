@@ -1,7 +1,21 @@
+##############
+# PRODUCTION #
+##############
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+ALLOWED_HOSTS = [
+    # All production DNS names must appear in here
+    # example:
+    # 'leaderboard.mozilla.org',
+]
+
+###############
+# DEVELOPMENT #
+###############
 # Enable to set `debug` context variable within templates
+# This is for DEVELOPMENT environments ONLY
 #class IPList(object):
 #
 #    def __contains__(self, *args, **kwargs):
@@ -9,9 +23,13 @@ DEBUG = False
 #
 #INTERNAL_IPS = IPList()
 
+
+##########
+# SHARED #
+##########
+
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     #'default': {
     #    'ENGINE': 'django.db.backends.sqlite3',
