@@ -1,34 +1,7 @@
+import operator
+
 from bulk_update.helper import bulk_update
 from django.db import models
-
-from leaderboard.locations.models import Country
-
-
-class ContributorQuerySet(models.QuerySet):
-    """
-    A queryset for Contributors with additional
-    support for country filtering and observation
-    annotation.
-    """
-
-    def filter_country(self, country_code):
-        """
-        Filter for contributors within the country
-        defined by the provided ISO2 country code.
-        """
-        return self.filter(
-            contribution__tile__country__iso2=country_code)
-
-    def annotate_observations(self):
-        """
-        Add an 'observations' field to the contributor
-        objects which counts the number of contributions
-        made by the contributor, and sort by the
-        greatest contributors first.
-        """
-        return self.annotate(
-            observations=models.Sum('contribution__observations')
-        ).filter(observations__gt=0).order_by('-observations')
 
 
 class Contributor(models.Model):
@@ -39,8 +12,6 @@ class Contributor(models.Model):
     access_token = models.CharField(max_length=255, unique=True)
     uid = models.CharField(max_length=255, default='')
     name = models.CharField(max_length=255, default='')
-
-    objects = ContributorQuerySet.as_manager()
 
     def __unicode__(self):
         return self.name
@@ -78,58 +49,94 @@ class ContributorRank(models.Model):
         ordering = ('rank',)
 
     def __unicode__(self):
-        return unicode(self.id)
+        return u'country: {} contributor: {} observations: {} rank: {}'.format(
+            self.id,
+            self.country_id,
+            self.contributor_id,
+            self.observations,
+            self.rank,
+        )
 
-    @staticmethod
-    def compute_ranks():
-        """
-        Compute the number of observations and ranks for
-        each contributor for each country and globally.
-        """
-        # When country is None, compute the global ranks
-        countries = [None] + list(Country.objects.all())
-
+    @classmethod
+    def _compute_ranks(cls, contributions):
+        # Pull the entire set of ranks into memory.
         contributor_ranks = {
             (rank.contributor_id, rank.country_id): rank
             for rank in ContributorRank.objects.all()
         }
 
-        new_contributor_ranks = []
-        updated_contributor_ranks = []
+        for contribution in contributions:
+            # Each contribution counts towards the rank in the country in which
+            # it was made, as well as the global rank for that contributor.
+            for country_id in (contribution.tile.country_id, None):
+                rank_key = (contribution.contributor_id, country_id)
+                contributor_rank = contributor_ranks.get(rank_key, None)
 
-        for country in countries:
-            contributors = Contributor.objects.all()
-
-            if country:
-                contributors = contributors.filter_country(country.iso2)
-
-            ranked_contributors = enumerate(
-                contributors.annotate_observations(), start=1)
-
-            for rank, contributor in ranked_contributors:
-
-                country_id = country.id if country else None
-                contributor_rank = contributor_ranks.get(
-                    (contributor.id, country_id), None)
-
-                if contributor_rank:
-                    contributor_rank.rank = rank
-                    contributor_rank.observations = contributor.observations
-                    updated_contributor_ranks.append(contributor_rank)
+                if contributor_rank is not None:
+                    # This rank exists and so we can update its observation
+                    # count.
+                    contributor_rank.observations += contribution.observations
                 else:
-                    new_contributor_ranks.append(ContributorRank(
-                        contributor=contributor,
-                        country=country,
-                        rank=rank,
-                        observations=contributor.observations,
-                    ))
+                    # This contributor has no rank for that country, we should
+                    # create a new one.
+                    contributor_ranks[rank_key] = ContributorRank(
+                        contributor_id=contribution.contributor_id,
+                        country_id=country_id,
+                        observations=contribution.observations,
+                    )
 
+        # Create a list of country ids from the contribution keys.
+        # This saves us from needing to query the database for the country ids.
+        country_ids = set([
+            country_id for (contributor_id, country_id)
+            in contributor_ranks.keys()
+        ])
+
+        for country_id in country_ids:
+            country_ranks = sorted(
+                # We have every rank for a country in memory already,
+                # so we can just filter and sort this dataset.
+                [
+                    rank for rank in contributor_ranks.values()
+                    if rank.country_id == country_id
+                ],
+                key=operator.attrgetter('observations'),
+                reverse=True,
+            )
+
+            # Assign each contributor their new ranks for this country.
+            for rank, contributor_rank in enumerate(country_ranks, start=1):
+                contributor_rank.rank = rank
+
+        # Update the ranks which already appear in the database.
         bulk_update(
-            updated_contributor_ranks,
+            [
+                rank for rank in contributor_ranks.values()
+                if rank.id is not None
+            ],
             update_fields=['rank', 'observations'],
             batch_size=100,
         )
-        ContributorRank.objects.bulk_create(new_contributor_ranks)
+
+        # Insert the new ranks which we created.
+        ContributorRank.objects.bulk_create(
+            [rank for rank in contributor_ranks.values() if rank.id is None],
+        )
+
+        # Remove the contributions which we used to calculate the new ranks.
+        contribution_ids = [contribution.id for contribution in contributions]
+        Contribution.objects.filter(id__in=contribution_ids).delete()
+
+    @classmethod
+    def compute_ranks(cls):
+        """
+        Compute the number of observations and ranks for
+        each contributor for each country and globally.
+        """
+        # Pull all contributions into memory,  we will only work on this
+        # dataset while new contributions enter the database.
+        contributions = list(Contribution.objects.all().select_related('tile'))
+        cls._compute_ranks(contributions)
 
 
 class Contribution(models.Model):
@@ -145,9 +152,4 @@ class Contribution(models.Model):
         unique_together = ('date', 'tile', 'contributor')
 
     def __unicode__(self):
-        return u'{user}-{date}-{tile}: {observations}'.format(
-            user=self.contributor,
-            date=self.date,
-            tile=self.tile,
-            observations=self.observations,
-        )
+        return unicode(self.date)
