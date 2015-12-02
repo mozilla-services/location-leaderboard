@@ -1,0 +1,21 @@
+# Change this to update where your leaderboard is running.
+upstream leaderboard {
+    server localhost:7001;
+}
+
+server {
+
+    # Listening on port 80 is nice but you have to start nginx
+    # with the right permissions.
+    listen 80;
+
+    location /static/ {
+        root /leaderboard/leaderboard/served/;
+    }
+
+    location / {
+        # Default to leaderboard.
+        proxy_pass http://leaderboard;
+        proxy_set_header Host $host;
+    }
+}
