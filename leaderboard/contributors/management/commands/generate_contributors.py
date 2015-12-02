@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 from leaderboard.locations.models import Country
 from leaderboard.locations.tests.test_models import TileFactory
-from leaderboard.contributors.models import Contribution
+from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
 
 
@@ -16,20 +16,25 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
-        parser.add_argument('num_contributors', type=int)
+        parser.add_argument('new_contributors', type=int)
+        parser.add_argument('new_contributions', type=int)
 
     def handle(self, *args, **options):
         countries = Country.objects.all()
 
-        for num_contributor in range(options['num_contributors']):
-            contributor = ContributorFactory()
+        for num_contributor in range(options['new_contributors']):
+            ContributorFactory()
 
-            for contribution_i in range(random.randint(3, 10)):
-                country = random.choice(countries)
-                contribution = Contribution.objects.create(
-                    contributor=contributor,
-                    date=datetime.date.today(),
-                    tile=TileFactory(country=country),
-                    observations=random.randint(100, 1000),
-                )
-                print contribution
+        contributors = list(Contributor.objects.all())
+
+        new_contributions = []
+
+        for contribution_i in range(options['new_contributions']):
+            new_contributions.append(Contribution(
+                contributor=random.choice(contributors),
+                date=datetime.date.today(),
+                tile=TileFactory(country=random.choice(countries)),
+                observations=random.randint(100, 1000),
+            ))
+
+        Contribution.objects.bulk_create(new_contributions)
