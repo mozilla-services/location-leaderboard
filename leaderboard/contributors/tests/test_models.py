@@ -38,93 +38,6 @@ class ContributionFactory(factory.DjangoModelFactory):
         model = Contribution
 
 
-class TestContributorQuerySet(TestCase):
-
-    def test_filter_country(self):
-        country1 = CountryFactory()
-        country2 = CountryFactory()
-
-        contributor1 = ContributorFactory()
-        contributor2 = ContributorFactory()
-        contributor3 = ContributorFactory()
-
-        ContributionFactory(
-            contributor=contributor1,
-            tile=TileFactory(country=country1),
-        )
-
-        ContributionFactory(
-            contributor=contributor2,
-            tile=TileFactory(country=country2),
-        )
-
-        ContributionFactory(
-            contributor=contributor3,
-            tile=TileFactory(country=country1),
-        )
-
-        ContributionFactory(
-            contributor=contributor3,
-            tile=TileFactory(country=country2),
-        )
-
-        contributors = Contributor.objects.filter_country(country2.iso2)
-        self.assertEqual(set(contributors), set([contributor2, contributor3]))
-
-    def test_annotate_observations(self):
-        country = CountryFactory()
-
-        contributor1 = ContributorFactory()
-
-        for i in range(10):
-            ContributionFactory(
-                contributor=contributor1,
-                tile=TileFactory(country=country),
-            )
-
-        contributor2 = ContributorFactory()
-
-        for i in range(20):
-            ContributionFactory(
-                contributor=contributor2,
-                tile=TileFactory(country=country),
-            )
-
-        annotated_contributors = Contributor.objects.annotate_observations()
-        contributor_observations = [
-            (contributor, contributor.observations) for
-            contributor in annotated_contributors
-        ]
-        expected_observations = [(contributor2, 20), (contributor1, 10)]
-        self.assertEqual(contributor_observations, expected_observations)
-
-    def test_observations_annotated_and_filtered_by_country(self):
-        contributor = ContributorFactory()
-
-        country1 = CountryFactory()
-        country2 = CountryFactory()
-
-        for country in (country1, country2):
-            for i in range(10):
-                ContributionFactory(
-                    contributor=contributor,
-                    tile=TileFactory(country=country),
-                )
-
-        annotated_contributor = (Contributor.objects
-                                            .filter_country(country1.iso2)
-                                            .annotate_observations()
-                                            .get())
-
-        self.assertEqual(annotated_contributor.observations, 10)
-
-        annotated_contributor = (Contributor.objects
-                                            .annotate_observations()
-                                            .get())
-
-        self.assertEqual(annotated_contributor.observations, 20)
-
-
 class TestContributorRank(TestCase):
 
     def create_contribution(self, contributor, country):
@@ -132,7 +45,7 @@ class TestContributorRank(TestCase):
             contributor=contributor,
             date=datetime.date.today(),
             observations=1,
-            tile=TileFactory(country=country)
+            tile=TileFactory(country=country),
         )
 
     def setUp(self):
@@ -244,4 +157,57 @@ class TestContributorRank(TestCase):
         self.assertEqual(ContributorRank.objects.count(), 6)
         rank = ContributorRank.objects.get(
             contributor=self.contributor1, country=self.country1)
+
         self.assertEqual(rank.observations, 3)
+
+    def test_compute_ranks_removes_observations_when_complete(self):
+        self.assertEqual(Contribution.objects.count(), 0)
+
+        for i in range(3):
+            self.create_contribution(self.contributor1, self.country1)
+
+        self.assertEqual(Contribution.objects.count(), 3)
+
+        ContributorRank.compute_ranks()
+
+        self.assertEqual(Contribution.objects.count(), 0)
+
+    def test_contribution_set_frozen_during_rank_computation(self):
+        contributor = ContributorFactory()
+        country = CountryFactory()
+
+        self.assertEqual(Contribution.objects.count(), 0)
+
+        for i in range(3):
+            self.create_contribution(contributor, country)
+
+        self.assertEqual(Contribution.objects.count(), 3)
+
+        contributions = list(Contribution.objects.all().select_related())
+        self.assertEqual(Contribution.objects.count(), 3)
+
+        for i in range(3):
+            self.create_contribution(contributor, country)
+
+        self.assertEqual(Contribution.objects.count(), 6)
+
+        ContributorRank._compute_ranks(contributions)
+
+        self.assertEqual(ContributorRank.objects.get(
+            contributor=contributor, country=None).observations, 3)
+        self.assertEqual(Contribution.objects.count(), 3)
+
+    def test_compute_ranks_updates_existing_ranks(self):
+        self.assertEqual(ContributorRank.objects.get(
+            country=None, contributor=self.contributor1).rank, 1)
+        self.assertEqual(ContributorRank.objects.get(
+            country=None, contributor=self.contributor2).rank, 2)
+
+        ContributionFactory(contributor=self.contributor2, observations=10)
+
+        ContributorRank.compute_ranks()
+
+        self.assertEqual(ContributorRank.objects.get(
+            country=None, contributor=self.contributor1).rank, 2)
+        self.assertEqual(ContributorRank.objects.get(
+            country=None, contributor=self.contributor2).rank, 1)
