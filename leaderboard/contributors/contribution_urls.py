@@ -8,6 +8,6 @@ from leaderboard.contributors.views import (
 urlpatterns = [
     url('^config/$', ContributionsConfigView.as_view(),
         name='contributions-config'),
-    url('^/$', CreateContributionsView.as_view(),
+    url('^$', CreateContributionsView.as_view(),
         name='contributions-create'),
 ]
