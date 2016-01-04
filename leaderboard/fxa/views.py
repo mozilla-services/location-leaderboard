@@ -1,11 +1,26 @@
 from uuid import uuid4
 
+from django.conf import settings
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from leaderboard.contributors.models import Contributor
 from leaderboard.fxa.client import FXAClientMixin, FXAException
+
+
+class FXAConfigView(APIView):
+
+    def get(self, request):
+        return Response(
+            {
+                'client_id': settings.FXA_CLIENT_ID,
+                'scopes': settings.FXA_SCOPES,
+                'oauth_uri': settings.FXA_OAUTH_URI,
+                'profile_uri': settings.FXA_PROFILE_URI,
+            },
+            content_type='application/json',
+        )
 
 
 class FXARedirectView(FXAClientMixin, APIView):
