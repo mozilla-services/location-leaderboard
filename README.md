@@ -16,6 +16,58 @@ the top contributions.
 
 # API Interface
 
+Firefox Accounts
+----
+  Get the configuration parameters the server uses to integrate with Firefox Accounts.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/api/v1/fxa/config/
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      {
+          scopes: <str>,
+          profile_uri: <str>,
+          client_id: <str>,
+          oauth_uri: <str>
+      }
+
+* **Error Responses:**
+
+  None
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/fxa/config/",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
 Get Countries
 ----
   Get a list of all countries that have been contributed to, the total number of contributions,
@@ -158,10 +210,10 @@ Update Contributor Name
 
 * **Error Responses:**
 
-  * **Code:** 400 INVALID  
+  * **Code:** 400 INVALID
   * **Content:** `{"detail":"JSON parse error - Expecting object: line 1 column 1 (char 0)"}`
 
-  * **Code:** 401 UNAUTHORIZED 
+  * **Code:** 401 UNAUTHORIZED
   * **Content:** `{"detail":"Unable to determine a valid Firefox Accounts authorization token"}`
 
 * **Sample Call:**

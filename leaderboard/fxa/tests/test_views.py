@@ -8,6 +8,30 @@ from leaderboard.contributors.models import Contributor
 from leaderboard.fxa.tests.test_client import MockRequestTestMixin
 
 
+class TestFXAConfigView(TestCase):
+
+    def test_config_view_returns_fxa_settings(self):
+        test_settings = {
+            'FXA_CLIENT_ID': 'fxa_client_id',
+            'FXA_SCOPES': 'leaderboard,profile',
+            'FXA_OAUTH_URI': 'http://example.com/v1/oauth/',
+            'FXA_PROFILE_URI': 'http://example.com/v1/profile/',
+        }
+
+        with self.settings(**test_settings):
+            response = self.client.get(reverse('fxa-config'))
+
+            self.assertEqual(response.status_code, 200)
+
+            response_data = json.loads(response.content)
+            self.assertEqual(response_data, {
+                'client_id': test_settings['FXA_CLIENT_ID'],
+                'scopes': test_settings['FXA_SCOPES'],
+                'oauth_uri': test_settings['FXA_OAUTH_URI'],
+                'profile_uri': test_settings['FXA_PROFILE_URI'],
+            })
+
+
 class TestFXARedirectView(MockRequestTestMixin, TestCase):
 
     def test_successful_redirect_returns_access_code(self):
