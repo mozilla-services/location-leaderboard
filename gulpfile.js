@@ -37,9 +37,9 @@ function less_task (name, input_paths, output_path) {
 less_task("less-sandstone", [sandstone_less_path], "./leaderboard/sandstone/static/sandstone/css/");
 less_task("less-leaderboard", [leaderboard_less_path], "./leaderboard/static/css/");
 
-// Basic usage 
+// Basic usage
 gulp.task("scripts", function() {
-  // Single entry point to browserify 
+  // Single entry point to browserify
   gulp.src("./leaderboard/static/js/leaderboard.react.js")
     .pipe(
       browserify({
@@ -54,7 +54,7 @@ gulp.task("scripts", function() {
 // Watch Files For Changes
 gulp.task("watch", function() {
   [
-    ["less-sandstone", sandstone_less_path], 
+    ["less-sandstone", sandstone_less_path],
     ["less-leaderboard", leaderboard_less_path],
     ["scripts", js_path],
   ].map(function (task) {
