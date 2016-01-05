@@ -13,4 +13,4 @@ before_script:
   - docker build -t leaderboard .
 
 script:
-  - docker run -e "TRAVIS=$TRAVIS" -e "TRAVIS_JOB_ID=$TRAVIS_JOB_ID" --net=host -t leaderboard sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
+  - docker run -e "DJANGO_SETTINGS_MODULE=leaderboard.settings.travis" -e "TRAVIS=$TRAVIS" -e "TRAVIS_JOB_ID=$TRAVIS_JOB_ID" --net=host -t leaderboard sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
