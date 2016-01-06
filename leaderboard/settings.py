@@ -135,6 +135,10 @@ CONTRIBUTION_TILE_SIZE = 1000
 # observations within that tile for a 24 hour period
 CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
 
+# FXA Shared Settings
+FXA_SCOPE = 'leaderboard,profile'
+
+# Travis settings
 if 'TRAVIS' in os.environ:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'travis'
@@ -158,6 +162,7 @@ if 'TRAVIS' in os.environ:
     FXA_OAUTH_URI = 'travis'
     FXA_PROFILE_URI = 'travis'
 
+# Docker build settings
 if 'DOCKER_BUILD' in os.environ:
     SECRET_KEY = 'docker'
 
