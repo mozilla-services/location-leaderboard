@@ -1,13 +1,39 @@
+import urlparse
+import urllib
 from uuid import uuid4
 
+from django.views.generic.base import View
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.shortcuts import redirect
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from leaderboard.contributors.models import Contributor
 from leaderboard.fxa.client import FXAClientMixin, FXAException
+
+
+class FXALoginView(View):
+
+    def get(self, request):
+        login_params = {
+            'action': 'signin',
+            'client_id': settings.FXA_CLIENT_ID,
+            'scope': settings.FXA_SCOPE,
+            'state': 99,
+            'redirect_uri': request.build_absolute_uri(
+                reverse('fxa-redirect')),
+        }
+
+        login_url = '{url}?{query}'.format(
+            url=urlparse.urljoin(
+                settings.FXA_OAUTH_URI,
+                'authorization',
+            ),
+            query=urllib.urlencode(login_params),
+        )
+        return redirect(login_url)
 
 
 class FXAConfigView(APIView):

@@ -8,6 +8,28 @@ from leaderboard.contributors.models import Contributor
 from leaderboard.fxa.tests.test_client import MockRequestTestMixin
 
 
+class TestFXALoginView(TestCase):
+
+    def test_login_view_redirects_to_fxa_url(self):
+        test_settings = {
+            'FXA_CLIENT_ID': 'fxa_client_id',
+            'FXA_SCOPES': 'leaderboard,profile',
+            'FXA_OAUTH_URI': 'http://example.com/v1/oauth/',
+            'FXA_PROFILE_URI': 'http://example.com/v1/profile/',
+        }
+
+        with self.settings(**test_settings):
+            response = self.client.get(reverse('fxa-login'))
+
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.url, (
+                'http://example.com/v1/oauth/authorization?action='
+                'signin&scope=leaderboard%2Cprofile&state=99&redirect_uri='
+                'http%3A%2F%2Ftestserver%2Fapi%2Fv1%2Ffxa%2Fredirect%2F'
+                '&client_id=fxa_client_id'
+            ))
+
+
 class TestFXAConfigView(TestCase):
 
     def test_config_view_returns_fxa_settings(self):
