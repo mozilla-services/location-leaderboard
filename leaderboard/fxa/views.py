@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
@@ -18,6 +19,8 @@ class FXAConfigView(APIView):
                 'scopes': settings.FXA_SCOPES,
                 'oauth_uri': settings.FXA_OAUTH_URI,
                 'profile_uri': settings.FXA_PROFILE_URI,
+                'redirect_uri': request.build_absolute_uri(
+                    reverse('fxa-redirect')),
             },
             content_type='application/json',
         )

@@ -47,10 +47,11 @@ Firefox Accounts
   JSON encoding
 
       {
+          client_id: <str>,
           scopes: <str>,
           profile_uri: <str>,
-          client_id: <str>,
-          oauth_uri: <str>
+          oauth_uri: <str>,
+          redirect_uri: <str>
       }
 
 * **Error Responses:**

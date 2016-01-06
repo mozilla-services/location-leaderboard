@@ -29,6 +29,8 @@ class TestFXAConfigView(TestCase):
                 'scopes': test_settings['FXA_SCOPES'],
                 'oauth_uri': test_settings['FXA_OAUTH_URI'],
                 'profile_uri': test_settings['FXA_PROFILE_URI'],
+                'redirect_uri': 'http://testserver{path}'.format(
+                    path=reverse('fxa-redirect')),
             })
 
 
