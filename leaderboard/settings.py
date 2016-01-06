@@ -19,9 +19,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3nx!_1%6g@!uo&9efusb++j!=w(=pe1wrsp99+uz+8%hltyatl'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -109,20 +106,6 @@ STATICFILES_FINDERS = (
 )
 
 
-# Database configuration for travis tests
-# Should be overridden by a local settings file for actual deployments
-if 'TRAVIS' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'leaderboard_test',
-            'USER': 'postgres',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '',
-        }
-    }
-
 # Django Rest Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': (
@@ -152,11 +135,31 @@ CONTRIBUTION_TILE_SIZE = 1000
 # observations within that tile for a 24 hour period
 CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
 
-# Firefox Accounts
-FXA_CLIENT_ID = 'TODO'
-FXA_SECRET = 'TODO'
-FXA_OAUTH_URI = 'TODO'
-FXA_PROFILE_URI = 'TODO'
+if 'TRAVIS' in os.environ:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = 'travis'
+
+    # Database configuration for travis tests
+    # Should be overridden by a local settings file for actual deployments
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'leaderboard_test',
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
+    # Firefox Accounts
+    FXA_CLIENT_ID = 'travis'
+    FXA_SECRET = 'travis'
+    FXA_OAUTH_URI = 'travis'
+    FXA_PROFILE_URI = 'travis'
+
+if 'DOCKER_BUILD' in os.environ:
+    SECRET_KEY = 'docker'
 
 try:
     from settings_local import *

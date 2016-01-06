@@ -2,6 +2,9 @@
 # PRODUCTION #
 ##############
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'TODO'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -50,5 +53,5 @@ DATABASES = {
 # Firefox Accounts
 FXA_CLIENT_ID = 'TODO'
 FXA_SECRET = 'TODO'
-FXA_OAUTH_URI = 'https://oauth-stable.dev.lcip.org/v1/'
-FXA_PROFILE_URI = 'https://stable.dev.lcip.org/profile/v1/'
+FXA_OAUTH_URI = 'TODO'
+FXA_PROFILE_URI = 'TODO'
