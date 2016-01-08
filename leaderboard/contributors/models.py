@@ -9,7 +9,7 @@ class Contributor(models.Model):
     A contributor to the leaderboard.
     Synchronizes with Firefox Accounts.
     """
-    access_token = models.CharField(max_length=255, unique=True)
+    fxa_uid = models.CharField(max_length=255, unique=True)
     uid = models.CharField(max_length=255, default='')
     name = models.CharField(max_length=255, default='')
 

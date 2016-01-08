@@ -6,6 +6,7 @@ from rest_framework.authentication import (
     BaseAuthentication,
 )
 
+from leaderboard.fxa.client import FXAClientMixin, FXAException
 from leaderboard.contributors.models import Contributor
 
 
@@ -14,7 +15,7 @@ from leaderboard.contributors.models import Contributor
 FXA_ACCESS_TOKEN_RE = re.compile('Bearer\s+(?P<token>[a-zA-Z0-9._~+\/\-=]+)')
 
 
-class OAuthTokenAuthentication(BaseAuthentication):
+class OAuthTokenAuthentication(FXAClientMixin, BaseAuthentication):
     """
     Simple token based authentication for OAuth v2.
     Clients should authenticate by passing the token key in the "Authorization"
@@ -40,9 +41,22 @@ class OAuthTokenAuthentication(BaseAuthentication):
         access_token = match.groupdict()['token']
 
         try:
-            contributor = Contributor.objects.get(access_token=access_token)
+            profile_data = self.fxa_client.get_profile_data(access_token)
+        except FXAException, e:
+            msg = 'Unable to communicate with Firefox Accounts: {}'.format(e)
+            raise AuthenticationFailed(msg)
+
+        fxa_uid = profile_data.get('uid', None)
+
+        if fxa_uid is None:
+            msg = 'Unable to retrieve Firefox Accounts profile information.'
+            raise AuthenticationFailed(msg)
+
+        try:
+            contributor = Contributor.objects.get(fxa_uid=fxa_uid)
         except Contributor.DoesNotExist:
-            raise AuthenticationFailed('Invalid token.')
+            msg = 'No contributor found.'
+            raise AuthenticationFailed(msg)
 
         return (contributor, access_token)
 

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from leaderboard.fxa.tests.test_client import MockRequestTestMixin
 from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.models import Tile
@@ -27,12 +28,13 @@ class ContributionConfigTests(TestCase):
         })
 
 
-class SubmitContributionTests(TestCase):
+class SubmitContributionTests(MockRequestTestMixin, TestCase):
 
     def setUp(self):
         super(SubmitContributionTests, self).setUp()
+        fxa_profile_data = self.setup_profile_call()
         self.country = CountryFactory()
-        self.contributor = ContributorFactory()
+        self.contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
 
     def test_submit_multiple_observations(self):
         now = time.time()
@@ -77,8 +79,7 @@ class SubmitContributionTests(TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
+            HTTP_AUTHORIZATION='Bearer asdf',
         )
 
         self.assertEqual(response.status_code, 201)
@@ -127,8 +128,7 @@ class SubmitContributionTests(TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
+            HTTP_AUTHORIZATION='Bearer asdf',
         )
 
         self.assertEqual(response.status_code, 400)
@@ -158,8 +158,7 @@ class SubmitContributionTests(TestCase):
             reverse('contributions-create'),
             payload,
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
+            HTTP_AUTHORIZATION='Bearer asdf',
             HTTP_CONTENT_ENCODING='gzip',
         )
 
@@ -172,8 +171,7 @@ class SubmitContributionTests(TestCase):
             reverse('contributions-create'),
             'asdf',
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
+            HTTP_AUTHORIZATION='Bearer asdf',
             HTTP_CONTENT_ENCODING='gzip',
         )
 
@@ -181,11 +179,12 @@ class SubmitContributionTests(TestCase):
         self.assertIn('gzip error', response.content)
 
 
-class UpdateContributorTests(TestCase):
+class UpdateContributorTests(MockRequestTestMixin, TestCase):
 
     def setUp(self):
         super(UpdateContributorTests, self).setUp()
-        self.contributor = ContributorFactory()
+        fxa_profile_data = self.setup_profile_call()
+        self.contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
 
     def test_update_contributor_saves_to_db(self):
         new_name = 'new name'
@@ -196,8 +195,7 @@ class UpdateContributorTests(TestCase):
             }),
             json.dumps({'name': new_name}),
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
+            HTTP_AUTHORIZATION='Bearer asdf',
         )
 
         self.assertEquals(response.status_code, 200)
@@ -208,34 +206,19 @@ class UpdateContributorTests(TestCase):
         contributor = Contributor.objects.get(id=self.contributor.id)
         self.assertEqual(contributor.name, new_name)
 
-    def test_update_contributor_cant_edit_another_contributor(self):
-        contributor2 = ContributorFactory()
-        new_name = 'new name'
-
-        response = self.client.patch(
-            reverse('contributors-detail', kwargs={'uid': contributor2.uid}),
-            json.dumps({'name': new_name}),
-            content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
-        )
-
-        self.assertEquals(response.status_code, 403)
-
     def test_update_contributor_doesnt_update_disallowed_field(self):
-        old_access_token = self.contributor.access_token
+        old_fxa_uid = self.contributor.fxa_uid
 
         response = self.client.patch(
             reverse('contributors-detail', kwargs={
                 'uid': self.contributor.uid,
             }),
-            json.dumps({'access_token': 'asdf'}),
+            json.dumps({'fxa_uid': 'asdf'}),
             content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(
-                self.contributor.access_token),
+            HTTP_AUTHORIZATION='Bearer asdf',
         )
 
         self.assertEqual(response.status_code, 200)
 
         contributor = Contributor.objects.get(id=self.contributor.id)
-        self.assertEqual(contributor.access_token, old_access_token)
+        self.assertEqual(contributor.fxa_uid, old_fxa_uid)

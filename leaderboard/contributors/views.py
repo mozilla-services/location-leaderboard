@@ -5,9 +5,6 @@ from rest_framework.views import APIView
 
 from leaderboard.fxa.authenticator import OAuthTokenAuthentication
 from leaderboard.contributors.models import Contributor
-from leaderboard.contributors.permissions import (
-    AccessTokenContributorPermission,
-)
 from leaderboard.contributors.serializers import (
     ContributionSerializer,
     ContributorNameSerializer,
@@ -27,7 +24,6 @@ class ContributionsConfigView(APIView):
 class UpdateContributorView(UpdateAPIView):
     queryset = Contributor.objects.all()
     authentication_classes = (OAuthTokenAuthentication,)
-    permission_classes = (AccessTokenContributorPermission,)
     serializer_class = ContributorNameSerializer
     lookup_field = 'uid'
 
