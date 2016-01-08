@@ -16,7 +16,7 @@ the top contributions.
 
 # API Interface
 
-Firefox Accounts
+Firefox Accounts Configuration
 ----
   Get the configuration parameters the server uses to integrate with Firefox Accounts.
 
@@ -62,6 +62,67 @@ Firefox Accounts
 
         $.ajax({
           url: "https://leaderboard.services.mozilla.com/api/v1/fxa/config/",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
+Firefox Accounts Redirect
+----
+  Handle a post-authorize redirect from Firefox Accounts back to the leaderboard.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/api/v1/fxa/redirect/
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  * **code**
+
+    The temporary authentication code provided by Firefox Accounts which must be exchanged for a long lived
+    access token.
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      {
+          leaderboard_uid: <str>,
+          fxa_uid: <str>,
+          fxa_auth_data: {
+              access_token: <str>,
+              refresh_token: <str>,
+              auth_at: <int>,
+              expires_in: <int>,
+              scope: <str>,
+              token_type: <str>
+          }
+      }
+
+* **Error Responses:**
+
+  None
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/fxa/redirect/?code=asdf",
           dataType: "json",
           type : "GET",
           success : function(r, data) {

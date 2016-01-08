@@ -1,8 +1,34 @@
 import json
+import urllib
 import urlparse
 
 import requests
+from django.core.urlresolvers import reverse
 from django.conf import settings
+
+
+def get_fxa_login_url(base_url):
+    """
+    Construct a URL which will trigger an Oauth login flow inside FXA.
+    """
+    login_params = {
+        'action': 'signin',
+        'access_type': 'offline',
+        'client_id': settings.FXA_CLIENT_ID,
+        'scope': settings.FXA_SCOPE,
+        'state': 99,
+        'redirect_uri': urlparse.urljoin(base_url, reverse('fxa-redirect')),
+    }
+
+    login_url = '{url}?{query}'.format(
+        url=urlparse.urljoin(
+            settings.FXA_OAUTH_URI,
+            '/v1/authorization',
+        ),
+        query=urllib.urlencode(login_params),
+    )
+
+    return login_url
 
 
 class FXAException(Exception):
@@ -13,26 +39,13 @@ class FXAException(Exception):
     pass
 
 
-def get_fxa_client():
-    """
-    Return an FXA client using the parameters set in your
-    project Django settings.
-    """
-    return FXAClient(
-        oauth_uri=settings.FXA_OAUTH_URI,
-        profile_uri=settings.FXA_PROFILE_URI,
-        client_id=settings.FXA_CLIENT_ID,
-        client_secret=settings.FXA_SECRET,
-    )
-
-
 class FXAClientMixin(object):
     """
     An object which has an FXA client.
     """
 
     def __init__(self, *args, **kwargs):
-        self.fxa_client = get_fxa_client()
+        self.fxa_client = FXAClient()
         super(FXAClientMixin, self).__init__(*args, **kwargs)
 
 
@@ -41,12 +54,6 @@ class FXAClient(object):
     An FXA client which allows you to communicate with the
     FXA oauth and profile services.
     """
-
-    def __init__(self, oauth_uri, profile_uri, client_id, client_secret):
-        self.oauth_uri = oauth_uri
-        self.profile_uri = profile_uri
-        self.client_id = client_id
-        self.client_secret = client_secret
 
     def _parse_response(self, response):
         """
@@ -79,12 +86,12 @@ class FXAClient(object):
         }
         """
         params = {
-            'client_id': self.client_id,
-            'client_secret': self.client_secret,
+            'client_id': settings.FXA_CLIENT_ID,
+            'client_secret': settings.FXA_SECRET,
             'code': code,
         }
 
-        token_url = urlparse.urljoin(self.oauth_uri, 'token')
+        token_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/token')
         response = requests.post(token_url, data=json.dumps(params))
 
         return self._parse_response(response)
@@ -104,7 +111,7 @@ class FXAClient(object):
             'Authorization': 'Bearer {}'.format(access_token),
         }
 
-        profile_url = urlparse.urljoin(self.profile_uri, 'profile')
+        profile_url = urlparse.urljoin(settings.FXA_PROFILE_URI, 'v1/profile')
         response = requests.get(profile_url, headers=headers)
 
         return self._parse_response(response)

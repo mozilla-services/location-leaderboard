@@ -136,7 +136,7 @@ CONTRIBUTION_TILE_SIZE = 1000
 CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
 
 # FXA Shared Settings
-FXA_SCOPE = 'leaderboard,profile'
+FXA_SCOPE = 'profile leaderboard'
 
 # Travis settings
 if 'TRAVIS' in os.environ:

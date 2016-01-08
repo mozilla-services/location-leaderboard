@@ -1,6 +1,8 @@
+import uuid
 import json
 
 import mock
+from django.conf import settings
 from django.test import TestCase
 
 from leaderboard.fxa.client import FXAClientMixin, FXAException
@@ -18,6 +20,35 @@ class MockRequestTestMixin(object):
         mock_post_patcher = mock.patch('leaderboard.fxa.client.requests.post')
         self.mock_post = mock_post_patcher.start()
         self.addCleanup(mock_post_patcher.stop)
+
+    def set_mock_response(self, mock, status_code=200, data=''):
+        response = mock.MagicMock()
+        response.status_code = status_code
+        response.content = json.dumps(data)
+        mock.return_value = response
+
+    def setup_auth_call(self):
+        fxa_auth_data = {
+            'access_token': uuid.uuid4().hex,
+            'auth_at': 123,
+            'expires_in': 123,
+            'scope': settings.FXA_SCOPE,
+            'token_type': 'bearer'
+        }
+
+        self.set_mock_response(self.mock_post, data=fxa_auth_data)
+
+        return fxa_auth_data
+
+    def setup_profile_call(self):
+        fxa_profile_data = {
+            'uid': uuid.uuid4().hex,
+            'email': 'user@example.com',
+        }
+
+        self.set_mock_response(self.mock_get, data=fxa_profile_data)
+
+        return fxa_profile_data
 
 
 class TestFXAClient(FXAClientMixin, MockRequestTestMixin, TestCase):
