@@ -71,6 +71,23 @@ class TestFXAClient(FXAClientMixin, MockRequestTestMixin, TestCase):
 
         self.assertEqual(response_data, authorization_data)
 
+    def test_get_refresh_token_returns_token(self):
+        authorization_data = {
+            'access_token': 'abcdef',
+            'expires_in': 123,
+            'scope': 'profile',
+            'token_type': 'bearer'
+        }
+
+        response = mock.MagicMock()
+        response.content = json.dumps(authorization_data)
+        response.status_code = 200
+        self.mock_post.return_value = response
+
+        response_data = self.fxa_client.refresh_authorization_token('asdf')
+
+        self.assertEqual(response_data, authorization_data)
+
     def test_get_profile_data_returns_profile(self):
         profile_data = {
             'email': 'email@-example.com',

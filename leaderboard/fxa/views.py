@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from leaderboard.contributors.models import Contributor
+from leaderboard.fxa.authenticator import OAuthTokenAuthentication
 from leaderboard.fxa.client import (
     get_fxa_login_url,
     FXAClientMixin,
@@ -86,3 +87,22 @@ class FXARedirectView(FXAClientMixin, APIView):
             },
             content_type='application/json',
         )
+
+
+class FXARefreshView(FXAClientMixin, APIView):
+    authentication_classes = (OAuthTokenAuthentication,)
+
+    def post(self, request):
+        refresh_token = request.POST.get('refresh_token', None)
+
+        if refresh_token is None:
+            raise ValidationError('Unable to determine refresh token.')
+
+        try:
+            fxa_auth_data = self.fxa_client.refresh_authorization_token(
+                refresh_token)
+        except FXAException:
+            raise ValidationError(
+                'Unable to communicate with Firefox Accounts.')
+
+        return Response(fxa_auth_data, content_type='application/json')
