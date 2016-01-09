@@ -79,6 +79,7 @@ class FXAClient(object):
 
         {
             'access_token': 'asdf',
+            'refresh_token': 'asdf',
             'auth_at': 1438019181,
             'expires_in': 172800,
             'scope': 'profile',
@@ -86,9 +87,36 @@ class FXAClient(object):
         }
         """
         params = {
+            'grant_type': 'authorization_code',
             'client_id': settings.FXA_CLIENT_ID,
             'client_secret': settings.FXA_SECRET,
             'code': code,
+        }
+
+        token_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/token')
+        response = requests.post(token_url, data=json.dumps(params))
+
+        return self._parse_response(response)
+
+    def refresh_authorization_token(self, refresh_token):
+        """
+        Exchange a refresh token for a new access token.
+
+        Example response:
+
+        {
+            'access_token': 'asdf',
+            'expires_in': 1209600,
+            'scope': 'profile',
+            'token_type': 'bearer'}
+        }
+        """
+        params = {
+            'grant_type': 'refresh_token',
+            'client_id': settings.FXA_CLIENT_ID,
+            'client_secret': settings.FXA_SECRET,
+            'scope': settings.FXA_SCOPE,
+            'refresh_token': refresh_token,
         }
 
         token_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/token')

@@ -3,6 +3,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.contributors.models import Contributor
 from leaderboard.fxa.client import get_fxa_login_url
 from leaderboard.fxa.tests.test_client import MockRequestTestMixin
@@ -182,3 +183,65 @@ class TestFXARedirectView(MockRequestTestMixin, TestCase):
 
         self.assertEqual(contributor.fxa_uid, fxa_profile_data2['uid'])
         self.assertTrue(contributor.uid is not None)
+
+
+class TestFXARefreshView(MockRequestTestMixin, TestCase):
+
+    def setUp(self):
+        super(TestFXARefreshView, self).setUp()
+        fxa_profile_data = self.setup_profile_call()
+        self.contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
+
+    def test_successful_refresh_returns_new_token(self):
+        fxa_auth_data = self.setup_auth_call()
+
+        response = self.client.post(
+            reverse('fxa-refresh'),
+            data={'refresh_token': 'asdf'},
+            HTTP_AUTHORIZATION='Bearer asdf',
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        response_data = json.loads(response.content)
+
+        self.assertEqual(response_data, fxa_auth_data)
+
+    def test_missing_access_token_raises_403(self):
+        response = self.client.post(
+            reverse('fxa-refresh'),
+            data={'refresh_token': 'asdf'},
+        )
+
+        self.assertEqual(response.status_code, 401)
+
+    def test_invalid_access_token_raises_403(self):
+        self.set_mock_response(self.mock_get, status_code=400)
+
+        response = self.client.post(
+            reverse('fxa-refresh'),
+            data={'refresh_token': 'asdf'},
+            HTTP_AUTHORIZATION='Bearer asdf',
+        )
+
+        self.assertEqual(response.status_code, 401)
+
+    def test_missing_refresh_token_raises_400(self):
+        response = self.client.post(
+            reverse('fxa-refresh'),
+            data={},
+            HTTP_AUTHORIZATION='Bearer asdf',
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_fxa_auth_error_raises_400(self):
+        self.set_mock_response(self.mock_post, status_code=400)
+
+        response = self.client.post(
+            reverse('fxa-refresh'),
+            data={'refresh_token': 'asdf'},
+            HTTP_AUTHORIZATION='Bearer asdf',
+        )
+
+        self.assertEqual(response.status_code, 400)

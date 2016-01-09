@@ -130,6 +130,69 @@ Firefox Accounts Redirect
           }
         });
 
+Firefox Accounts Refresh
+----
+  Refresh a Firefox Accounts access token for a new token using a refresh token.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/api/v1/fxa/refresh/
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  * **refresh_token**
+
+    A long lived Firefox Accounts refresh token retrieved through an Oauth redirect process.
+
+* **Request Headers**
+
+  * Authorization
+
+  A successful submission must include a valid Firefox Accounts authorization
+  bearer token
+
+  Example: `Authorization: Bearer kf94k5jsgsl3kj`
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      {
+          access_token: <str>,
+          expires_in: <int>,
+          scope: <str>,
+          token_type: <str>
+      }
+
+* **Error Responses:**
+
+  * **Code:** 400 INVALID
+  * **Content:** `{"detail":"JSON parse error - Expecting object: line 1 column 1 (char 0)"}`
+
+  * **Code:** 401 UNAUTHORIZED
+  * **Content:** `{"detail":"Unable to determine a valid Firefox Accounts authorization token"}`
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/api/v1/fxa/refresh/?refresh_token=asdf",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
 Get Countries
 ----
   Get a list of all countries that have been contributed to, the total number of contributions,
