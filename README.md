@@ -49,6 +49,7 @@ Firefox Accounts Configuration
       {
           client_id: <str>,
           scopes: <str>,
+          leaderboard_base_uri: <str>,
           profile_uri: <str>,
           oauth_uri: <str>,
           redirect_uri: <str>
