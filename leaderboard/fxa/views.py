@@ -33,6 +33,7 @@ class FXAConfigView(APIView):
                 'scopes': settings.FXA_SCOPE,
                 'oauth_uri': settings.FXA_OAUTH_URI,
                 'profile_uri': settings.FXA_PROFILE_URI,
+                'leaderboard_base_uri': request.build_absolute_uri('/'),
                 'redirect_uri': request.build_absolute_uri(
                     reverse('fxa-redirect')),
             },
