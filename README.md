@@ -16,6 +16,58 @@ the top contributions.
 
 # API Interface
 
+Leaderboard Version Info
+----
+  Return the version metadata for the deployed version of the code.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/__version__
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+  JSON encoding
+
+      {
+          "commit": <str>,
+          "tag": <str>,
+          "version": <str>,
+          "source": <str>
+      }
+
+* **Error Responses:**
+
+  None
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/__version__",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
 Firefox Accounts Configuration
 ----
   Get the configuration parameters the server uses to integrate with Firefox Accounts.
