@@ -1,3 +1,4 @@
+import urlparse
 from uuid import uuid4
 
 from django.views.generic.base import View
@@ -27,13 +28,17 @@ class FXALoginView(View):
 class FXAConfigView(APIView):
 
     def get(self, request):
+        parsed = urlparse.urlparse(request.build_absolute_uri('/'))
+        base_url = urlparse.urlunparse((
+            parsed.scheme, parsed.netloc, '', '', '', ''))
+
         return Response(
             {
                 'client_id': settings.FXA_CLIENT_ID,
                 'scopes': settings.FXA_SCOPE,
                 'oauth_uri': settings.FXA_OAUTH_URI,
                 'profile_uri': settings.FXA_PROFILE_URI,
-                'leaderboard_base_uri': request.build_absolute_uri('/'),
+                'leaderboard_base_uri': base_url,
                 'redirect_uri': request.build_absolute_uri(
                     reverse('fxa-redirect')),
             },
