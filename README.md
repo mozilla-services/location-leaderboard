@@ -68,6 +68,52 @@ Leaderboard Version Info
           }
         });
 
+Leaderboard Heartbeat
+----
+  Return the heartbeat metadata for the deployed heartbeat of the code.
+
+* **URL**
+
+  https://leaderboard.services.mozilla.com/__heartbeat__
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Request Headers**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200
+
+* **Error Responses:**
+
+  * **Code:** 400
+
+    The deployment is unhealthy and unable to connect to the database
+    or host healthy traffic.
+
+* **Sample Call:**
+
+        $.ajax({
+          url: "https://leaderboard.services.mozilla.com/__heartbeat__",
+          dataType: "json",
+          type : "GET",
+          success : function(r, data) {
+            console.log(data);
+          }
+        });
+
 Firefox Accounts Configuration
 ----
   Get the configuration parameters the server uses to integrate with Firefox Accounts.
