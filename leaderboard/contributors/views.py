@@ -1,14 +1,10 @@
 from django.conf import settings
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from leaderboard.fxa.authenticator import OAuthTokenAuthentication
-from leaderboard.contributors.models import Contributor
-from leaderboard.contributors.serializers import (
-    ContributionSerializer,
-    ContributorNameSerializer,
-)
+from leaderboard.contributors.serializers import ContributionSerializer
 
 
 class ContributionsConfigView(APIView):
@@ -19,13 +15,6 @@ class ContributionsConfigView(APIView):
             'record_duration': settings.CONTRIBUTION_RECORD_DURATION,
         }
         return Response(config_data, content_type='application/json')
-
-
-class UpdateContributorView(UpdateAPIView):
-    queryset = Contributor.objects.all()
-    authentication_classes = (OAuthTokenAuthentication,)
-    serializer_class = ContributorNameSerializer
-    lookup_field = 'uid'
 
 
 class CreateContributionsView(CreateAPIView):

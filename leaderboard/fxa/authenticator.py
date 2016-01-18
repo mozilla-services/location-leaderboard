@@ -58,7 +58,18 @@ class OAuthTokenAuthentication(FXAClientMixin, BaseAuthentication):
             msg = 'No contributor found.'
             raise AuthenticationFailed(msg)
 
-        return (contributor, access_token)
+        display_name = profile_data.get('displayName', None)
+        if display_name is not None and display_name != contributor.name:
+            contributor.name = display_name
+            contributor.save()
+
+        return (
+            contributor,
+            {
+                'access_token': access_token,
+                'profile_data': profile_data,
+            },
+        )
 
     def authenticate_header(self, request):
         return 'Token'
