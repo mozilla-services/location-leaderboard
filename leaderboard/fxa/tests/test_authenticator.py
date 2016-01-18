@@ -2,6 +2,7 @@ import mock
 from django.test import TestCase
 from rest_framework.exceptions import AuthenticationFailed
 
+from leaderboard.contributors.models import Contributor
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.fxa.authenticator import OAuthTokenAuthentication
 from leaderboard.fxa.tests.test_client import MockRequestTestMixin
@@ -65,3 +66,24 @@ class TestOAuthTokenAuthentication(MockRequestTestMixin, TestCase):
         user, token = OAuthTokenAuthentication().authenticate(request)
 
         self.assertEqual(user, contributor)
+
+    def test_authenticator_updates_display_name(self):
+        contributor = ContributorFactory()
+
+        fxa_profile_data = {
+            'uid': contributor.fxa_uid,
+            'displayName': 'new name',
+        }
+
+        self.set_mock_response(self.mock_get, data=fxa_profile_data)
+
+        request = mock.MagicMock()
+        request.META = {
+            'HTTP_AUTHORIZATION': 'Bearer asdf',
+        }
+
+        user, token = OAuthTokenAuthentication().authenticate(request)
+
+        contributor = Contributor.objects.get()
+
+        self.assertEqual(contributor.name, fxa_profile_data['displayName'])

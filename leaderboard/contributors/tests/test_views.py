@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from leaderboard.fxa.tests.test_client import MockRequestTestMixin
-from leaderboard.contributors.models import Contributor, Contribution
+from leaderboard.contributors.models import Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
 from leaderboard.locations.models import Tile
 from leaderboard.locations.tests.test_models import CountryFactory
@@ -177,48 +177,3 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn('gzip error', response.content)
-
-
-class UpdateContributorTests(MockRequestTestMixin, TestCase):
-
-    def setUp(self):
-        super(UpdateContributorTests, self).setUp()
-        fxa_profile_data = self.setup_profile_call()
-        self.contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
-
-    def test_update_contributor_saves_to_db(self):
-        new_name = 'new name'
-
-        response = self.client.patch(
-            reverse('contributors-detail', kwargs={
-                'uid': self.contributor.uid,
-            }),
-            json.dumps({'name': new_name}),
-            content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer asdf',
-        )
-
-        self.assertEquals(response.status_code, 200)
-
-        response_data = json.loads(response.content)
-        self.assertEqual(response_data, {u'name': unicode(new_name)})
-
-        contributor = Contributor.objects.get(id=self.contributor.id)
-        self.assertEqual(contributor.name, new_name)
-
-    def test_update_contributor_doesnt_update_disallowed_field(self):
-        old_fxa_uid = self.contributor.fxa_uid
-
-        response = self.client.patch(
-            reverse('contributors-detail', kwargs={
-                'uid': self.contributor.uid,
-            }),
-            json.dumps({'fxa_uid': 'asdf'}),
-            content_type='application/json',
-            HTTP_AUTHORIZATION='Bearer asdf',
-        )
-
-        self.assertEqual(response.status_code, 200)
-
-        contributor = Contributor.objects.get(id=self.contributor.id)
-        self.assertEqual(contributor.fxa_uid, old_fxa_uid)

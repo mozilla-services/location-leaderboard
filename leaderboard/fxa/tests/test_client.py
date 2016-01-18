@@ -43,7 +43,6 @@ class MockRequestTestMixin(object):
     def setup_profile_call(self):
         fxa_profile_data = {
             'uid': uuid.uuid4().hex,
-            'email': 'user@example.com',
         }
 
         self.set_mock_response(self.mock_get, data=fxa_profile_data)
