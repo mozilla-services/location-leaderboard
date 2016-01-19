@@ -70,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'leaderboard.analytics_context.analytics_context',
             ],
         },
     },
@@ -143,6 +144,9 @@ GIT_COMMIT = os.environ.get('GIT_COMMIT', 'UNKNOWN')
 GIT_SOURCE = os.environ.get('GIT_SOURCE', 'UKNOWN')
 GIT_TAG = os.environ.get('GIT_TAG', 'UNKNOWN')
 GIT_VERSION = os.environ.get('GIT_VERSION', 'UNKNOWN')
+
+# Google Analytics
+GOOGLE_ANALYTICS_ID = 'Unknown'
 
 # Travis settings
 if 'TRAVIS' in os.environ:
