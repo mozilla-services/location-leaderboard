@@ -36,8 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
 
-    'rest_framework',
     'leaderboard.sandstone',
+    'raven.contrib.django.raven_compat',
+    'rest_framework',
     'rest_framework_gis',
 
     'leaderboard.contributors',
@@ -147,6 +148,11 @@ GIT_VERSION = os.environ.get('GIT_VERSION', 'UNKNOWN')
 
 # Google Analytics
 GOOGLE_ANALYTICS_ID = 'Unknown'
+
+# Sentry Monitoring
+RAVEN_CONFIG = {
+    'dsn': 'Unknown',
+}
 
 # Travis settings
 if 'TRAVIS' in os.environ:
