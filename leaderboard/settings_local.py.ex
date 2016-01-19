@@ -58,3 +58,8 @@ FXA_PROFILE_URI = 'TODO'
 
 # Google Analytics
 GOOGLE_ANALYTICS_ID = 'TODO'
+
+# Sentry Monitoring
+RAVEN_CONFIG = {
+    'dsn': 'TODO',
+}
