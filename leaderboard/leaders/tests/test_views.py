@@ -173,6 +173,53 @@ class LeadersGlobalListTests(TestCase):
         contributors_data = json.loads(response.content)
         self.assertEqual(len(contributors_data['results']), 1)
 
+    def test_leader_with_no_name_not_shown(self):
+        today = datetime.date.today()
+        country = CountryFactory()
+
+        contributor1 = ContributorFactory()
+
+        for i in range(3):
+            Contribution(
+                contributor=contributor1,
+                date=today,
+                observations=1,
+                tile=TileFactory(country=country),
+            ).save()
+
+        contributor2 = ContributorFactory(name='')
+
+        for i in range(4):
+            Contribution(
+                contributor=contributor2,
+                date=today,
+                observations=1,
+                tile=TileFactory(country=country),
+            ).save()
+
+        # Create a contributor with no contributions
+        # who should not appearin the leaderboard
+        ContributorFactory()
+
+        # Create the contributor ranks
+        ContributorRank.compute_ranks()
+
+        response = self.client.get(reverse('leaders-global-list'))
+        self.assertEqual(response.status_code, 200)
+
+        contributors_data = json.loads(response.content)
+        self.assertEqual(contributors_data, {
+            'count': 1,
+            'previous': None,
+            'results': [{
+                'uid': contributor1.uid,
+                'name': contributor1.name,
+                'observations': 3,
+                'rank': 2,
+            }],
+            'next': None,
+        })
+
 
 class LeaderCountryListViewTests(TestCase):
 

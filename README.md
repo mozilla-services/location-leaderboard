@@ -574,7 +574,7 @@ Get Leader
 
 Get Leaders
 ----
-  Get all leaders that have contributed, sorted by the highest contributions.
+  Get all leaders that have contributed and set their public display name, sorted by the highest contributions.
 
 * **URL**
 
