@@ -140,12 +140,6 @@ CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
 # FXA Shared Settings
 FXA_SCOPE = 'profile leaderboard'
 
-# Git version info
-GIT_COMMIT = os.environ.get('GIT_COMMIT', 'UNKNOWN')
-GIT_SOURCE = os.environ.get('GIT_SOURCE', 'UKNOWN')
-GIT_TAG = os.environ.get('GIT_TAG', 'UNKNOWN')
-GIT_VERSION = os.environ.get('GIT_VERSION', 'UNKNOWN')
-
 # Google Analytics
 GOOGLE_ANALYTICS_ID = 'Unknown'
 
