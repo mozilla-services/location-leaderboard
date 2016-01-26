@@ -46,3 +46,6 @@ leaderboard/static/js/build/
 
 # Static Files
 leaderboard/served/
+
+# version file
+leaderboard/version.json

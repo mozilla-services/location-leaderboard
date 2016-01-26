@@ -1,3 +1,5 @@
+import json
+
 import mock
 from django.core.urlresolvers import reverse
 from django.db import OperationalError
@@ -9,6 +11,22 @@ class LandingViewTests(TestCase):
     def test_landing_page_renders(self):
         response = self.client.get(reverse('home-landing'))
         self.assertEqual(response.status_code, 200)
+
+
+class VersionViewTests(TestCase):
+
+    def test_version_endpoint_returns_version_info_json(self):
+        version_info = {
+            'source': 'http://path/to/repo',
+            'version': '1.0',
+            'commit': 'abcdefg',
+        }
+
+        with self.settings(GIT_VERSION_INFO=version_info):
+            response = self.client.get(reverse('home-version'))
+
+            self.assertEquals(response.status_code, 200)
+            self.assertEquals(json.loads(response.content), version_info)
 
 
 class HearbeatViewTests(TestCase):
