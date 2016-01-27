@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+import json
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -147,6 +148,13 @@ GOOGLE_ANALYTICS_ID = 'Unknown'
 RAVEN_CONFIG = {
     'dsn': 'Unknown',
 }
+
+# Git version info can be found in version.json
+try:
+    GIT_VERSION_INFO = json.loads(open(os.path.join(BASE_DIR, 'version.json')).read())
+except (IOError, ValueError):
+    # Unable to find version.json
+    GIT_VERSION_INFO = ''
 
 # Travis settings
 if 'TRAVIS' in os.environ:
