@@ -199,7 +199,6 @@ class TestFXARefreshView(MockRequestTestMixin, TestCase):
         response = self.client.post(
             reverse('fxa-refresh'),
             data={'refresh_token': 'asdf'},
-            HTTP_AUTHORIZATION='Bearer asdf',
         )
 
         self.assertEqual(response.status_code, 200)
@@ -207,25 +206,6 @@ class TestFXARefreshView(MockRequestTestMixin, TestCase):
         response_data = json.loads(response.content)
 
         self.assertEqual(response_data, fxa_auth_data)
-
-    def test_missing_access_token_raises_403(self):
-        response = self.client.post(
-            reverse('fxa-refresh'),
-            data={'refresh_token': 'asdf'},
-        )
-
-        self.assertEqual(response.status_code, 401)
-
-    def test_invalid_access_token_raises_403(self):
-        self.set_mock_response(self.mock_get, status_code=400)
-
-        response = self.client.post(
-            reverse('fxa-refresh'),
-            data={'refresh_token': 'asdf'},
-            HTTP_AUTHORIZATION='Bearer asdf',
-        )
-
-        self.assertEqual(response.status_code, 401)
 
     def test_missing_refresh_token_raises_400(self):
         response = self.client.post(

@@ -124,6 +124,27 @@ class FXAClient(object):
 
         return self._parse_response(response)
 
+    def verify_token(self, access_token):
+        """
+        Verify an access token with FXA.
+
+        Example response:
+
+        {
+            "user": "5901bd09376fadaa076afacef5251b6a",
+            "client_id": "45defeda038a1c92",
+            "scope": ["profile:email", "profile:avatar"],
+            "email": "foo@example.com"
+        }
+        """
+        profile_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/verify')
+        response = requests.post(
+            profile_url,
+            {'token': access_token},
+        )
+
+        return self._parse_response(response)
+
     def get_profile_data(self, access_token):
         """
         Retrieve the profile details for a user given a valid access_token.

@@ -40,6 +40,18 @@ class MockRequestTestMixin(object):
 
         return fxa_auth_data
 
+    def setup_verify_call(self, uid=None, client_id=None):
+        fxa_verify_data = {
+            'user': uid or uuid.uuid4().hex,
+            'client_id': client_id or settings.FXA_CLIENT_ID,
+            'scope': ['profile:email', 'profile:avatar'],
+            'email': 'foo@example.com'
+        }
+
+        self.set_mock_response(self.mock_post, data=fxa_verify_data)
+
+        return fxa_verify_data
+
     def setup_profile_call(self):
         fxa_profile_data = {
             'uid': uuid.uuid4().hex,
@@ -86,6 +98,23 @@ class TestFXAClient(FXAClientMixin, MockRequestTestMixin, TestCase):
         response_data = self.fxa_client.refresh_authorization_token('asdf')
 
         self.assertEqual(response_data, authorization_data)
+
+    def test_verify_access_token_returns_verification_data(self):
+        verify_data = {
+            'user': '5901bd09376fadaa076afacef5251b6a',
+            'client_id': '45defeda038a1c92',
+            'scope': ['profile:email', 'profile:avatar'],
+            'email': 'foo@example.com'
+        }
+
+        response = mock.MagicMock()
+        response.content = json.dumps(verify_data)
+        response.status_code = 200
+        self.mock_post.return_value = response
+
+        response_data = self.fxa_client.verify_token('asdf')
+
+        self.assertEqual(response_data, verify_data)
 
     def test_get_profile_data_returns_profile(self):
         profile_data = {

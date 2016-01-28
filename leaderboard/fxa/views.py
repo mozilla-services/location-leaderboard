@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from leaderboard.contributors.models import Contributor
-from leaderboard.fxa.authenticator import OAuthTokenAuthentication
 from leaderboard.fxa.client import (
     get_fxa_login_url,
     FXAClientMixin,
@@ -96,7 +95,6 @@ class FXARedirectView(FXAClientMixin, APIView):
 
 
 class FXARefreshView(FXAClientMixin, APIView):
-    authentication_classes = (OAuthTokenAuthentication,)
 
     def post(self, request):
         refresh_token = request.POST.get('refresh_token', None)
