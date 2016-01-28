@@ -1,5 +1,6 @@
 import re
 
+from django.conf import settings
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.authentication import (
     get_authorization_header,
@@ -41,21 +42,42 @@ class OAuthTokenAuthentication(FXAClientMixin, BaseAuthentication):
         access_token = match.groupdict()['token']
 
         try:
-            profile_data = self.fxa_client.get_profile_data(access_token)
+            verify_data = self.fxa_client.verify_token(access_token)
         except FXAException, e:
-            msg = 'Unable to communicate with Firefox Accounts: {}'.format(e)
+            msg = (
+                'Unable to verify access token '
+                'with Firefox Accounts: {}'
+            ).format(e)
             raise AuthenticationFailed(msg)
 
-        fxa_uid = profile_data.get('uid', None)
+        client_id = verify_data.get('client_id', None)
+
+        if client_id != settings.FXA_CLIENT_ID:
+            msg = (
+                'Provided access token is not '
+                'valid for use with this service.'
+            )
+            raise AuthenticationFailed(msg)
+
+        fxa_uid = verify_data.get('user', None)
 
         if fxa_uid is None:
-            msg = 'Unable to retrieve Firefox Accounts profile information.'
+            msg = 'Unable to retrieve Firefox Accounts user id.'
             raise AuthenticationFailed(msg)
 
         try:
             contributor = Contributor.objects.get(fxa_uid=fxa_uid)
         except Contributor.DoesNotExist:
             msg = 'No contributor found.'
+            raise AuthenticationFailed(msg)
+
+        try:
+            profile_data = self.fxa_client.get_profile_data(access_token)
+        except FXAException, e:
+            msg = (
+                'Unable to retrieve profile '
+                'data from Firefox Accounts: {}'
+            ).format(e)
             raise AuthenticationFailed(msg)
 
         display_name = profile_data.get('displayName', None)

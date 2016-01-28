@@ -34,16 +34,47 @@ class TestOAuthTokenAuthentication(MockRequestTestMixin, TestCase):
             OAuthTokenAuthentication().authenticate(request)
 
     def test_raises_authenticationfailed_if_uid_missing(self):
-        self.set_mock_response(self.mock_get, data={})
+        fxa_client_id = 'client id'
+
+        with self.settings(FXA_CLIENT_ID=fxa_client_id):
+            self.set_mock_response(self.mock_post, data={
+                'client_id': fxa_client_id,
+            })
+
+            request = mock.MagicMock()
+            request.META = {'HTTP_AUTHORIZATION': 'Bearer abc'}
+
+            with self.assertRaises(AuthenticationFailed):
+                OAuthTokenAuthentication().authenticate(request)
+
+    def test_raises_authenticationfailed_if_no_contributor_found(self):
+        self.setup_verify_call()
 
         request = mock.MagicMock()
-        request.META = {'HTTP_AUTHORIZATION': 'Bearer abc'}
+        request.META = {
+            'HTTP_AUTHORIZATION': 'Bearer asdf',
+        }
 
         with self.assertRaises(AuthenticationFailed):
             OAuthTokenAuthentication().authenticate(request)
 
-    def test_raises_authenticationfailed_if_no_contributor_found(self):
-        self.setup_profile_call()
+    def test_authentication_fails_if_client_id_does_not_match(self):
+        fxa_profile_data = self.setup_profile_call()
+        self.setup_verify_call(
+            uid=fxa_profile_data['uid'], client_id='wrong id')
+
+        request = mock.MagicMock()
+        request.META = {
+            'HTTP_AUTHORIZATION': 'Bearer asdf',
+        }
+
+        with self.assertRaises(AuthenticationFailed):
+            OAuthTokenAuthentication().authenticate(request)
+
+    def test_authentication_fails_if_unable_to_retrieve_profile_data(self):
+        fxa_verify_data = self.setup_verify_call()
+
+        ContributorFactory(fxa_uid=fxa_verify_data['user'])
 
         request = mock.MagicMock()
         request.META = {
@@ -55,6 +86,7 @@ class TestOAuthTokenAuthentication(MockRequestTestMixin, TestCase):
 
     def test_parses_header_and_returns_contributor(self):
         fxa_profile_data = self.setup_profile_call()
+        self.setup_verify_call(uid=fxa_profile_data['uid'])
 
         contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
 
@@ -76,6 +108,8 @@ class TestOAuthTokenAuthentication(MockRequestTestMixin, TestCase):
         }
 
         self.set_mock_response(self.mock_get, data=fxa_profile_data)
+
+        self.setup_verify_call(uid=fxa_profile_data['uid'])
 
         request = mock.MagicMock()
         request.META = {

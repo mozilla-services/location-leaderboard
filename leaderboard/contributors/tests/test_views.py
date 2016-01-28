@@ -33,6 +33,7 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
     def setUp(self):
         super(SubmitContributionTests, self).setUp()
         fxa_profile_data = self.setup_profile_call()
+        self.setup_verify_call(uid=fxa_profile_data['uid'])
         self.country = CountryFactory()
         self.contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
 
