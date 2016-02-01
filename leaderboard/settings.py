@@ -144,11 +144,6 @@ FXA_SCOPE = 'profile:uid profile:display_name'
 # Google Analytics
 GOOGLE_ANALYTICS_ID = 'Unknown'
 
-# Sentry Monitoring
-RAVEN_CONFIG = {
-    'dsn': 'Unknown',
-}
-
 # Git version info can be found in version.json
 try:
     GIT_VERSION_INFO = json.loads(open(os.path.join(BASE_DIR, 'version.json')).read())
