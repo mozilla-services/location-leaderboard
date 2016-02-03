@@ -8,4 +8,4 @@ THISDIR=$(echo $PWD/$(dirname $0))
 WORKDIR=$(dirname $THISDIR)
 cd $WORKDIR
 scripts/echo_version_json.sh > ./leaderboard/version.json
-tar --exclude .ops --exclude .git -c -f - . | docker build -t $TAG -f ./Dockerfile.ops - 
+tar --exclude .ops --exclude .git -c -f - . | docker build -t $TAG -f ./Dockerfile - 

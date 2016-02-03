@@ -7,6 +7,5 @@ RUN apt-get update && apt-get install -y binutils libproj-dev gdal-bin
 COPY ./requirements.txt ./
 RUN pip install -r requirements.txt --no-cache-dir --disable-pip-version-check
 COPY . /leaderboard
-RUN ./scripts/echo_version_json.sh > /leaderboard/leaderboard/version.json
 RUN mkdir /leaderboard/leaderboard/served/;mkdir /leaderboard/leaderboard/served/static/;python manage.py collectstatic -c --noinput
 RUN apt-get -y autoremove && apt-get -y clean
