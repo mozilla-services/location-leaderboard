@@ -139,7 +139,7 @@ CONTRIBUTION_TILE_SIZE = 1000
 CONTRIBUTION_RECORD_DURATION = 24 * 60 * 60
 
 # FXA Shared Settings
-FXA_SCOPE = 'profile:uid profile:display_name'
+FXA_SCOPE = 'profile:uid profile:display_name profile:display_name:write'
 
 # Google Analytics
 GOOGLE_ANALYTICS_ID = 'Unknown'
