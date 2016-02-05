@@ -3,6 +3,8 @@ import operator
 from bulk_update.helper import bulk_update
 from django.db import models
 
+from leaderboard.locations.models import Country
+
 
 class Contributor(models.Model):
     """
@@ -68,7 +70,7 @@ class ContributorRank(models.Model):
         for contribution in contributions:
             # Each contribution counts towards the rank in the country in which
             # it was made, as well as the global rank for that contributor.
-            for country_id in (contribution.tile.country_id, None):
+            for country_id in (contribution.country_id, None):
                 rank_key = (contribution.contributor_id, country_id)
                 contributor_rank = contributor_ranks.get(rank_key, None)
 
@@ -135,7 +137,7 @@ class ContributorRank(models.Model):
         """
         # Pull all contributions into memory,  we will only work on this
         # dataset while new contributions enter the database.
-        contributions = list(Contribution.objects.all().select_related('tile'))
+        contributions = list(Contribution.objects.all())
         cls._compute_ranks(contributions)
 
 
@@ -144,12 +146,9 @@ class Contribution(models.Model):
     A contribution made by a contributor to the leaderboard.
     """
     date = models.DateField()
-    tile = models.ForeignKey('locations.Tile')
+    country = models.ForeignKey(Country)
     contributor = models.ForeignKey(Contributor)
     observations = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        unique_together = ('date', 'tile', 'contributor')
 
     def __unicode__(self):
         return unicode(self.date)

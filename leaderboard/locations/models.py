@@ -2,12 +2,6 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.gis.db import models
 
-from leaderboard.locations.projected_geos import (
-    ProjectedPoint,
-    ProjectedPolygon,
-    ProjectedMultiPolygon,
-)
-
 
 class CountryQuerySet(models.query.GeoQuerySet):
     """
@@ -71,74 +65,3 @@ class Country(models.Model):
             'leaders-country-list',
             kwargs={'country_id': self.iso2},
         )
-
-
-class TileManager(models.GeoManager):
-    """
-    A model manager for Tiles which allows you to
-    query a Tile nearest to a point provided in easting/northing
-    projected coordinates.
-    """
-
-    def get_or_create_nearest_tile(self, easting=None, northing=None,
-                                   *args, **kwargs):
-        # Round to the nearest tile size
-        easting = easting - (easting % settings.CONTRIBUTION_TILE_SIZE)
-        northing = northing - (northing % settings.CONTRIBUTION_TILE_SIZE)
-
-        return self.get_or_create(
-            *args, easting=easting, northing=northing, **kwargs)
-
-
-class Tile(models.Model):
-    """
-    A square tile on the surface of the Earth.
-    """
-
-    # The bottom left coordinates
-    easting = models.IntegerField()
-    northing = models.IntegerField()
-
-    country = models.ForeignKey(Country, related_name='tiles')
-    geometry = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
-
-    objects = TileManager()
-
-    def __unicode__(self):
-        return u'{country}: {easting},{northing}'.format(
-            country=self.country,
-            northing=self.northing,
-            easting=self.easting,
-        )
-
-    def save(self, *args, **kwargs):
-        # If we are saving a new tile, we want to automatically
-        # populate the geometry field
-        if not self.geometry:
-            # Create a box starting with the coordinates provided
-            # at the bottom left
-            points = [
-                ProjectedPoint(self.easting, self.northing),
-                ProjectedPoint(
-                    self.easting + settings.CONTRIBUTION_TILE_SIZE,
-                    self.northing,
-                ),
-                ProjectedPoint(
-                    self.easting + settings.CONTRIBUTION_TILE_SIZE,
-                    self.northing + settings.CONTRIBUTION_TILE_SIZE,
-                ),
-                ProjectedPoint(
-                    self.easting,
-                    self.northing + settings.CONTRIBUTION_TILE_SIZE,
-                ),
-                ProjectedPoint(self.easting, self.northing),
-            ]
-
-            self.geometry = ProjectedMultiPolygon([ProjectedPolygon(points)])
-
-        # Look up the nearest country if none is set
-        if not self.country_id:
-            self.country = Country.objects.nearest_to_point(
-                self.geometry.centroid)
-
-        return super(Tile, self).save(*args, **kwargs)

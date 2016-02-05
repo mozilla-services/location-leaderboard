@@ -1,31 +1,15 @@
+import datetime
 import json
 import time
 
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from leaderboard.fxa.tests.test_client import MockRequestTestMixin
 from leaderboard.contributors.models import Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
-from leaderboard.locations.models import Tile
 from leaderboard.locations.tests.test_models import CountryFactory
 from leaderboard.utils.compression import gzip_compress
-
-
-class ContributionConfigTests(TestCase):
-
-    def test_get_contribution_config(self):
-        response = self.client.get(reverse('contributions-config'))
-
-        self.assertEqual(response.status_code, 200)
-
-        config_data = json.loads(response.content)
-
-        self.assertEqual(config_data, {
-            'tile_size': settings.CONTRIBUTION_TILE_SIZE,
-            'record_duration': settings.CONTRIBUTION_RECORD_DURATION,
-        })
 
 
 class SubmitContributionTests(MockRequestTestMixin, TestCase):
@@ -38,7 +22,8 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
         self.contributor = ContributorFactory(fxa_uid=fxa_profile_data['uid'])
 
     def test_submit_multiple_observations(self):
-        now = time.time()
+        today = datetime.date.today()
+        now = time.mktime(today.timetuple())
         one_day = 24 * 60 * 60
 
         observation_data = {
@@ -85,22 +70,19 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
 
         self.assertEqual(response.status_code, 201)
 
-        self.assertEqual(Tile.objects.all().count(), 2)
-        tile1 = Tile.objects.get(easting=-8873000, northing=5435000)
-        self.assertEqual(tile1.country, self.country)
-        tile2 = Tile.objects.get(easting=-8893000, northing=5435000)
-        self.assertEqual(tile2.country, self.country)
+        self.assertEqual(Contribution.objects.count(), 4)
 
-        contributor_contributions = Contribution.objects.filter(
-            contributor=self.contributor)
-        self.assertEqual(contributor_contributions.count(), 3)
-        contribution1 = contributor_contributions.filter(tile=tile1).get()
-        self.assertEqual(contribution1.observations, 200)
-
-        self.assertEqual(
-            contributor_contributions.filter(tile=tile2).count(), 2)
-        for contribution in contributor_contributions.filter(tile=tile2):
+        self.assertEqual(Contribution.objects.filter(date=today).count(), 3)
+        for contribution in Contribution.objects.filter(date=today):
+            self.assertEqual(contribution.contributor, self.contributor)
+            self.assertEqual(contribution.country, self.country)
             self.assertEqual(contribution.observations, 100)
+
+        contribution = Contribution.objects.get(
+            date=(today + datetime.timedelta(days=1)))
+        self.assertEqual(contribution.contributor, self.contributor)
+        self.assertEqual(contribution.country, self.country)
+        self.assertEqual(contribution.observations, 100)
 
     def test_missing_authentication_token_returns_401(self):
         response = self.client.post(
@@ -133,7 +115,6 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(Tile.objects.all().count(), 0)
         self.assertEqual(Contribution.objects.all().count(), 0)
         errors = response.data[0]
         self.assertIn('time', errors)
@@ -164,7 +145,6 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
         )
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(Tile.objects.all().count(), 1)
         self.assertEqual(Contribution.objects.all().count(), 1)
 
     def test_invalid_gzip_data_raises_400(self):

@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from leaderboard.contributors.models import Contribution, ContributorRank
 from leaderboard.contributors.tests.test_models import ContributorFactory
-from leaderboard.locations.tests.test_models import TileFactory, CountryFactory
+from leaderboard.locations.tests.test_models import CountryFactory
 
 
 class TestCountryListVIew(TestCase):
@@ -27,7 +27,7 @@ class TestCountryListVIew(TestCase):
                 for contribution_i in range(10):
                     Contribution.objects.create(
                         contributor=contributor,
-                        tile=TileFactory(country=country),
+                        country=country,
                         date=today,
                         observations=1,
                     )

@@ -1,9 +1,11 @@
 import datetime
 
+from django.conf import settings
+from django.contrib.gis.geos import Point
 from rest_framework import serializers
 
+from leaderboard.locations.models import Country
 from leaderboard.contributors.models import Contribution
-from leaderboard.locations.models import Tile
 
 
 class ContributionSerializer(serializers.Serializer):
@@ -20,16 +22,17 @@ class ContributionSerializer(serializers.Serializer):
     def create(self, data):
         date = datetime.datetime.fromtimestamp(data['time']).date()
 
-        tile, created = Tile.objects.get_or_create_nearest_tile(
-            easting=data['tile_easting_m'], northing=data['tile_northing_m'])
+        country = Country.objects.nearest_to_point(Point(
+            data['tile_easting_m'],
+            data['tile_northing_m'],
+            srid=settings.PROJECTION_SRID,
+        ))
 
-        contribution, created = Contribution.objects.get_or_create(
+        Contribution.objects.create(
             date=date,
-            tile=tile,
+            country=country,
             contributor=self.context['request'].user,
+            observations=data['observations'],
         )
-
-        contribution.observations += data['observations']
-        contribution.save()
 
         return data

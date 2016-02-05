@@ -345,54 +345,6 @@ Get Countries
           }
         });
 
-Get Contribution Config
-----
-  Get the configuration parameters necessary to prepare contribution data for submission.
-  All of the individual observations a stumbler has made should be grouped into blocks, the size
-  and duration of which are determined by the results of this call.
-
-* **URL**
-
-  `https://leaderboard.services.mozilla.com/api/v1/contributions/config/`
-
-* **Method:**
-
-  `GET`
-
-* **Success Response:**
-
-  * **Code:** 200
-
-  JSON encoding
-
-      {
-        tile_size: <int>,
-        record_duration: <int>
-      }
-
-  * **tile_size**
-
-  The size of each side of a square tile in meters.
-
-  * **record_duration**
-
-  The length each contribution record in seconds.
-
-* **Error Responses:**
-
-  None
-
-* **Sample Call:**
-
-        $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/contributions/config/",
-          dataType: "json",
-          type : "GET",
-          success : function(r, data) {
-            console.log(data);
-          }
-        });
-
 Add Stumbles
 ----
  Submit the number of networks detected within a series of tiles for a given contributor.

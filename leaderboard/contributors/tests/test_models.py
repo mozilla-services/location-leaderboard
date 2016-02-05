@@ -10,10 +10,7 @@ from leaderboard.contributors.models import (
     ContributorRank,
     Contribution,
 )
-from leaderboard.locations.tests.test_models import (
-    CountryFactory,
-    TileFactory,
-)
+from leaderboard.locations.tests.test_models import CountryFactory
 
 
 faker = FakerFactory.create()
@@ -31,7 +28,7 @@ class ContributorFactory(factory.DjangoModelFactory):
 class ContributionFactory(factory.DjangoModelFactory):
     date = factory.LazyAttribute(lambda o: datetime.date.today())
     contributor = factory.SubFactory(ContributorFactory)
-    tile = factory.SubFactory(TileFactory)
+    country = factory.SubFactory(CountryFactory)
     observations = 1
 
     class Meta:
@@ -45,7 +42,7 @@ class TestContributorRank(TestCase):
             contributor=contributor,
             date=datetime.date.today(),
             observations=1,
-            tile=TileFactory(country=country),
+            country=country,
         )
 
     def setUp(self):
