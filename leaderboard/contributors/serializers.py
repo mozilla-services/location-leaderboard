@@ -15,8 +15,8 @@ class ContributionSerializer(serializers.Serializer):
     made within taht tile.
     """
     time = serializers.FloatField()
-    tile_northing_m = serializers.IntegerField()
-    tile_easting_m = serializers.IntegerField()
+    tile_northing_m = serializers.FloatField()
+    tile_easting_m = serializers.FloatField()
     observations = serializers.IntegerField()
 
     def create(self, data):

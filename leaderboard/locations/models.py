@@ -47,9 +47,7 @@ class Country(models.Model):
     un = models.IntegerField('United Nations Code')
     region = models.IntegerField('Region Code')
     subregion = models.IntegerField('Sub-Region Code')
-    lon = models.FloatField()
-    lat = models.FloatField()
-    geometry = models.MultiPolygonField(srid=settings.PROJECTION_SRID)
+    geometry = models.MultiPolygonField(srid=settings.WGS84_SRID)
 
     objects = CountryManager()
 

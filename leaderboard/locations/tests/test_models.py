@@ -17,8 +17,6 @@ class CountryFactory(factory.DjangoModelFactory):
     un = factory.Sequence(lambda n: n)
     region = factory.Sequence(lambda n: n)
     subregion = factory.Sequence(lambda n: n)
-    lon = factory.Sequence(lambda n: n)
-    lat = factory.Sequence(lambda n: n)
     geometry = factory.Sequence(lambda n: MultiPolygon([
         Polygon([
             Point(n, n),
