@@ -10,10 +10,7 @@ from leaderboard.contributors.models import (
     ContributorRank,
 )
 from leaderboard.contributors.tests.test_models import ContributorFactory
-from leaderboard.locations.tests.test_models import (
-    CountryFactory,
-    TileFactory,
-)
+from leaderboard.locations.tests.test_models import CountryFactory
 
 
 class LeaderProfileTests(TestCase):
@@ -32,7 +29,7 @@ class LeaderProfileTests(TestCase):
                     contributor=contributor,
                     date=today,
                     observations=1,
-                    tile=TileFactory(country=country),
+                    country=country,
                 )
 
         # Create the contributor ranks
@@ -98,7 +95,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor1,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=country1),
+                country=country1,
             ).save()
 
         contributor2 = ContributorFactory()
@@ -108,7 +105,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor2,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=country2),
+                country=country2,
             ).save()
 
         # Create a contributor with no contributions
@@ -152,7 +149,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=country),
+                country=country,
             ).save()
 
         # Create the contributor ranks
@@ -184,7 +181,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor1,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=country),
+                country=country,
             ).save()
 
         contributor2 = ContributorFactory(name='')
@@ -194,7 +191,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor2,
                 date=today,
                 observations=1,
-                tile=TileFactory(country=country),
+                country=country,
             ).save()
 
         # Create a contributor with no contributions
@@ -235,7 +232,7 @@ class LeaderCountryListViewTests(TestCase):
             contributor=contributor,
             date=today,
             observations=1,
-            tile=TileFactory(country=country1),
+            country=country1,
         )
         contribution1.save()
 
@@ -243,7 +240,7 @@ class LeaderCountryListViewTests(TestCase):
             contributor=contributor,
             date=today,
             observations=1,
-            tile=TileFactory(country=country1),
+            country=country1,
         )
         contribution2.save()
 
@@ -251,7 +248,7 @@ class LeaderCountryListViewTests(TestCase):
             contributor=contributor,
             date=today,
             observations=1,
-            tile=TileFactory(country=country2),
+            country=country2,
         )
         contribution3.save()
 
