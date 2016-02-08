@@ -14,8 +14,6 @@ field_mapping = {
     'pop2005': 'POP2005',
     'region': 'REGION',
     'subregion': 'SUBREGION',
-    'lon': 'LON',
-    'lat': 'LAT',
     'geometry': 'MULTIPOLYGON',
 }
 
@@ -31,6 +29,5 @@ class Command(BaseCommand):
             Country,
             options['file_path'],
             field_mapping,
-            transform=False,
             encoding='iso-8859-1',
         ).save(strict=True, verbose=True)

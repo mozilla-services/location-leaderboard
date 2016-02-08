@@ -2,12 +2,15 @@ import datetime
 import json
 import time
 
+from django.conf import settings
+from django.contrib.gis.geos import Point, Polygon, MultiPolygon
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from leaderboard.fxa.tests.test_client import MockRequestTestMixin
 from leaderboard.contributors.models import Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
+from leaderboard.fxa.tests.test_client import MockRequestTestMixin
+from leaderboard.locations.models import Country
 from leaderboard.locations.tests.test_models import CountryFactory
 from leaderboard.utils.compression import gzip_compress
 
@@ -83,6 +86,64 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
         self.assertEqual(contribution.contributor, self.contributor)
         self.assertEqual(contribution.country, self.country)
         self.assertEqual(contribution.observations, 100)
+
+    def test_position_converted_to_lat_lon(self):
+        Country.objects.all().delete()
+
+        country1 = CountryFactory.build()
+        country1.geometry = MultiPolygon([
+            Polygon([
+                Point(10, 10, srid=settings.WGS84_SRID),
+                Point(11, 10, srid=settings.WGS84_SRID),
+                Point(11, 11, srid=settings.WGS84_SRID),
+                Point(10, 11, srid=settings.WGS84_SRID),
+                Point(10, 10, srid=settings.WGS84_SRID),
+            ]),
+        ])
+        country1.save()
+
+        country2 = CountryFactory.build()
+        country2.geometry = MultiPolygon([
+            Polygon([
+                Point(20, 20, srid=settings.WGS84_SRID),
+                Point(21, 20, srid=settings.WGS84_SRID),
+                Point(21, 21, srid=settings.WGS84_SRID),
+                Point(20, 21, srid=settings.WGS84_SRID),
+                Point(20, 20, srid=settings.WGS84_SRID),
+            ]),
+        ])
+        country2.save()
+
+        # Create a sample point in Country 1
+        sample_point = Point(10.5, 10.5, srid=settings.WGS84_SRID)
+
+        # Convert its coordinates into the projected spatial system
+        sample_point.transform(settings.PROJECTION_SRID)
+
+        observation_data = {
+            'items': [
+                {
+                    'time': time.time(),
+                    'tile_easting_m': sample_point.coords[0],
+                    'tile_northing_m': sample_point.coords[1],
+                    'observations': 100,
+                },
+            ],
+        }
+
+        payload = json.dumps(observation_data)
+
+        response = self.client.post(
+            reverse('contributions-create'),
+            payload,
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer asdf',
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        contribution = Contribution.objects.get()
+        self.assertEqual(contribution.country, country1)
 
     def test_missing_authentication_token_returns_401(self):
         response = self.client.post(
