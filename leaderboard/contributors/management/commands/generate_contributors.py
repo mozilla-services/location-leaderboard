@@ -4,7 +4,6 @@ import random
 from django.core.management.base import BaseCommand
 
 from leaderboard.locations.models import Country
-from leaderboard.locations.tests.test_models import TileFactory
 from leaderboard.contributors.models import Contributor, Contribution
 from leaderboard.contributors.tests.test_models import ContributorFactory
 
@@ -33,7 +32,7 @@ class Command(BaseCommand):
             new_contributions.append(Contribution(
                 contributor=random.choice(contributors),
                 date=datetime.date.today(),
-                tile=TileFactory(country=random.choice(countries)),
+                country=random.choice(countries),
                 observations=random.randint(100, 1000),
             ))
 
