@@ -33,6 +33,7 @@ var Leaderboard = React.createClass({
       map = <LeaderMap
         countriesGeoUrl={this.props.config.countriesGeoUrl}
         leafletJSUrl={this.props.config.leafletJSUrl}
+        leafletGeometryJSUrl={this.props.config.leafletGeometryJSUrl}
         leafletCSSUrl={this.props.config.leafletCSSUrl}
         selection={this.state.selection}
       />;

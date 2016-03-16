@@ -14,7 +14,7 @@ module.exports = {
         this.keys[key] = this.keys[key].then(function (data) {
           return preprocessor(data);
         });
-      };
+      }
     }
 
     return this.keys[key];
@@ -52,16 +52,18 @@ module.exports = {
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/dispatcher.js","/")
 },{"+7ZJp0":12,"buffer":10}],3:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+/*global React ReactDOM*/
+
 "use strict";
 
 var dispatcher = _dereq_("./dispatcher.js");
 var cachedFetch = _dereq_("./cachedfetch.js");
-var getUrlParameters = _dereq_('./parseurl.js').getUrlParameters;
+var getUrlParameters = _dereq_("./parseurl.js").getUrlParameters;
 var getLeadersKey = _dereq_("./leaderskey.js");
 
-var LeaderMap = _dereq_("./leadermap.react.js");
-var LeaderTable = _dereq_("./leadertable.react.js");
-var LeaderProfile = _dereq_("./leaderprofile.react.js");
+var LeaderMap = _dereq_("./leadermap.react.js").LeaderMap;
+var LeaderTable = _dereq_("./leadertable.react.js").LeaderTable;
+var LeaderProfile = _dereq_("./leaderprofile.react.js").LeaderProfile;
 
 var Leaderboard = React.createClass({
   displayName: "Leaderboard",
@@ -89,6 +91,7 @@ var Leaderboard = React.createClass({
       map = React.createElement(LeaderMap, {
         countriesGeoUrl: this.props.config.countriesGeoUrl,
         leafletJSUrl: this.props.config.leafletJSUrl,
+        leafletGeometryJSUrl: this.props.config.leafletGeometryJSUrl,
         leafletCSSUrl: this.props.config.leafletCSSUrl,
         selection: this.state.selection
       });
@@ -126,7 +129,7 @@ var Leaderboard = React.createClass({
     for (var paramName in selection) {
       var paramValue = selection[paramName];
       if (paramValue != null && ("" + paramValue).length > 0) {
-        newLocationParams.push(paramName + '=' + paramValue);
+        newLocationParams.push(paramName + "=" + paramValue);
       }
     }
 
@@ -208,14 +211,16 @@ module.exports = {
   }
 };
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_38465340.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_4926eec4.js","/")
 },{"+7ZJp0":12,"./cachedfetch.js":1,"./dispatcher.js":2,"./leadermap.react.js":4,"./leaderprofile.react.js":5,"./leaderskey.js":6,"./leadertable.react.js":7,"./parseurl.js":8,"buffer":10}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+/*global React L*/
+
 "use strict";
 
 var dispatcher = _dereq_("./dispatcher.js");
 var cachedFetch = _dereq_("./cachedfetch.js");
-var promisescript = _dereq_('promisescript');
+var promisescript = _dereq_("promisescript");
 
 // Style constants
 var countryStyleEmpty = {
@@ -248,8 +253,8 @@ var mapAttribution = "<a href=\"https://www.mapbox.com/about/maps\">© Mapbox</a
 
 var popupContent = "<h3 class=\"center\">Click on a country to see its local " + "leaderboard!</h3>";
 
-module.exports = React.createClass({
-  displayName: "exports",
+var LeaderMap = React.createClass({
+  displayName: "LeaderMap",
 
   map: null,
   popup: null,
@@ -262,6 +267,11 @@ module.exports = React.createClass({
     var javascriptLoaded = promisescript({
       url: this.props.leafletJSUrl,
       type: "script"
+    }).then(function () {
+      return promisescript({
+        url: _this.props.leafletGeometryJSUrl,
+        type: "script"
+      });
     });
 
     var geoJsonLoaded = cachedFetch.set("countriesGeo", this.props.countriesGeoUrl);
@@ -289,11 +299,11 @@ module.exports = React.createClass({
 
         layer.setStyle(countryStyleFilled);
 
-        layer.on("mouseover", function (e) {
+        layer.on("mouseover", function () {
           layer.setStyle(countryStyleHover);
         });
 
-        layer.on("mouseout", function (e) {
+        layer.on("mouseout", function () {
           if (countryIso2 === _this.props.selection.iso2) {
             layer.setStyle(countryStyleSelected);
           } else {
@@ -301,7 +311,7 @@ module.exports = React.createClass({
           }
         });
 
-        layer.on("click", function (e) {
+        layer.on("click", function () {
           _this.map.closePopup(_this.popup);
 
           dispatcher.fire("updateSelection", {
@@ -329,7 +339,16 @@ module.exports = React.createClass({
       var newSelectedLayer = _this2.countryLayers[newSelection.iso2];
       if (newSelectedLayer != null) {
         newSelectedLayer.setStyle(countryStyleSelected);
-        _this2.map.fitBounds(newSelectedLayer.getLatLngs());
+        var newLatLngs = newSelectedLayer.getLatLngs();
+
+        if (newLatLngs[0].constructor === Array) {
+          var getArea = L.GeometryUtil.geodesicArea;
+          newLatLngs = newLatLngs.sort(function (a, b) {
+            return getArea(a) - getArea(b);
+          }).reverse()[0];
+        }
+
+        _this2.map.fitBounds(newLatLngs);
       } else {
         _this2.map.fitWorld();
       }
@@ -350,9 +369,15 @@ module.exports = React.createClass({
   }
 });
 
+module.exports = {
+  LeaderMap: LeaderMap
+};
+
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leadermap.react.js","/")
 },{"+7ZJp0":12,"./cachedfetch.js":1,"./dispatcher.js":2,"buffer":10,"promisescript":13}],5:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+/*global React*/
+
 "use strict";
 
 var cachedFetch = _dereq_("./cachedfetch.js");
@@ -399,8 +424,8 @@ var LeaderCountryRow = React.createClass({
   }
 });
 
-module.exports = React.createClass({
-  displayName: "exports",
+var LeaderProfile = React.createClass({
+  displayName: "LeaderProfile",
 
   getInitialState: function getInitialState() {
     return {
@@ -461,6 +486,7 @@ module.exports = React.createClass({
           null,
           this.state.profile.ranks.map(function (rank) {
             return React.createElement(LeaderCountryRow, {
+              key: _this2.props.selection.profile + rank.observations,
               selection: _this2.props.selection,
               rank: rank
             });
@@ -470,6 +496,10 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = {
+  LeaderProfile: LeaderProfile
+};
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leaderprofile.react.js","/")
 },{"+7ZJp0":12,"./cachedfetch.js":1,"./dispatcher.js":2,"buffer":10}],6:[function(_dereq_,module,exports){
@@ -483,6 +513,8 @@ module.exports = function (selection) {
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leaderskey.js","/")
 },{"+7ZJp0":12,"buffer":10}],7:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+/*global React*/
+
 "use strict";
 
 var dispatcher = _dereq_("./dispatcher.js");
@@ -556,7 +588,7 @@ var LeadersHeader = React.createClass({
           Object.keys(countries).map(function (countryIso2) {
             return React.createElement(
               "option",
-              { value: countryIso2 },
+              { key: countryIso2, value: countryIso2 },
               countries[countryIso2].name
             );
           })
@@ -608,8 +640,8 @@ var LeadersFooter = React.createClass({
   }
 });
 
-var LeadersTableRow = React.createClass({
-  displayName: "LeadersTableRow",
+var LeaderTableRow = React.createClass({
+  displayName: "LeaderTableRow",
 
   handleClick: function handleClick(e) {
     e.preventDefault();
@@ -648,8 +680,8 @@ var LeadersTableRow = React.createClass({
   }
 });
 
-var LeadersTable = React.createClass({
-  displayName: "LeadersTable",
+var LeaderTableRows = React.createClass({
+  displayName: "LeaderTableRows",
 
   render: function render() {
     var _this2 = this;
@@ -684,7 +716,8 @@ var LeadersTable = React.createClass({
         "tbody",
         null,
         this.props.leaders.map(function (leader) {
-          return React.createElement(LeadersTableRow, {
+          return React.createElement(LeaderTableRow, {
+            key: leader.uid,
             selection: _this2.props.selection,
             leader: leader
           });
@@ -694,8 +727,8 @@ var LeadersTable = React.createClass({
   }
 });
 
-module.exports = React.createClass({
-  displayName: "exports",
+var LeaderTable = React.createClass({
+  displayName: "LeaderTable",
 
   getInitialState: function getInitialState() {
     return {
@@ -739,8 +772,8 @@ module.exports = React.createClass({
   },
 
   render: function render() {
-    var start = 0,
-        stop = 0;
+    var start = 0;
+    var stop = 0;
 
     if (this.state.leaders.length > 0) {
       start = this.state.leaders[0].rank;
@@ -756,7 +789,7 @@ module.exports = React.createClass({
       React.createElement(
         "div",
         { id: "leaders-table-content" },
-        React.createElement(LeadersTable, {
+        React.createElement(LeaderTableRows, {
           selection: this.props.selection,
           leaders: this.state.leaders
         })
@@ -772,6 +805,10 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = {
+  LeaderTable: LeaderTable
+};
 
 }).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/leadertable.react.js","/")
 },{"+7ZJp0":12,"./cachedfetch.js":1,"./dispatcher.js":2,"./leaderskey.js":6,"./parseurl.js":8,"buffer":10}],8:[function(_dereq_,module,exports){

@@ -51,7 +51,12 @@ var LeaderMap = React.createClass({
     var javascriptLoaded = promisescript({
       url: this.props.leafletJSUrl,
       type: "script"
-    });
+    }).then(() =>
+      promisescript({
+        url: this.props.leafletGeometryJSUrl,
+        type: "script"
+      })
+    );
 
     var geoJsonLoaded = cachedFetch.set("countriesGeo", this.props.countriesGeoUrl);
 
@@ -121,7 +126,14 @@ var LeaderMap = React.createClass({
       var newSelectedLayer = this.countryLayers[newSelection.iso2];
       if (newSelectedLayer != null) {
         newSelectedLayer.setStyle(countryStyleSelected);
-        this.map.fitBounds(newSelectedLayer.getLatLngs());
+        var newLatLngs = newSelectedLayer.getLatLngs();
+
+        if (newLatLngs[0].constructor === Array) {
+          var getArea = L.GeometryUtil.geodesicArea;
+          newLatLngs = newLatLngs.sort((a, b) => getArea(a) - getArea(b)).reverse()[0];
+        }
+
+        this.map.fitBounds(newLatLngs);
       } else {
         this.map.fitWorld();
       }

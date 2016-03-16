@@ -58,6 +58,7 @@
       window.onload = function () {
         leaderboard.init({
           leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
+          leafletGeometryJSUrl: '{% static "lib/leaflet/leaflet.geometryutil.js" %}',
           leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
 
           countriesGeoUrl: '{% static "geojson/countries.named.geojson" %}',
