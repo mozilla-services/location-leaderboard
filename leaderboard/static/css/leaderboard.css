@@ -4,6 +4,7 @@
 }
 #leaderboard #leaders-map {
   height: 550px;
+  margin-bottom: 10px;
 }
 #leaderboard #leaders-table select {
   width: 100%;
