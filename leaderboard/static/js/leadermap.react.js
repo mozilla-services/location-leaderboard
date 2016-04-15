@@ -60,8 +60,11 @@ var LeaderMap = React.createClass({
 
     var geoJsonLoaded = cachedFetch.set("countriesGeo", this.props.countriesGeoUrl);
 
-    this.mapReady = Promise.all([javascriptLoaded, geoJsonLoaded]).then((results) => {
+    var countriesInfoLoaded = cachedFetch.get("countriesInfo");
+
+    this.mapReady = Promise.all([javascriptLoaded, geoJsonLoaded, countriesInfoLoaded]).then((results) => {
       var countriesGeo = results[1];
+      var countriesInfo = results[2];
 
       this.map = L.map("leaders-map", {
         closePopupOnClick: true,
@@ -81,30 +84,33 @@ var LeaderMap = React.createClass({
 
       var onEachFeature = (countryShapeInfo, layer) => {
         var countryIso2 = countryShapeInfo.properties.alpha2;
+        var countryHasData = countriesInfo[countryIso2] !== undefined;
 
         this.countryLayers[countryIso2] = layer;
 
-        layer.setStyle(countryStyleFilled);
+        if (countryHasData) {
+          layer.setStyle(countryStyleFilled);
 
-        layer.on("mouseover", () => {
-          layer.setStyle(countryStyleHover);
-        });
-
-        layer.on("mouseout", () => {
-          if (countryIso2 === this.props.selection.iso2) {
-            layer.setStyle(countryStyleSelected);
-          } else {
-            layer.setStyle(countryStyleFilled);
-          }
-        });
-
-        layer.on("click", () => {
-          this.map.closePopup(this.popup);
-
-          dispatcher.fire("updateSelection", {
-            iso2: countryIso2
+          layer.on("mouseover", () => {
+            layer.setStyle(countryStyleHover);
           });
-        });
+
+          layer.on("mouseout", () => {
+            if (countryIso2 === this.props.selection.iso2) {
+              layer.setStyle(countryStyleSelected);
+            } else {
+              layer.setStyle(countryStyleFilled);
+            }
+          });
+
+          layer.on("click", () => {
+            this.map.closePopup(this.popup);
+
+            dispatcher.fire("updateSelection", {
+              iso2: countryIso2
+            });
+          });
+        }
       };
 
       L.geoJson(
