@@ -131,7 +131,7 @@ WGS84_SRID = 4326
 PROJECTION_SRID = 3857
 
 # FXA Shared Settings
-FXA_SCOPE = 'profile:uid profile:display_name profile:display_name:write'
+FXA_SCOPE = 'profile:uid profile:display_name profile:display_name:write profile:email'
 
 # Google Analytics
 GOOGLE_ANALYTICS_ID = 'Unknown'
