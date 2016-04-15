@@ -58,7 +58,7 @@ var LeaderProfile = React.createClass({
             {this.state.profile.ranks.map((rank) => {
               return (
                 <LeaderCountryRow
-                  key={this.props.selection.profile + rank.observations}
+                  key={this.props.selection.profile + rank.country}
                   selection={this.props.selection}
                   rank={rank}
                 />
