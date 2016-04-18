@@ -23,7 +23,7 @@ class LeadersGlobalListView(ListAPIView):
 
 
 class LeadersCountryListView(LeadersGlobalListView):
-    queryset = ContributorRank.objects.all()
+    queryset = ContributorRank.objects.all().select_related('contributor')
 
     def get(self, *args, **kwargs):
         if not Country.objects.filter(iso2=self.kwargs['country_id']).exists():
