@@ -18,7 +18,8 @@ class LeaderProfileView(RetrieveAPIView):
 class LeadersGlobalListView(ListAPIView):
     queryset = (ContributorRank.objects
                                .all_global()
-                               .exclude(contributor__name=''))
+                               .exclude(contributor__name='')
+                               .select_related('contributor'))
     serializer_class = LeaderListSerializer
 
 
