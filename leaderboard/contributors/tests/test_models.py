@@ -2,8 +2,10 @@ import datetime
 import uuid
 
 import factory
-from faker import Factory as FakerFactory
+from django.conf import settings
+from django.contrib.gis.geos import Point
 from django.test import TestCase
+from faker import Factory as FakerFactory
 
 from leaderboard.contributors.models import (
     Contributor,
@@ -28,7 +30,8 @@ class ContributorFactory(factory.DjangoModelFactory):
 class ContributionFactory(factory.DjangoModelFactory):
     date = factory.LazyAttribute(lambda o: datetime.date.today())
     contributor = factory.SubFactory(ContributorFactory)
-    country = factory.SubFactory(CountryFactory)
+    point = factory.Sequence(
+        lambda n: Point(n, n, srid=settings.WGS84_SRID))
     observations = 1
 
     class Meta:
@@ -42,7 +45,7 @@ class TestContributorRank(TestCase):
             contributor=contributor,
             date=datetime.date.today(),
             observations=1,
-            country=country,
+            point=country.geometry.point_on_surface,
         )
 
     def setUp(self):

@@ -27,7 +27,7 @@ class TestCountryListVIew(TestCase):
                 for contribution_i in range(10):
                     Contribution.objects.create(
                         contributor=contributor,
-                        country=country,
+                        point=country.geometry.point_on_surface,
                         date=today,
                         observations=1,
                     )

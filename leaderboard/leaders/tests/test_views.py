@@ -29,7 +29,7 @@ class LeaderProfileTests(TestCase):
                     contributor=contributor,
                     date=today,
                     observations=1,
-                    country=country,
+                    point=country.geometry.point_on_surface,
                 )
 
         # Create the contributor ranks
@@ -95,7 +95,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor1,
                 date=today,
                 observations=1,
-                country=country1,
+                point=country1.geometry.point_on_surface,
             ).save()
 
         contributor2 = ContributorFactory()
@@ -105,7 +105,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor2,
                 date=today,
                 observations=1,
-                country=country2,
+                point=country2.geometry.point_on_surface,
             ).save()
 
         # Create a contributor with no contributions
@@ -149,7 +149,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor,
                 date=today,
                 observations=1,
-                country=country,
+                point=country.geometry.point_on_surface,
             ).save()
 
         # Create the contributor ranks
@@ -181,7 +181,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor1,
                 date=today,
                 observations=1,
-                country=country,
+                point=country.geometry.point_on_surface,
             ).save()
 
         contributor2 = ContributorFactory(name='')
@@ -191,7 +191,7 @@ class LeadersGlobalListTests(TestCase):
                 contributor=contributor2,
                 date=today,
                 observations=1,
-                country=country,
+                point=country.geometry.point_on_surface,
             ).save()
 
         # Create a contributor with no contributions
@@ -232,7 +232,7 @@ class LeaderCountryListViewTests(TestCase):
             contributor=contributor,
             date=today,
             observations=1,
-            country=country1,
+            point=country1.geometry.point_on_surface,
         )
         contribution1.save()
 
@@ -240,7 +240,7 @@ class LeaderCountryListViewTests(TestCase):
             contributor=contributor,
             date=today,
             observations=1,
-            country=country1,
+            point=country1.geometry.point_on_surface,
         )
         contribution2.save()
 
@@ -248,7 +248,7 @@ class LeaderCountryListViewTests(TestCase):
             contributor=contributor,
             date=today,
             observations=1,
-            country=country2,
+            point=country2.geometry.point_on_surface,
         )
         contribution3.save()
 

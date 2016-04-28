@@ -28,35 +28,36 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
         today = datetime.date.today()
         now = time.mktime(today.timetuple())
         one_day = 24 * 60 * 60
+        point = Point(-8872100, 5435700, srid=settings.PROJECTION_SRID)
 
         observation_data = {
             'items': [
                 # A contribution for tile1 at time1
                 {
                     'time': now,
-                    'tile_easting_m': -8872100,
-                    'tile_northing_m': 5435700,
+                    'tile_easting_m': point.coords[0],
+                    'tile_northing_m': point.coords[1],
                     'observations': 100,
                 },
                 # A contribution for tile1 at time 1
                 {
                     'time': now,
-                    'tile_easting_m': -8872100,
-                    'tile_northing_m': 5435700,
+                    'tile_easting_m': point.coords[0],
+                    'tile_northing_m': point.coords[1],
                     'observations': 100,
                 },
                 # A contribution for tile2 at time1
                 {
                     'time': now,
-                    'tile_easting_m': -8892100,
-                    'tile_northing_m': 5435700,
+                    'tile_easting_m': point.coords[0],
+                    'tile_northing_m': point.coords[1],
                     'observations': 100,
                 },
                 # A contribution for tile2 at time2
                 {
                     'time': now + one_day,
-                    'tile_easting_m': -8892100,
-                    'tile_northing_m': 5435700,
+                    'tile_easting_m': point.coords[0],
+                    'tile_northing_m': point.coords[1],
                     'observations': 100,
                 },
             ],
@@ -75,16 +76,18 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
 
         self.assertEqual(Contribution.objects.count(), 4)
 
+        point.transform(settings.WGS84_SRID)
+
         self.assertEqual(Contribution.objects.filter(date=today).count(), 3)
         for contribution in Contribution.objects.filter(date=today):
             self.assertEqual(contribution.contributor, self.contributor)
-            self.assertEqual(contribution.country, self.country)
+            self.assertEqual(contribution.point, point)
             self.assertEqual(contribution.observations, 100)
 
         contribution = Contribution.objects.get(
             date=(today + datetime.timedelta(days=1)))
         self.assertEqual(contribution.contributor, self.contributor)
-        self.assertEqual(contribution.country, self.country)
+        self.assertEqual(contribution.point, point)
         self.assertEqual(contribution.observations, 100)
 
     def test_position_converted_to_lat_lon(self):
@@ -142,8 +145,10 @@ class SubmitContributionTests(MockRequestTestMixin, TestCase):
 
         self.assertEqual(response.status_code, 201)
 
+        sample_point.transform(settings.WGS84_SRID)
+
         contribution = Contribution.objects.get()
-        self.assertEqual(contribution.country, country1)
+        self.assertEqual(contribution.point, sample_point)
 
     def test_missing_authentication_token_returns_401(self):
         response = self.client.post(

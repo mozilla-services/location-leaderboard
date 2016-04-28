@@ -6,6 +6,7 @@ include =
 omit = 
     leaderboard/wsgi
     leaderboard/settings*
+    *migrations*
 
 [report]
 # Regexes for lines to exclude from consideration
