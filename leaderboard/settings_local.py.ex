@@ -63,3 +63,5 @@ GOOGLE_ANALYTICS_ID = 'TODO'
 RAVEN_CONFIG = {
     'dsn': 'TODO',
 }
+
+NEWRELIC_INI = '/etc/newrelic.ini'
