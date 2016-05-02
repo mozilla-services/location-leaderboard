@@ -4,6 +4,7 @@ from bulk_update.helper import bulk_update
 from django.conf import settings
 from django.contrib.gis.db import models
 
+from leaderboard.stats import stats_client
 from leaderboard.locations.models import Country
 
 
@@ -156,10 +157,14 @@ class ContributorRank(models.Model):
         Compute the number of observations and ranks for
         each contributor for each country and globally.
         """
-        # Pull all contributions into memory,  we will only work on this
-        # dataset while new contributions enter the database.
-        contributions = list(Contribution.objects.all())
-        cls._compute_ranks(contributions)
+        with stats_client.timer('compute_ranks_timing'):
+            # Pull all contributions into memory,  we will only work on this
+            # dataset while new contributions enter the database.
+            contributions = list(Contribution.objects.all())
+            cls._compute_ranks(contributions)
+
+            stats_client.gauge(
+                'compute_ranks_contributions', len(contributions))
 
 
 class Contribution(models.Model):
