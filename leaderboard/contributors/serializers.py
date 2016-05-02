@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.gis.geos import Point
 from rest_framework import serializers
 
-from leaderboard.locations.models import Country
 from leaderboard.contributors.models import Contribution
 
 
@@ -20,19 +19,18 @@ class ContributionSerializer(serializers.Serializer):
     observations = serializers.IntegerField()
 
     def create(self, data):
-        date = datetime.datetime.fromtimestamp(data['time']).date()
-
-        country = Country.objects.nearest_to_point(Point(
+        point = Point(
             data['tile_easting_m'],
             data['tile_northing_m'],
             srid=settings.PROJECTION_SRID,
-        ))
+        )
+        point.transform(settings.WGS84_SRID)
 
         Contribution.objects.create(
-            date=date,
-            country=country,
             contributor=self.context['request'].user,
+            date=datetime.datetime.fromtimestamp(data['time']).date(),
             observations=data['observations'],
+            point=point,
         )
 
         return data

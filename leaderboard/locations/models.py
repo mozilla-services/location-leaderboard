@@ -15,22 +15,6 @@ class CountryQuerySet(models.query.GeoQuerySet):
         ).filter(observations__gt=0)
 
 
-class CountryManager(models.GeoManager):
-    """
-    A model manager for Countries which allows you to
-    query countries which are closest to a point.
-    """
-
-    def get_queryset(self):
-        return CountryQuerySet(self.model, using=self._db)
-
-    def nearest_to_point(self, point):
-        country = self.get_queryset().distance(point).order_by('distance')[:1]
-
-        if country.exists():
-            return country.get()
-
-
 class Country(models.Model):
     """
     A country as defined by:
@@ -49,7 +33,7 @@ class Country(models.Model):
     subregion = models.IntegerField('Sub-Region Code')
     geometry = models.MultiPolygonField(srid=settings.WGS84_SRID)
 
-    objects = CountryManager()
+    objects = CountryQuerySet.as_manager()
 
     class Meta:
         ordering = ('name',)

@@ -1,7 +1,8 @@
 import operator
 
 from bulk_update.helper import bulk_update
-from django.db import models
+from django.conf import settings
+from django.contrib.gis.db import models
 
 from leaderboard.locations.models import Country
 
@@ -66,11 +67,18 @@ class ContributorRank(models.Model):
             (rank.contributor_id, rank.country_id): rank
             for rank in ContributorRank.objects.all()
         }
+        countries = Country.objects.all()
 
         for contribution in contributions:
             # Each contribution counts towards the rank in the country in which
             # it was made, as well as the global rank for that contributor.
-            for country_id in (contribution.country_id, None):
+
+            contribution_country = sorted([
+                (country.geometry.distance(contribution.point), country)
+                for country in countries
+            ])[0][1]
+
+            for country_id in (contribution_country.id, None):
                 rank_key = (contribution.contributor_id, country_id)
                 contributor_rank = contributor_ranks.get(rank_key, None)
 
@@ -146,7 +154,7 @@ class Contribution(models.Model):
     A contribution made by a contributor to the leaderboard.
     """
     date = models.DateField()
-    country = models.ForeignKey(Country)
+    point = models.PointField(srid=settings.WGS84_SRID)
     contributor = models.ForeignKey(Contributor)
     observations = models.PositiveIntegerField(default=0)
 
