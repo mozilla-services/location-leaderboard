@@ -12,6 +12,7 @@ from leaderboard.contributors.models import (
     ContributorRank,
     Contribution,
 )
+from leaderboard.locations.models import Country
 from leaderboard.locations.tests.test_models import CountryFactory
 
 
@@ -203,7 +204,11 @@ class TestContributorRank(TestCase):
         self.assertEqual(ContributorRank.objects.get(
             country=None, contributor=self.contributor2).rank, 2)
 
-        ContributionFactory(contributor=self.contributor2, observations=10)
+        ContributionFactory(
+            contributor=self.contributor2,
+            point=self.country1.geometry.point_on_surface,
+            observations=10,
+        )
 
         ContributorRank.compute_ranks()
 
@@ -211,3 +216,38 @@ class TestContributorRank(TestCase):
             country=None, contributor=self.contributor1).rank, 2)
         self.assertEqual(ContributorRank.objects.get(
             country=None, contributor=self.contributor2).rank, 1)
+
+    def test_compute_ranks_matches_point_to_nearest_country(self):
+        contributor = ContributorFactory()
+
+        # Create a dummy country to find a point outside existing countries
+        dummy_country = CountryFactory()
+        point_outside_countries = dummy_country.geometry.point_on_surface
+        dummy_country.delete()
+
+        # The point is outside all existing countries
+        self.assertFalse(
+            Country.objects.filter(
+                geometry__contains=point_outside_countries).exists())
+
+        # The point is closer to country2
+        self.assertGreater(
+            self.country1.geometry.distance(point_outside_countries),
+            self.country2.geometry.distance(point_outside_countries),
+        )
+
+        ContributionFactory(
+            contributor=contributor, point=point_outside_countries)
+
+        self.assertFalse(
+            ContributorRank.objects.filter(contributor=contributor).exists())
+
+        ContributorRank.compute_ranks()
+
+        self.assertTrue(
+            ContributorRank.objects.filter(
+                contributor=contributor, country=self.country2).exists())
+
+        self.assertFalse(
+            ContributorRank.objects.filter(
+                contributor=contributor, country=self.country1).exists())

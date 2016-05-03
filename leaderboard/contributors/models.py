@@ -73,10 +73,20 @@ class ContributorRank(models.Model):
             # Each contribution counts towards the rank in the country in which
             # it was made, as well as the global rank for that contributor.
 
-            contribution_country = sorted([
-                (country.geometry.distance(contribution.point), country)
-                for country in countries
-            ])[0][1]
+            contribution_country = None
+
+            # Attempt to find a country which contains the observation point
+            for country in countries:
+                if country.geometry.contains(contribution.point):
+                    contribution_country = country
+                    break
+
+            # If no point was found, find the nearest country
+            if contribution_country is None:
+                contribution_country = sorted([
+                    (country.geometry.distance(contribution.point), country)
+                    for country in countries
+                ])[0][1]
 
             for country_id in (contribution_country.id, None):
                 rank_key = (contribution.contributor_id, country_id)
