@@ -67,28 +67,31 @@ class ContributorRank(models.Model):
             (rank.contributor_id, rank.country_id): rank
             for rank in ContributorRank.objects.all()
         }
-        countries = Country.objects.all()
+        countries = (Country.objects.order_by('-area')
+                                    .only('id', 'geometry').all())
+        prepared_countries = [(country.id, country.geometry.prepared)
+                              for country in countries]
 
         for contribution in contributions:
             # Each contribution counts towards the rank in the country in which
             # it was made, as well as the global rank for that contributor.
 
-            contribution_country = None
+            contribution_country_id = None
 
             # Attempt to find a country which contains the observation point
-            for country in countries:
-                if country.geometry.contains(contribution.point):
-                    contribution_country = country
+            for country_id, prepared in prepared_countries:
+                if prepared.contains(contribution.point):
+                    contribution_country_id = country_id
                     break
 
             # If no point was found, find the nearest country
-            if contribution_country is None:
-                contribution_country = sorted([
+            if contribution_country_id is None:
+                contribution_country_id = sorted([
                     (country.geometry.distance(contribution.point), country)
                     for country in countries
-                ])[0][1]
+                ])[0][1].id
 
-            for country_id in (contribution_country.id, None):
+            for country_id in (contribution_country_id, None):
                 rank_key = (contribution.contributor_id, country_id)
                 contributor_rank = contributor_ranks.get(rank_key, None)
 
