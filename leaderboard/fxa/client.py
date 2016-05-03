@@ -6,6 +6,8 @@ import requests
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
+from leaderboard.stats import stats_client
+
 
 def get_fxa_login_url(base_url):
     """
@@ -119,8 +121,10 @@ class FXAClient(object):
             'refresh_token': refresh_token,
         }
 
-        token_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/token')
-        response = requests.post(token_url, data=json.dumps(params))
+        with stats_client.timer('fxa_refresh_auth_token_timing'):
+            token_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/token')
+            response = requests.post(token_url, data=json.dumps(params))
+            stats_client.incr('fxa_refresh_auth_token_count')
 
         return self._parse_response(response)
 
@@ -137,11 +141,13 @@ class FXAClient(object):
             "email": "foo@example.com"
         }
         """
-        profile_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/verify')
-        response = requests.post(
-            profile_url,
-            {'token': access_token},
-        )
+        with stats_client.timer('fxa_verify_auth_token_timing'):
+            profile_url = urlparse.urljoin(settings.FXA_OAUTH_URI, 'v1/verify')
+            response = requests.post(
+                profile_url,
+                {'token': access_token},
+            )
+            stats_client.incr('fxa_verify_auth_token_count')
 
         return self._parse_response(response)
 
@@ -160,7 +166,10 @@ class FXAClient(object):
             'Authorization': 'Bearer {}'.format(access_token),
         }
 
-        profile_url = urlparse.urljoin(settings.FXA_PROFILE_URI, 'v1/profile')
-        response = requests.get(profile_url, headers=headers)
+        with stats_client.timer('fxa_get_profile_timing'):
+            profile_url = urlparse.urljoin(
+                settings.FXA_PROFILE_URI, 'v1/profile')
+            response = requests.get(profile_url, headers=headers)
+            stats_client.incr('fxa_get_profile_count')
 
         return self._parse_response(response)
