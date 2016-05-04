@@ -55,15 +55,13 @@ var LeaderProfile = React.createClass({
             </tr>
           </thead>
           <tbody>
-            {this.state.profile.ranks.map((rank) => {
-              return (
-                <LeaderCountryRow
-                  key={this.props.selection.profile + rank.country}
-                  selection={this.props.selection}
-                  rank={rank}
-                />
-              );
-            })}
+            {this.state.profile.ranks.map((rank) =>
+              <LeaderCountryRow
+                key={this.props.selection.profile + (rank.country && rank.country.iso2)}
+                selection={this.props.selection}
+                rank={rank}
+              />
+            )}
           </tbody>
         </table>
       </div>
