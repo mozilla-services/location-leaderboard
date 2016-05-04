@@ -211,7 +211,7 @@ module.exports = {
   }
 };
 
-}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_b630eb26.js","/")
+}).call(this,_dereq_("+7ZJp0"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},_dereq_("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_11033f3a.js","/")
 },{"+7ZJp0":12,"./cachedfetch.js":1,"./dispatcher.js":2,"./leadermap.react.js":4,"./leaderprofile.react.js":5,"./leaderskey.js":6,"./leadertable.react.js":7,"./parseurl.js":8,"buffer":10}],4:[function(_dereq_,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*global React L*/
@@ -492,7 +492,7 @@ var LeaderProfile = React.createClass({
           null,
           this.state.profile.ranks.map(function (rank) {
             return React.createElement(LeaderCountryRow, {
-              key: _this2.props.selection.profile + rank.country,
+              key: _this2.props.selection.profile + (rank.country && rank.country.iso2),
               selection: _this2.props.selection,
               rank: rank
             });
