@@ -14,13 +14,15 @@ class StatsMiddleware(object):
             request._stats_view_name = view.cls.__name__
 
     def process_response(self, request, response):
-        duration = (time.time() - request._stats_start) * 1000
-        view_name = getattr(request, '_stats_view_name', None)
+        if hasattr(request, '_stats_start'):
+            duration = (time.time() - request._stats_start) * 1000
+            view_name = getattr(request, '_stats_view_name', None)
 
-        if view_name is not None:
-            stats_client.timing(
-                'request_timing|{}'.format(request._stats_view_name), duration)
-            stats_client.incr(
-                'request_count|{}'.format(request._stats_view_name))
+            if view_name is not None:
+                stats_client.timing(
+                    'request_timing|{}'.format(
+                        request._stats_view_name), duration)
+                stats_client.incr(
+                    'request_count|{}'.format(request._stats_view_name))
 
         return response
