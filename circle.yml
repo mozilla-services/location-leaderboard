@@ -38,7 +38,7 @@ dependencies:
     # Clean up any old images and save the new one
     - I="image-$(date +%j).tar"; mkdir -p ~/docker; rm ~/docker/*; docker save app:build > ~/docker/$I; ls -l ~/docker
 
-  database:
+database:
     - psql -U ubuntu -c "CREATE DATABASE leaderboard_test;"
     - psql -U ubuntu -c "CREATE EXTENSION postgis" -d leaderboard_test
     - psql -U ubuntu -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
