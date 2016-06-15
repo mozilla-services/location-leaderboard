@@ -39,8 +39,13 @@ dependencies:
     - I="image-$(date +%j).tar"; mkdir -p ~/docker; rm ~/docker/*; docker save app:build > ~/docker/$I; ls -l ~/docker
 
 test:
+  database:
+    - psql -U postgres -c "CREATE DATABASE leaderboard_test;"
+    - psql -U postgres -c "CREATE EXTENSION postgis" -d leaderboard_test
+    - psql -U postgres -c "CREATE EXTENSION postgis_topology" -d leaderboard_test
+
   override:
-    - docker run app:build /bin/sh -c "flake8 --ignore=E402 tokenserver && nosetests tokenserver/tests"
+    - docker run -e "TRAVIS=$TRAVIS" -e "TRAVIS_JOB_ID=$TRAVIS_JOB_ID" --net=host -t leaderboard sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
 
 # appropriately tag and push the container to dockerhub
 deployment:
