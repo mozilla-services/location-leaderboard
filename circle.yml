@@ -46,7 +46,32 @@ database:
 
 test:
   override:
-    - docker run --net=host -t app:build sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
+    - > 
+        cat >> /local_settings.ini < 'EOF'
+        SECRET_KEY = 'TODO'
+        DEBUG = False
+        ALLOWED_HOSTS = [
+        ]
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.contrib.gis.db.backends.postgis',
+                'NAME': 'TODO',
+                'USER': 'TODO',
+                'PASSWORD': 'TODO',
+                'HOST': 'TODO',
+                'PORT': 'TODO',
+            }
+        }
+        FXA_CLIENT_ID = 'TODO'
+        FXA_SECRET = 'TODO'
+        FXA_OAUTH_URI = 'TODO'
+        FXA_PROFILE_URI = 'TODO'
+        GOOGLE_ANALYTICS_ID = 'TODO'
+        RAVEN_CONFIG = {
+            'dsn': 'TODO',
+        }
+        EOF
+        docker run --net=host -v /local_settings.ini:settings_local.py -t app:build sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
 
 # appropriately tag and push the container to dockerhub
 deployment:
