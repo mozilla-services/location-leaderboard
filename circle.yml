@@ -47,7 +47,7 @@ database:
 test:
   override:
     - > 
-        cat >> /local_settings.ini < 'EOF'
+        printf /tmp/local_settings.ini < 'EOF'
         SECRET_KEY = 'TODO'
         DEBUG = False
         ALLOWED_HOSTS = [
@@ -71,7 +71,7 @@ test:
             'dsn': 'TODO',
         }
         EOF
-        docker run --net=host -v /local_settings.ini:settings_local.py -t app:build sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
+        docker run --net=host -v /tmp/local_settings.ini:settings_local.py -t app:build sh -c "pip install flake8 coveralls && flake8 leaderboard && coverage run manage.py test && COVERALLS_REPO_TOKEN=d7QxZjN1cQe9uq8QJqDi33F0XM2IvTFJ4 coveralls"
 
 # appropriately tag and push the container to dockerhub
 deployment:
