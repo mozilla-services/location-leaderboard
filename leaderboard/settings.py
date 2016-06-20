@@ -164,6 +164,30 @@ if 'TRAVIS' in os.environ:
     FXA_OAUTH_URI = 'travis'
     FXA_PROFILE_URI = 'travis'
 
+# CircleCI
+if 'CIRCLE' in os.environ:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = 'circle'
+
+    # Database configuration for travis tests
+    # Should be overridden by a local settings file for actual deployments
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'circle_test',
+            'USER': 'ubuntu',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
+
+    # Firefox Accounts
+    FXA_CLIENT_ID = 'circle'
+    FXA_SECRET = 'circle'
+    FXA_OAUTH_URI = 'circle'
+    FXA_PROFILE_URI = 'circle'
+
 # Docker build settings
 if 'DOCKER_BUILD' in os.environ:
     SECRET_KEY = 'docker'
