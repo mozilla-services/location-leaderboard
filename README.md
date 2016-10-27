@@ -22,7 +22,7 @@ Leaderboard Version Info
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/__version__
+  https://location-leaderboard.services.mozilla.com/__version__
 
 * **Method:**
 
@@ -60,7 +60,7 @@ Leaderboard Version Info
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/__version__",
+          url: "https://location-leaderboard.services.mozilla.com/__version__",
           dataType: "json",
           type : "GET",
           success : function(r, data) {
@@ -74,7 +74,7 @@ Leaderboard Heartbeat
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/__heartbeat__
+  https://location-leaderboard.services.mozilla.com/__heartbeat__
 
 * **Method:**
 
@@ -106,7 +106,7 @@ Leaderboard Heartbeat
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/__heartbeat__",
+          url: "https://location-leaderboard.services.mozilla.com/__heartbeat__",
           dataType: "json",
           type : "GET",
           success : function(r, data) {
@@ -120,7 +120,7 @@ Firefox Accounts Configuration
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/fxa/config/
+  https://location-leaderboard.services.mozilla.com/api/v1/fxa/config/
 
 * **Method:**
 
@@ -160,7 +160,7 @@ Firefox Accounts Configuration
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/fxa/config/",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/fxa/config/",
           dataType: "json",
           type : "GET",
           success : function(r, data) {
@@ -174,7 +174,7 @@ Firefox Accounts Redirect
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/fxa/redirect/
+  https://location-leaderboard.services.mozilla.com/api/v1/fxa/redirect/
 
 * **Method:**
 
@@ -221,7 +221,7 @@ Firefox Accounts Redirect
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/fxa/redirect/?code=asdf",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/fxa/redirect/?code=asdf",
           dataType: "json",
           type : "GET",
           success : function(r, data) {
@@ -235,7 +235,7 @@ Firefox Accounts Refresh
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/fxa/refresh/
+  https://location-leaderboard.services.mozilla.com/api/v1/fxa/refresh/
 
 * **Method:**
 
@@ -284,7 +284,7 @@ Firefox Accounts Refresh
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/fxa/refresh/?refresh_token=asdf",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/fxa/refresh/?refresh_token=asdf",
           dataType: "json",
           type : "GET",
           success : function(r, data) {
@@ -299,7 +299,7 @@ Get Countries
 
 * **URL**
 
-  https://leaderboard.services.mozilla.com/api/v1/locations/countries/
+  https://location-leaderboard.services.mozilla.com/api/v1/locations/countries/
 
 * **Method:**
 
@@ -337,7 +337,7 @@ Get Countries
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/locations/countries/",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/locations/countries/",
           dataType: "json",
           type : "GET",
           success : function(r, data) {
@@ -351,7 +351,7 @@ Add Stumbles
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/contributions/`
+  `https://location-leaderboard.services.mozilla.com/api/v1/contributions/`
 
 * **Method:**
 
@@ -431,7 +431,7 @@ Add Stumbles
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/",
           dataType: "json",
           beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer fksdf90sek4jk50');
@@ -471,7 +471,7 @@ Get Leader
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/leaders/profile/<uid: str>/`
+  `https://location-leaderboard.services.mozilla.com/api/v1/leaders/profile/<uid: str>/`
 
 * **Method:**
 
@@ -512,7 +512,7 @@ Get Leader
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/profile/abcdefg/",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/leaders/profile/abcdefg/",
           dataType: "json",
           data: {
             country_id: 1,
@@ -530,7 +530,7 @@ Get Leaders
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/leaders/global/`
+  `https://location-leaderboard.services.mozilla.com/api/v1/leaders/global/`
 
 * **Method:**
 
@@ -565,7 +565,7 @@ Get Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/global/?offset=20",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/leaders/global/?offset=20",
           dataType: "json",
           data: {
             country_id: 1,
@@ -583,7 +583,7 @@ Get Country Leaders
 
 * **URL**
 
-  `https://leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/`
+  `https://location-leaderboard.services.mozilla.com/api/v1/leaders/country/<country_id: str>/`
 
 * **Method:**
 
@@ -625,7 +625,7 @@ Get Country Leaders
 * **Sample Call:**
 
         $.ajax({
-          url: "https://leaderboard.services.mozilla.com/api/v1/leaders/country/ca/?offset=20",
+          url: "https://location-leaderboard.services.mozilla.com/api/v1/leaders/country/ca/?offset=20",
           dataType: "json",
           data: {
             country_id: 1,
