@@ -88,7 +88,6 @@ CSP_DEFAULT_SRC = (
 CSP_SCRIPT_SRC = (
     "'self'",
     "'sha256-Ri/knIQy+te80bBUW2ViOjxeh+qSuEtuLCIT0mCqX7U='", # for landing.html L57 inline script window.onload = ...
-    "'sha256-K52oyFUGA5jrXpSv3mYq5eyKyH1ER3Me3vevzaHBBmM='", # for landing.html L78 GA inline script
     "mozorg.cdn.mozilla.net",
     "www.google-analytics.com",
     "www.mozilla.org",
