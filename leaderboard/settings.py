@@ -49,6 +49,7 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'leaderboard.stats_middleware.StatsMiddleware',
 
+    'csp.middleware.CSPMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -77,6 +78,62 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'leaderboard.wsgi.application'
 
+# Content Security Policy
+CSP_REPORT_ONLY = True
+
+CSP_DEFAULT_SRC = (
+    "'none'",
+)
+
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'sha256-Ri/knIQy+te80bBUW2ViOjxeh+qSuEtuLCIT0mCqX7U='", # for landing.html L57 inline script window.onload = ...
+    "mozorg.cdn.mozilla.net",
+    "www.google-analytics.com",
+    "www.mozilla.org",
+)
+
+CSP_STYLE_SRC = (
+    "'unsafe-inline'",  # jQuery 1.7 uses inline styles
+    "'self'",
+    "www.mozilla.org",
+)
+
+CSP_IMG_SRC = (
+    "'self'",
+    "data:",
+    "*.tiles.mapbox.com",
+    "www.google-analytics.com",
+    "www.mozilla.org",
+)
+
+CSP_CONNECT_SRC = (
+    "'self'",  # API requests
+)
+
+CSP_OBJECT_SRC = (
+    "'none'",
+)
+
+CSP_FRAME_ANCESTORS = (
+    "'none'",
+)
+
+CSP_CHILD_SRC = (
+    "'none'",
+)
+
+CSP_FONT_SRC = (
+    "'self'",
+)
+
+CSP_BASE_URI = (
+    "'none'"
+)
+
+CSP_REPORT_URI = (
+    "/__cspreport__"
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
