@@ -79,7 +79,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'leaderboard.wsgi.application'
 
 # Content Security Policy
-CSP_REPORT_ONLY = True
 
 CSP_DEFAULT_SRC = (
     "'none'",
