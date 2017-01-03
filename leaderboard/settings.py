@@ -125,6 +125,7 @@ CSP_CHILD_SRC = (
 
 CSP_FONT_SRC = (
     "'self'",
+    "www.mozilla.org",
 )
 
 CSP_BASE_URI = (
