@@ -5,7 +5,16 @@
 {% block page_title %}{% endblock %}
 
 {% block content %}
-<div id="leaderboard-container" data-ga-id="{{ GOOGLE_ANALYTICS_ID }}">
+<div id="leaderboard-container"
+     data-ga-id="{{ GOOGLE_ANALYTICS_ID }}"
+     data-leaflet-js-url="{% static "lib/leaflet/leaflet.js" %}"
+     data-leaflet-geometry-js-url="{% static "lib/leaflet/leaflet.geometryutil.js" %}"
+     data-leaflet-css-url="{% static "lib/leaflet/leaflet.css" %}"
+     data-countries-geo-url="{% static "geojson/countries.named.geojson" %}"
+     data-countries-info-url="{% url "countries-list" %}"
+     data-global-leaders-url="{% url "leaders-global-list" %}"
+     data-country-leaders-url="{% url "leaders-country-list" country_id="XX" %}"
+     data-leader-profile-url="{% url "leaders-profile" uid="XX" %}">
 </div>
 
 <div class="section">
@@ -53,27 +62,6 @@
     <script src="{% static "js/dist/leaderboard.react.js" %}"></script>
     {% endif %}
 
-
-    <script>
-      window.onload = function () {
-        leaderboard.init({
-          leafletJSUrl: '{% static "lib/leaflet/leaflet.js" %}',
-          leafletGeometryJSUrl: '{% static "lib/leaflet/leaflet.geometryutil.js" %}',
-          leafletCSSUrl: '{% static "lib/leaflet/leaflet.css" %}',
-
-          countriesGeoUrl: '{% static "geojson/countries.named.geojson" %}',
-          countriesInfoUrl: '{% url "countries-list" %}',
-          globalLeadersUrl: '{% url "leaders-global-list" %}',
-          countryLeadersUrl: '{% url "leaders-country-list" country_id="XX" %}',
-          leaderProfileUrl: '{% url "leaders-profile" uid="XX" %}',
-        });
-
-        try {
-          Tabzilla.disableEasterEgg()
-        } catch (e) {
-        }
-      }
-    </script>
-
+    <script src="{% static "js/onload.js" %}"></script>
     <script src="{% static "js/load_ga.js" %}"></script>
 {% endblock %}
